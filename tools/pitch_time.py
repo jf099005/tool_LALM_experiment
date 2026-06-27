@@ -14,6 +14,14 @@ try:
 except ImportError:  # pragma: no cover
     librosa = None
 
+# Fixed semitone offsets used when synthesizing ground-truth dataset samples
+# (kept small to limit the oracle's choice variance). Not enforced by
+# PitchShiftTool.execute() itself -- n_steps there accepts any value.
+PITCH_SHIFT_STEPS = [-4, 4]
+# Fixed stretch factors used when synthesizing ground-truth dataset samples.
+# Not enforced by TimeStretchTool.execute() itself -- rate there accepts any value.
+TIME_STRETCH_RATES = [0.8, 1.2]
+
 
 def _load_audio(path: Path) -> tuple[np.ndarray, int]:
     """Load a mono audio signal from a WAV or MP3 (or any librosa-supported) file."""
