@@ -103,10 +103,11 @@ def execute_predicted_tool_call(
 ) -> Path:
     """Run one predicted (tool_name, parameters) step on `current_audio_path`.
 
-    `parameters["audio_path"]` (whatever placeholder string the model emitted,
-    e.g. "<AUDIO_A>") is ignored and overwritten with the real current audio
-    path -- the placeholder is purely a textual convention from training data,
-    not something tools understand.
+    `parameters["audio_id"]` (whatever id string the model emitted, e.g.
+    "audio_0") is dropped and replaced with a real `audio_path` pointing at
+    the actual current audio file -- the id is purely a textual convention
+    from training data the model uses to refer back to a prior audio, not
+    something the underlying tool implementations understand.
 
     Returns the path the output audio was written to. Raises UnknownToolError
     or ToolExecutionError on any failure; callers should catch these per step
@@ -119,6 +120,7 @@ def execute_predicted_tool_call(
         raise ToolExecutionError(f"Current audio file missing: {current_audio_path}")
 
     params = dict(parameters or {})
+    params.pop("audio_id", None)
     params["audio_path"] = str(current_audio_path)
 
     try:

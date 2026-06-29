@@ -6,6 +6,14 @@ tools from the available registry, apply them to A in sequence to produce a
 target audio B, then emit a (Question, Answer) pair where the Answer is a pure
 tool-call JSON trace (no natural language) that reproduces B from A.
 
+Each audio involved is given a unique audio_id (audio_0 = A, audio_1 = B, then
+audio_2, audio_3, ... for intermediate step outputs in the order they're
+produced) -- see `audio_id_map` on each entry. Tool calls reference their input
+audio by `parameters["audio_id"]` rather than a literal path, and declare an
+`output_audio_id` for their own output -- an id that doesn't exist yet at call
+time, except on the final step, where it aliases the already-known audio_1
+(the target), since that step's output *is* the target.
+
 Usage:
     python build_dataset.py --num-samples 200 --output-dir /work/u1501463/gen_tool_usage_QA
 
@@ -48,9 +56,23 @@ def collect_source_files(sources: List[str], limit: int | None = None) -> List[P
     return files
 
 
-def placeholder_for_step(step_index: int) -> str:
-    """step_index is 1-based; step 1 reads the source audio A."""
-    return "<AUDIO_A>" if step_index == 1 else f"<OUTPUT_OF_STEP_{step_index - 1}>"
+def assign_audio_ids(num_steps: int) -> tuple[List[str], List[str]]:
+    """Compute (input_id, output_id) per step for a chain of `num_steps` tool calls.
+
+    Ids mirror the order audios are introduced to the model: audio_0 is the
+    source, audio_1 is the target. Every step's output mints a fresh id
+    (audio_2, audio_3, ...) that doesn't exist until that step runs, *except*
+    the final step -- its output is by definition the target, so it aliases
+    the already-known audio_1 instead of minting a new one. A model emitting
+    output_audio_id == "audio_1" is therefore claiming "this call finishes the
+    chain", which doubles as an implicit done signal.
+    """
+    input_ids: List[str] = []
+    output_ids: List[str] = []
+    for step_index in range(1, num_steps + 1):
+        input_ids.append("audio_0" if step_index == 1 else output_ids[-1])
+        output_ids.append("audio_1" if step_index == num_steps else f"audio_{step_index + 1}")
+    return input_ids, output_ids
 
 
 def to_swift_sample(
@@ -62,22 +84,51 @@ def to_swift_sample(
 
     ms-swift's multimodal custom-dataset format expects a `messages` list plus a
     parallel `audios` list; each `audio_token` occurrence in the user content is
-    bound, in order, to the corresponding path in `audios`. The literal source/
-    target paths embedded in the human-readable `question` text are swapped for
-    `audio_token` here, since the model perceives the audio itself, not its path.
+    bound, in order, to the corresponding path in `audios`. Every occurrence is
+    tagged with the audio_id it represents (e.g. `<audio_0><audio>`) so the
+    model has an explicit handle to refer back to that audio by id in a later
+    tool call, instead of relying on positional ordering alone. The literal
+    source/target paths embedded in the human-readable `question` text are
+    swapped for a tagged `audio_token` here, since the model perceives the
+    audio itself, not its path.
+
+    The answer is rendered as a multi-turn agent/tool dialogue: one assistant
+    turn per tool call, each followed by a "tool" turn carrying that step's
+    real output audio (tagged with the id the tool call itself declared via
+    `output_audio_id`) for the next call to reference -- this is the same
+    turn structure `tool_use_benchmark/run_eval.py` drives at inference time.
+    A final explicit `{"done": true}` assistant turn closes the chain, so the
+    model has a learned stop signal instead of relying on running out of
+    turns.
     """
-    question_text = entry["question"].replace(entry["source_audio"], audio_token, 1)
-    question_text = question_text.replace(entry["target_audio"], audio_token, 1)
+    audio_id_map = entry["audio_id_map"]
+    audios: List[str] = []
+    bound: Dict[str, str] = {}
+
+    def tag(audio_id: str) -> str:
+        if audio_id not in bound:
+            bound[audio_id] = f"<{audio_id}>{audio_token}"
+            audios.append(audio_id_map[audio_id])
+        return bound[audio_id]
+
+    question_text = entry["question"].replace(entry["source_audio"], tag("audio_0"), 1)
+    question_text = question_text.replace(entry["target_audio"], tag("audio_1"), 1)
 
     messages = []
     if system_prompt:
         messages.append({"role": "system", "content": system_prompt})
     messages.append({"role": "user", "content": question_text})
-    messages.append({"role": "assistant", "content": json.dumps(entry["answer"], ensure_ascii=False)})
+
+    tool_calls = entry["answer"]["tool_calls"]
+    for step_idx, tool_call in enumerate(tool_calls, start=1):
+        messages.append({"role": "assistant", "content": json.dumps(tool_call, ensure_ascii=False)})
+        output_id = tool_call["output_audio_id"]
+        messages.append({"role": "tool", "content": f"Output of step {step_idx}: {tag(output_id)}"})
+    messages.append({"role": "assistant", "content": json.dumps({"done": True})})
 
     return {
         "messages": messages,
-        "audios": [entry["source_audio"], entry["target_audio"]],
+        "audios": audios,
     }
 
 
@@ -103,21 +154,34 @@ def build_one_sample(
     k = rng.randint(min_tools, max_tools)
     k = min(k, len(tool_names))
     chosen_tools = rng.sample(tool_names, k)
+    input_ids, output_ids = assign_audio_ids(len(chosen_tools))
 
     current_path = audio_a
     tool_calls: List[Dict[str, Any]] = []
+    step_outputs: List[Path] = []
 
     for step_index, name in enumerate(chosen_tools, start=1):
         duration = tool_registry.get_duration_seconds(current_path)
         out_path = sample_dir / f"step{step_index}_{name}.wav"
         params, current_path = tool_registry.REGISTRY[name].apply(current_path, out_path, rng, duration)
         params = dict(params)
-        params["audio_path"] = placeholder_for_step(step_index)
-        tool_calls.append({"tool_name": name, "parameters": params})
+        params.pop("audio_path", None)
+        params["audio_id"] = input_ids[step_index - 1]
+        tool_calls.append({
+            "tool_name": name,
+            "parameters": params,
+            "output_audio_id": output_ids[step_index - 1],
+        })
+        step_outputs.append(current_path)
 
     audio_b = sample_dir / "B.wav"
     if current_path != audio_b:
         current_path.replace(audio_b)
+        step_outputs[-1] = audio_b
+
+    audio_id_map = {"audio_0": str(audio_a), "audio_1": str(audio_b)}
+    for step_index in range(1, len(chosen_tools)):  # excludes the final step, which aliases audio_1
+        audio_id_map[output_ids[step_index - 1]] = str(step_outputs[step_index - 1])
 
     tools_block = tool_registry.describe_available_tools()
     question = render_question(source=str(audio_a), target=str(audio_b), tools_block=tools_block, rng=rng)
@@ -130,6 +194,8 @@ def build_one_sample(
         "num_steps": len(chosen_tools),
         "question": question,
         "answer": {"tool_calls": tool_calls},
+        "step_outputs": [str(p) for p in step_outputs],
+        "audio_id_map": audio_id_map,
     }
 
 

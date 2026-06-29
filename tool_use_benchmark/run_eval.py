@@ -43,28 +43,30 @@ from tool_executor import ToolExecutionError, UnknownToolError, execute_predicte
 
 AUDIO_TOKEN = "<audio>"
 
-# The SFT training data has no explicit "done" turn (a chain is just N
-# assistant turns with nothing after), so a fine-tuned model is run with no
-# system prompt, same as training. A zero-shot/official model has never seen
-# that implicit one-tool-call-per-turn JSON convention, so it needs to be told
-# the protocol explicitly -- including an explicit stop signal, since without
-# one the model has no way to indicate "the chain is complete".
+# The SFT training data ends every chain with an explicit {"done": true} turn
+# (see build_dataset.to_swift_sample), so a fine-tuned model is run with no
+# system prompt, same as training -- it already learned the stop signal. A
+# zero-shot/official model has never seen that JSON convention, so it needs to
+# be told the protocol explicitly, including the same stop signal.
 DEFAULT_PROTOCOL_SYSTEM_PROMPT = (
-    "You are given a source audio and a target audio, plus a list of audio-editing "
-    "tools. Infer the chain of tool calls that transforms the source audio into the "
-    "target audio.\n\n"
+    "You are given a source audio (audio_0) and a target audio (audio_1), plus a list "
+    "of audio-editing tools. Infer the chain of tool calls that transforms audio_0 into "
+    "audio_1.\n\n"
     "Respond with exactly one JSON object per turn and nothing else:\n"
-    '  {"tool_name": "<tool name>", "parameters": {<tool arguments>}}\n\n'
-    "After each tool call you will be shown the real audio result before your next "
-    'turn. Once the chain is complete, respond with {"done": true} instead of '
-    "another tool call."
+    '  {"tool_name": "<tool name>", "parameters": {"audio_id": "<id of the audio to read>", '
+    '<other tool arguments>}, "output_audio_id": "<a new id for this call\'s output>"}\n\n'
+    "`audio_id` must refer to audio_0, audio_1, or an output_audio_id you declared in an "
+    "earlier turn. After each tool call you will be shown the real audio result, tagged "
+    "with the output_audio_id you gave it, before your next turn -- use audio_1 as the "
+    'output_audio_id once a call\'s output is the target itself. Once the chain is '
+    'complete, respond with {"done": true} instead of another tool call.'
 )
 
 
 def render_initial_prompt(entry: Dict[str, Any]) -> str:
-    """Same substitution as build_dataset.to_swift_sample: literal A/B paths -> audio_token."""
-    text = entry["question"].replace(entry["source_audio"], AUDIO_TOKEN, 1)
-    text = text.replace(entry["target_audio"], AUDIO_TOKEN, 1)
+    """Same substitution as build_dataset.to_swift_sample: literal A/B paths -> tagged audio_token."""
+    text = entry["question"].replace(entry["source_audio"], f"<audio_0>{AUDIO_TOKEN}", 1)
+    text = text.replace(entry["target_audio"], f"<audio_1>{AUDIO_TOKEN}", 1)
     return text
 
 
@@ -159,7 +161,8 @@ def run_sample(
             break
 
         predicted_steps.append(step_record)
-        messages.append({"role": "tool", "content": f"Output of step {step_idx}: {AUDIO_TOKEN}"})
+        output_audio_id = call.get("output_audio_id") or f"audio_{step_idx + 1}"
+        messages.append({"role": "tool", "content": f"Output of step {step_idx}: <{output_audio_id}>{AUDIO_TOKEN}"})
         audios.append(str(current_audio))
     else:
         stop_reason = "max_steps_reached"
