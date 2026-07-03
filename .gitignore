@@ -1,4 +1,5 @@
-__pycache__
+__pycache__/
+*.py[cod]
 .checkpoints
 .claude
 
@@ -11,6 +12,7 @@ MMAU_human_voice_amplify/tool_outputs/
 dcase_audios/
 sample_audios/
 .vscode/
+/tool_outputs/
 
 # Audio files
 *.wav

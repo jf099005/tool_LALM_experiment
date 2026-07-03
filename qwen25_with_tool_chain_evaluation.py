@@ -3,12 +3,14 @@ import json
 import os
 from typing import List, Optional
 from pathlib import Path
-from argparse import ArgumentParser
+from argparse import ArgumentParser, BooleanOptionalAction
 
 os.environ.pop("TRITON_PTXAS_PATH", None)
 import librosa
 import numpy as np
 from vllm import LLM, SamplingParams
+
+from uncertainty_quantification_tools import compute_uncertainty
 
 def parse_arguments():
     parser = ArgumentParser(description="Evaluate Qwen2.5-Omni-7B on DCASE subset with optional tool chain results.")
@@ -22,6 +24,14 @@ def parse_arguments():
     parser.add_argument('--overwrite_original_audio', action = 'store_true', help="Whether to overwrite the original audio with the tool chain result audio. If set, the original audio will not be included in the prompt even if tool chain results are loaded.")
     parser.add_argument('--specify_tool', default=None, help="The name of the tool to load results from, e.g., 'extract_target' or 'remove_target'. This argument is required if --load_tool_chain_results is set.")
     parser.add_argument('--tool_results_path', default='/home/u1501463/tool_use_LALM/apply_tool_results', help="Path to the folder containing tool chain results.")
+    parser.add_argument('--compute_uncertainty', '-uq', action='store_true', help="Whether to compute uncertainty quantification for each prediction. Master switch; individual metrics below are only computed if this is set.")
+    parser.add_argument('--uq_num_samples', type=int, default=10, help="Number of stochastic samples to draw per item. Required (>0) for predictive/length-normalized/discrete-semantic entropy; set to 0 to skip all sample-based metrics (e.g. to only compute P(True)).")
+    parser.add_argument('--uq_sample_temperature', type=float, default=1.0, help="Sampling temperature used when drawing UQ samples.")
+    parser.add_argument('--uq_predictive_entropy', action=BooleanOptionalAction, default=True, help="Whether to report predictive entropy (H_pred). Requires --uq_num_samples > 0.")
+    parser.add_argument('--uq_length_normalized_entropy', action=BooleanOptionalAction, default=True, help="Whether to report length-normalized entropy (H_norm_tok). Requires --uq_num_samples > 0.")
+    parser.add_argument('--uq_discrete_semantic_entropy', action=BooleanOptionalAction, default=True, help="Whether to report discrete semantic entropy (H_disc) and the answer distribution. Requires --uq_num_samples > 0.")
+    parser.add_argument('--uq_semantic_entropy', action=BooleanOptionalAction, default=False, help="Whether to additionally compute NLI-based semantic entropy (H_sem). Loads a cross-encoder model on first use; leave off unless needed.")
+    parser.add_argument('--uq_p_true', action=BooleanOptionalAction, default=True, help="Whether to compute the P(True) self-verification metric (one extra generation per item).")
     return parser.parse_args()
 
 
@@ -97,7 +107,15 @@ def evaluate(
     prv_results = [],
     overwrite_original_audio = False,
     specify_tool = None,
-    tool_results_root = '/home/u1501463/tool_use_LALM/apply_tool_results'
+    tool_results_root = '/home/u1501463/tool_use_LALM/apply_tool_results',
+    compute_uq = False,
+    uq_num_samples = 10,
+    uq_sample_temperature = 1.0,
+    uq_compute_predictive_entropy = True,
+    uq_compute_length_normalized_entropy = True,
+    uq_compute_discrete_semantic_entropy = True,
+    uq_compute_semantic = False,
+    uq_compute_p_true = True,
 ) -> None:
     subset = load_subset(subset_path)
     os.environ.pop("TRITON_PTXAS_PATH", None)
@@ -180,19 +198,49 @@ def evaluate(
         except:
             is_correct = False
 
-        results.append(
-            {
-                "index": idx,
-                'prompt': prompt,
-                'load tool chain results': load_tool_chain_results,
-                "id": problem_id,
-                "question": question,
-                "choices": choices,
-                "answer": answer,
-                "prediction": pred,
-                "correct": is_correct,
-            }
-        )
+        result_entry = {
+            "index": idx,
+            'prompt': prompt,
+            'load tool chain results': load_tool_chain_results,
+            "id": problem_id,
+            "question": question,
+            "choices": choices,
+            "answer": answer,
+            "prediction": pred,
+            "correct": is_correct,
+        }
+
+        if compute_uq:
+            needs_samples = (
+                uq_compute_predictive_entropy
+                or uq_compute_length_normalized_entropy
+                or uq_compute_discrete_semantic_entropy
+                or uq_compute_semantic
+            )
+            uq_result = compute_uncertainty(
+                llm,
+                prompt=prompt,
+                multi_modal_data=audio_data,
+                choices=choices,
+                greedy_prediction=pred,
+                system_prompt=system_prompt,
+                question=question,
+                num_samples=uq_num_samples if needs_samples else 0,
+                sample_temperature=uq_sample_temperature,
+                max_tokens=max_tokens,
+                compute_semantic=uq_compute_semantic,
+                compute_p_true=uq_compute_p_true,
+            )
+            if not uq_compute_predictive_entropy:
+                uq_result.pop("predictive_entropy", None)
+            if not uq_compute_length_normalized_entropy:
+                uq_result.pop("length_normalized_entropy", None)
+            if not uq_compute_discrete_semantic_entropy:
+                uq_result.pop("discrete_semantic_entropy", None)
+                uq_result.pop("answer_distribution", None)
+            result_entry["uncertainty"] = uq_result
+
+        results.append(result_entry)
         if is_correct:
             correct += 1
 
@@ -261,7 +309,15 @@ def main():
         prv_results=prv_result,
         overwrite_original_audio=args.overwrite_original_audio,
         specify_tool=args.specify_tool,
-        tool_results_root=TOOL_RESULTS_PATH
+        tool_results_root=TOOL_RESULTS_PATH,
+        compute_uq=args.compute_uncertainty,
+        uq_num_samples=args.uq_num_samples,
+        uq_sample_temperature=args.uq_sample_temperature,
+        uq_compute_predictive_entropy=args.uq_predictive_entropy,
+        uq_compute_length_normalized_entropy=args.uq_length_normalized_entropy,
+        uq_compute_discrete_semantic_entropy=args.uq_discrete_semantic_entropy,
+        uq_compute_semantic=args.uq_semantic_entropy,
+        uq_compute_p_true=args.uq_p_true,
     )
 
 
