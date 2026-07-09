@@ -1,0 +1,452 @@
+[
+  {
+    "id": "dev_audio_0001409",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_0001459",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_0001512",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_0001525",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_0001571",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_0001587",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_0001599",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_0001629",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00072",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00074",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00107",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00112",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00121",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00134",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00146",
+    "kept_from": "file2",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00168",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00173",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00186",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00190",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00194",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00206",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00214",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00226",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00231",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00254",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00287",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00295",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00319",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00327",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00335",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00356",
+    "kept_from": "file2",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00375",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00410",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00425",
+    "kept_from": "file2",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00546",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00594",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00615",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00631",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00711",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00755",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00787",
+    "kept_from": "file2",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00822",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00835",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00841",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00866",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00891",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00893",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_00937",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01018",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01087",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01117",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01122",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01170",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01210",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01264",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01266",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01279",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01290",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01291",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01297",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01307",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01308",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01329",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01370",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01377",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01379",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01498",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01513",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01518",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01610",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01686",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01690",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "dev_audio_01695",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-a-0011",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-a-0086",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-a-0096",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-a-0099",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-a-0122",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-a-0207",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-a-0225",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-a-0247",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-a-0249",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-a-0261",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-b-0068",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-b-0093",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-c-0026",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-c-0035",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-c-0046",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-c-0071",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  },
+  {
+    "id": "fold2-c-0072",
+    "kept_from": "file1",
+    "reason": "cmp decision"
+  }
+]

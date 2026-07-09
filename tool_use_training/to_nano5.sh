@@ -1,0 +1,1 @@
+scp -r ~/tool_use_LALM/tool_use_training/ u1501463@nano5.nchc.org.tw:~/tool_LALM_experiment/tool_use_training
