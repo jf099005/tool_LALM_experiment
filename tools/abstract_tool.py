@@ -87,3 +87,29 @@ class Tool(ABC):
     @abstractmethod
     def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
         raise NotImplementedError
+
+    @classmethod
+    def execute_batch(cls, batch_parameters: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Sequentially run `execute` over a batch, isolating per-item failures.
+
+        Tools that can share expensive setup across a batch (e.g. one shared model
+        load) override this; this default just means every `Tool` subclass works
+        with `tools/tool_batch_execute.py` without requiring a bespoke override.
+        """
+        if not isinstance(batch_parameters, list):
+            raise ToolValidationError("Batch parameters must be a list of parameter dictionaries.")
+
+        results: List[Dict[str, Any]] = []
+        for parameters in batch_parameters:
+            if not isinstance(parameters, dict):
+                raise ToolValidationError("Each batch item must be a parameter dictionary.")
+            try:
+                results.append(cls.execute(parameters))
+            except Exception as exc:
+                results.append({
+                    "audio_path": parameters.get("audio_path"),
+                    "status": "failure",
+                    "output_path": None,
+                    "message": str(exc),
+                })
+        return results

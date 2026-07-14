@@ -34,7 +34,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from tool_use_training.gen_tool_usage_QA.build_dataset import build_one_sample, collect_source_files  # noqa: E402
+from tool_use_training.gen_1st_stage_data.build_dataset import build_one_sample, collect_source_files  # noqa: E402
 from generate.gen_tool_usage_QA import tool_registry  # noqa: E402
 
 
