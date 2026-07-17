@@ -1,0 +1,128 @@
+[
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00755/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00755/disturbed_time_stretch.wav",
+    "rate": 1.25,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00937/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00937/disturbed_time_stretch.wav",
+    "rate": 1.25,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00787/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00787/disturbed_time_stretch.wav",
+    "rate": 0.909091,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00335/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00335/disturbed_time_stretch.wav",
+    "rate": 1.111111,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00072/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00072/disturbed_time_stretch.wav",
+    "rate": 0.909091,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00835/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00835/disturbed_time_stretch.wav",
+    "rate": 1.111111,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0099/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0099/disturbed_time_stretch.wav",
+    "rate": 1.111111,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00711/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00711/disturbed_time_stretch.wav",
+    "rate": 1.25,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0207/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0207/disturbed_time_stretch.wav",
+    "rate": 0.909091,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-b-0093/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-b-0093/disturbed_time_stretch.wav",
+    "rate": 1.25,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01087/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01087/disturbed_time_stretch.wav",
+    "rate": 1.111111,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00841/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00841/disturbed_time_stretch.wav",
+    "rate": 0.909091,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0247/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0247/disturbed_time_stretch.wav",
+    "rate": 1.111111,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01122/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01122/disturbed_time_stretch.wav",
+    "rate": 0.909091,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01498/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01498/disturbed_time_stretch.wav",
+    "rate": 0.909091,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01695/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01695/disturbed_time_stretch.wav",
+    "rate": 1.25,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00615/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00615/disturbed_time_stretch.wav",
+    "rate": 0.8,
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00254/disturbed.wav",
+    "message": "Time stretch completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00254/disturbed_time_stretch.wav",
+    "rate": 1.25,
+    "status": "success"
+  }
+]

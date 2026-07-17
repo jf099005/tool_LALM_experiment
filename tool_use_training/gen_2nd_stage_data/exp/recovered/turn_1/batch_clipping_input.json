@@ -1,0 +1,37 @@
+[
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:12.811",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00074/disturbed.wav"
+  },
+  {
+    "audio_begin": "00:00:00.809",
+    "audio_end": "00:00:13.809",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01307/disturbed.wav"
+  },
+  {
+    "audio_begin": "00:00:00.659",
+    "audio_end": "00:00:30.659",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00226/disturbed.wav"
+  },
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:06.028",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00295/disturbed.wav"
+  },
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:10.399",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01308/disturbed.wav"
+  },
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:09.238",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001525/disturbed.wav"
+  },
+  {
+    "audio_begin": "00:00:00.559",
+    "audio_end": "00:00:30.559",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00107/disturbed.wav"
+  }
+]

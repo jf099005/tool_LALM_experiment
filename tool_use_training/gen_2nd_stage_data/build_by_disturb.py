@@ -89,7 +89,7 @@ def get_audio_path(item: Dict[str, Any]) -> str:
     audio_path = item.get("audio_path") or item.get("audio_url")
     if not audio_path:
         raise ValueError(f"QA pair {item.get('id')!r} has no audio_path/audio_url.")
-    return audio_path
+    return str(Path(audio_path).expanduser().resolve())
 
 
 def to_dcase_entry(item: Dict[str, Any], audio_path: str) -> Dict[str, Any]:
@@ -360,6 +360,9 @@ def main() -> None:
     parser.add_argument("--recovered-subset-file", type=Path, default=None, help="Default: <tool-results-dir>/recovered_subset.json")
     parser.add_argument("--schedule-dir", type=Path, default=None, help="Default: <tool-results-dir>/tool_schedules")
     args = parser.parse_args()
+
+    args.output_dir = args.output_dir.expanduser().resolve()
+    args.tool_results_dir = args.tool_results_dir.expanduser().resolve()
 
     manifest_file = args.manifest_file or (args.output_dir / "manifest.json")
     disturbed_subset_file = args.disturbed_subset_file or (args.output_dir / "disturbed_subset.json")

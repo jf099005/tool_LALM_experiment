@@ -1,0 +1,107 @@
+[
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00375/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'wiener'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00375/disturbed_wiener.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01518/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'spectral_subtraction'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01518/disturbed_spectral_subtraction.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00356/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'spectral_subtraction'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00356/disturbed_spectral_subtraction.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0071/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'spectral_subtraction'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0071/disturbed_spectral_subtraction.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "adaptive",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0249/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'adaptive'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0249/disturbed_adaptive.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00194/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'wiener'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00194/disturbed_wiener.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001409/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'wiener'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001409/disturbed_wiener.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0046/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'spectral_subtraction'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0046/disturbed_spectral_subtraction.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01210/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'wiener'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01210/disturbed_wiener.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00287/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'spectral_subtraction'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00287/disturbed_spectral_subtraction.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01329/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'wiener'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01329/disturbed_wiener.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01264/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'spectral_subtraction'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01264/disturbed_spectral_subtraction.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0011/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'spectral_subtraction'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0011/disturbed_spectral_subtraction.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00546/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'wiener'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00546/disturbed_wiener.wav",
+    "status": "success"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01279/disturbed.wav",
+    "message": "Denoise operation completed using algorithm 'spectral_subtraction'.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01279/disturbed_spectral_subtraction.wav",
+    "status": "success"
+  }
+]

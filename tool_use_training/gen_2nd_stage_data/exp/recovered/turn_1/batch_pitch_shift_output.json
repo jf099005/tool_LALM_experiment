@@ -1,0 +1,154 @@
+[
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001512/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 5.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001512/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01117/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 3.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01117/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00594/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 5.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00594/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01290/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 3.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01290/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0096/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 3.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0096/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01686/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 5.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01686/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01018/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 5.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01018/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00410/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 5.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00410/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00112/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 5.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00112/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00186/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": -5.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00186/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001571/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 3.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001571/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01379/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 5.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01379/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0261/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": -3.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0261/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0122/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": -3.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0122/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-b-0068/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 3.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-b-0068/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0225/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 3.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0225/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00146/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": 5.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00146/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00173/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": -3.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00173/disturbed_pitch_shift.wav",
+    "status": "success"
+  },
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01513/disturbed.wav",
+    "bins_per_octave": 12,
+    "message": "Pitch shift completed successfully.",
+    "n_steps": -5.0,
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01513/disturbed_pitch_shift.wav",
+    "status": "success"
+  }
+]

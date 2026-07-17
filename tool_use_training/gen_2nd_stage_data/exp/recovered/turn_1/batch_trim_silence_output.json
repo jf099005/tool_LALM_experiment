@@ -1,0 +1,101 @@
+[
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:31.949",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00319/disturbed.wav",
+    "frame_length": 2048,
+    "hop_length": 512,
+    "message": "Silence trimming completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00319/disturbed_trim_silence_00-00-00.000_00-00-31.949.wav",
+    "status": "success",
+    "threshold_db": 30.0
+  },
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:31.279",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00206/disturbed.wav",
+    "frame_length": 2048,
+    "hop_length": 512,
+    "message": "Silence trimming completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00206/disturbed_trim_silence_00-00-00.000_00-00-31.279.wav",
+    "status": "success",
+    "threshold_db": 30.0
+  },
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:07.002",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00214/disturbed.wav",
+    "frame_length": 2048,
+    "hop_length": 512,
+    "message": "Silence trimming completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00214/disturbed_trim_silence_00-00-00.000_00-00-07.002.wav",
+    "status": "success",
+    "threshold_db": 30.0
+  },
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:11.549",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00866/disturbed.wav",
+    "frame_length": 2048,
+    "hop_length": 512,
+    "message": "Silence trimming completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00866/disturbed_trim_silence_00-00-00.000_00-00-11.549.wav",
+    "status": "success",
+    "threshold_db": 35.0
+  },
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:13.759",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0035/disturbed.wav",
+    "frame_length": 2048,
+    "hop_length": 512,
+    "message": "Silence trimming completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0035/disturbed_trim_silence_00-00-00.000_00-00-13.759.wav",
+    "status": "success",
+    "threshold_db": 25.0
+  },
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:31.769",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00121/disturbed.wav",
+    "frame_length": 2048,
+    "hop_length": 512,
+    "message": "Silence trimming completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00121/disturbed_trim_silence_00-00-00.000_00-00-31.769.wav",
+    "status": "success",
+    "threshold_db": 35.0
+  },
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:10.719",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00822/disturbed.wav",
+    "frame_length": 2048,
+    "hop_length": 512,
+    "message": "Silence trimming completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00822/disturbed_trim_silence_00-00-00.000_00-00-10.719.wav",
+    "status": "success",
+    "threshold_db": 35.0
+  },
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:11.809",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00425/disturbed.wav",
+    "frame_length": 2048,
+    "hop_length": 512,
+    "message": "Silence trimming completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00425/disturbed_trim_silence_00-00-00.000_00-00-11.809.wav",
+    "status": "success",
+    "threshold_db": 35.0
+  },
+  {
+    "audio_begin": "00:00:00.000",
+    "audio_end": "00:00:11.679",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0086/disturbed.wav",
+    "frame_length": 2048,
+    "hop_length": 512,
+    "message": "Silence trimming completed successfully.",
+    "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0086/disturbed_trim_silence_00-00-00.000_00-00-11.679.wav",
+    "status": "success",
+    "threshold_db": 30.0
+  }
+]

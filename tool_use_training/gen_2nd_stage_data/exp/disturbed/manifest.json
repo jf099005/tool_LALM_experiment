@@ -1,0 +1,3553 @@
+[
+  {
+    "id": "dev_audio_00168",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00168.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Dog",
+          "timestamp": "00:00:07.719",
+          "snr_db": 4.1,
+          "onset": 7.719,
+          "offset": 16.837
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00168/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00168/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00168/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00168/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01690",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01690.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Traffic noise",
+          "timestamp": "00:00:05.719",
+          "snr_db": 7.3,
+          "onset": 5.719,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01690/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01690/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01690/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01690/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_0001512",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001512.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -5
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001512/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001512/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001512/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001512/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00755",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00755.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 0.8
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 12.5,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00755/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00755/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00755/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00755/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00893",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00893.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Bird",
+          "timestamp": "00:00:03.469",
+          "snr_db": 2.5,
+          "onset": 3.469,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00893/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00893/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00893/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00893/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_0001629",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001629.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Siren",
+          "timestamp": "00:00:00.609",
+          "snr_db": 7.3,
+          "onset": 0.609,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001629/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001629/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001629/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001629/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01266",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01266.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Dog",
+          "timestamp": "00:00:06.239",
+          "snr_db": 6.6,
+          "onset": 6.239,
+          "offset": 10.4
+        },
+        "_input_duration": 10.399546485260771,
+        "_output_duration": 10.399546485260771,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01266/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01266/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01266/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01266/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00937",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00937.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 0.8
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 12.5,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00937/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00937/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00937/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00937/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01117",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01117.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -3
+        },
+        "_input_duration": 9.093514739229025,
+        "_output_duration": 9.093514739229025,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01117/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01117/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01117/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01117/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00375",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00375.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "pink",
+          "snr_db": 13.5
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00375/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00375/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_wiener",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00375/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00375/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00787",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00787.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 1.1
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 9.090916666666667,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00787/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00787/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00787/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00787/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00319",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00319.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "start",
+          "duration_sec": 1.95,
+          "noise_type": "pink",
+          "snr_db": 16.7
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 31.95,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00319/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00319/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "trim_silence_heuristic",
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:31.949",
+          "threshold_db": 30.0
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00319/turn1_trim_silence.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:31.949",
+          "threshold_db": 30.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00319/turn1_trim_silence.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00335",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00335.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 0.9
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 33.3333125,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00335/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00335/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.111111
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00335/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.111111
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00335/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01518",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01518.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "pink",
+          "snr_db": 8.7
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01518/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01518/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_spectral_subtraction",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 2.18
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01518/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 2.18
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01518/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00594",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00594.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -5
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00594/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00594/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00594/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00594/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00206",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00206.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "end",
+          "duration_sec": 1.28,
+          "noise_type": "white",
+          "snr_db": 22.7
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 31.28,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00206/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00206/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "trim_silence_heuristic",
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:31.279",
+          "threshold_db": 30.0
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00206/turn1_trim_silence.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:31.279",
+          "threshold_db": 30.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00206/turn1_trim_silence.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01291",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01291.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Traffic noise",
+          "timestamp": "00:00:01.049",
+          "snr_db": 4.9,
+          "onset": 1.049,
+          "offset": 11.049
+        },
+        "_input_duration": 12.999433106575964,
+        "_output_duration": 12.999433106575964,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01291/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01291/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01291/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01291/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01290",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01290.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -3
+        },
+        "_input_duration": 10.399546485260771,
+        "_output_duration": 10.399546485260771,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01290/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01290/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01290/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01290/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00356",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00356.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "white",
+          "snr_db": 7.5
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00356/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00356/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_spectral_subtraction",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 1.83
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00356/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 1.83
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00356/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-c-0071",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-c-0071.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "white",
+          "snr_db": 13.3
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0071/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0071/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_spectral_subtraction",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 1.55
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-c-0071/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 1.55
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-c-0071/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-a-0249",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0249.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "white",
+          "snr_db": 10.6
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0249/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0249/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_adaptive",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "adaptive",
+          "sensitivity": 0.63
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0249/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "adaptive",
+          "sensitivity": 0.63
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0249/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00631",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00631.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Bird",
+          "timestamp": "00:00:03.629",
+          "snr_db": 7.8,
+          "onset": 3.629,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00631/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00631/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00631/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00631/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-a-0096",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0096.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -3
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0096/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0096/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0096/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0096/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01686",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01686.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -5
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01686/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01686/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01686/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01686/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00214",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00214.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "start",
+          "duration_sec": 1.75,
+          "noise_type": "white",
+          "snr_db": 13.3
+        },
+        "_input_duration": 5.2528125,
+        "_output_duration": 7.0028125,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00214/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00214/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "trim_silence_heuristic",
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:07.002",
+          "threshold_db": 30.0
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00214/turn1_trim_silence.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:07.002",
+          "threshold_db": 30.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00214/turn1_trim_silence.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01018",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01018.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -5
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01018/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01018/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01018/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01018/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00866",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00866.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "start",
+          "duration_sec": 1.55,
+          "noise_type": "pink",
+          "snr_db": 13.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 11.55,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00866/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00866/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "trim_silence_heuristic",
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:11.549",
+          "threshold_db": 35.0
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00866/turn1_trim_silence.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:11.549",
+          "threshold_db": 35.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00866/turn1_trim_silence.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00410",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00410.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -5
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00410/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00410/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00410/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00410/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00072",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00072.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 1.1
+        },
+        "_input_duration": 25.83825,
+        "_output_duration": 23.4893125,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00072/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00072/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00072/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00072/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00112",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00112.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -5
+        },
+        "_input_duration": 10.06075,
+        "_output_duration": 10.06075,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00112/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00112/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00112/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00112/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-c-0035",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-c-0035.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "both",
+          "duration_sec": 1.88,
+          "noise_type": "pink",
+          "snr_db": 15.8
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 13.76,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0035/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0035/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "trim_silence_heuristic",
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:13.759",
+          "threshold_db": 25.0
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-c-0035/turn1_trim_silence.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:13.759",
+          "threshold_db": 25.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-c-0035/turn1_trim_silence.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01370",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01370.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Bird",
+          "timestamp": "00:00:03.289",
+          "snr_db": 0.4,
+          "onset": 3.289,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01370/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01370/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01370/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01370/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00186",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00186.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": 5
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00186/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00186/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -5
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00186/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00186/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00835",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00835.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 0.9
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 11.111104166666667,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00835/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00835/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.111111
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00835/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.111111
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00835/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00891",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00891.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Bird",
+          "timestamp": "00:00:00.009",
+          "snr_db": 1.5,
+          "onset": 0.009,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00891/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00891/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00891/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00891/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_0001571",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001571.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -3
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001571/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001571/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001571/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001571/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00074",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00074.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "end",
+          "duration_sec": 0.55,
+          "noise_type": "pink",
+          "snr_db": 21.6
+        },
+        "_input_duration": 12.81125,
+        "_output_duration": 13.36125,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00074/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00074/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "clip_off_padding",
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:12.811"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00074/turn1_clipping.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:12.811"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00074/turn1_clipping.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01610",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01610.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Bird",
+          "timestamp": "00:00:02.539",
+          "snr_db": 1.3,
+          "onset": 2.539,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01610/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01610/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01610/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01610/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00194",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00194.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "pink",
+          "snr_db": 6.9
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00194/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00194/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_wiener",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00194/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00194/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_0001599",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001599.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Rain",
+          "timestamp": "00:00:05.379",
+          "snr_db": 7.7,
+          "onset": 5.379,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001599/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001599/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001599/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001599/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_0001409",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001409.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "pink",
+          "snr_db": 14.4
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001409/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001409/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_wiener",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001409/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001409/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-c-0046",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-c-0046.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "white",
+          "snr_db": 3.2
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0046/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0046/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_spectral_subtraction",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 2.48
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-c-0046/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 2.48
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-c-0046/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01379",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01379.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -5
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01379/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01379/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01379/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01379/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-a-0099",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0099.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 0.9
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 11.111125,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0099/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0099/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.111111
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0099/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.111111
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0099/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-c-0026",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-c-0026.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Bird",
+          "timestamp": "00:00:00.209",
+          "snr_db": 7.3,
+          "onset": 0.209,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0026/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0026/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-c-0026/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-c-0026/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-a-0261",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0261.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": 3
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0261/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0261/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -3
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0261/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -3
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0261/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00711",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00711.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 0.8
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 12.5,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00711/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00711/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00711/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00711/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-a-0122",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0122.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": 3
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0122/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0122/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -3
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0122/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -3
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0122/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00121",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00121.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "start",
+          "duration_sec": 1.77,
+          "noise_type": "pink",
+          "snr_db": 20.7
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 31.77,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00121/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00121/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "trim_silence_heuristic",
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:31.769",
+          "threshold_db": 35.0
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00121/turn1_trim_silence.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:31.769",
+          "threshold_db": 35.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00121/turn1_trim_silence.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01307",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01307.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "start",
+          "duration_sec": 0.81,
+          "noise_type": "pink",
+          "snr_db": 10.1
+        },
+        "_input_duration": 12.999433106575964,
+        "_output_duration": 13.809433106575964,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01307/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01307/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "clip_off_padding",
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.809",
+          "audio_end": "00:00:13.809"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01307/turn1_clipping.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.809",
+          "audio_end": "00:00:13.809"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01307/turn1_clipping.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-a-0207",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0207.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 1.1
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 9.09090625,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0207/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0207/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0207/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0207/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-b-0093",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-b-0093.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 0.8
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 12.5,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-b-0093/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-b-0093/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-b-0093/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-b-0093/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-b-0068",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-b-0068.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -3
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-b-0068/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-b-0068/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-b-0068/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-b-0068/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00134",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00134.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Wind",
+          "timestamp": "00:00:08.739",
+          "snr_db": 3.8,
+          "onset": 8.739,
+          "offset": 18.74
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00134/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00134/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00134/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00134/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01087",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01087.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 0.9
+        },
+        "_input_duration": 9.273514739229025,
+        "_output_duration": 10.303900226757369,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01087/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01087/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.111111
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01087/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.111111
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01087/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00327",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00327.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Traffic noise",
+          "timestamp": "00:00:08.919",
+          "snr_db": 0.9,
+          "onset": 8.919,
+          "offset": 18.919
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00327/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00327/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00327/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00327/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00841",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00841.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 1.1
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 9.090916666666667,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00841/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00841/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00841/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00841/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01210",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01210.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "pink",
+          "snr_db": 8.1
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01210/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01210/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_wiener",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01210/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01210/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-a-0225",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0225.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -3
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0225/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0225/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0225/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 3
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0225/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00287",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00287.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "white",
+          "snr_db": 5.4
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00287/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00287/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_spectral_subtraction",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 1.56
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00287/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 1.56
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00287/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01329",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01329.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "pink",
+          "snr_db": 9.7
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01329/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01329/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_wiener",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01329/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01329/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01377",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01377.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Rain",
+          "timestamp": "00:00:04.149",
+          "snr_db": 2.9,
+          "onset": 4.149,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01377/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01377/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01377/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01377/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00231",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00231.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Rain",
+          "timestamp": "00:00:02.219",
+          "snr_db": 0.5,
+          "onset": 2.219,
+          "offset": 6.399
+        },
+        "_input_duration": 6.3994375,
+        "_output_duration": 6.3994375,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00231/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00231/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00231/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00231/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00146",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00146.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": -5
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00146/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00146/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00146/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00146/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-a-0247",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0247.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 0.9
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 11.111125,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0247/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0247/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.111111
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0247/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.111111
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0247/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00226",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00226.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "start",
+          "duration_sec": 0.66,
+          "noise_type": "pink",
+          "snr_db": 15.7
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.66,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00226/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00226/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "clip_off_padding",
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.659",
+          "audio_end": "00:00:30.659"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00226/turn1_clipping.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.659",
+          "audio_end": "00:00:30.659"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00226/turn1_clipping.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00822",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00822.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "end",
+          "duration_sec": 0.72,
+          "noise_type": "pink",
+          "snr_db": 19.6
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.72,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00822/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00822/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "trim_silence_heuristic",
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:10.719",
+          "threshold_db": 35.0
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00822/turn1_trim_silence.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:10.719",
+          "threshold_db": 35.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00822/turn1_trim_silence.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_0001587",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001587.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Vehicle",
+          "timestamp": "00:00:06.219",
+          "snr_db": 7.0,
+          "onset": 6.219,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001587/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001587/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001587/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001587/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01122",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01122.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 1.1
+        },
+        "_input_duration": 9.313514739229024,
+        "_output_duration": 8.466848072562358,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01122/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01122/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01122/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01122/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00425",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00425.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "start",
+          "duration_sec": 1.81,
+          "noise_type": "white",
+          "snr_db": 22.6
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 11.81,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00425/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00425/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "trim_silence_heuristic",
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:11.809",
+          "threshold_db": 35.0
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00425/turn1_trim_silence.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:11.809",
+          "threshold_db": 35.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00425/turn1_trim_silence.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01264",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01264.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "white",
+          "snr_db": 3.8
+        },
+        "_input_duration": 10.399546485260771,
+        "_output_duration": 10.399546485260771,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01264/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01264/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_spectral_subtraction",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 1.54
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01264/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 1.54
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01264/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00295",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00295.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Traffic noise",
+          "timestamp": "00:00:06.029",
+          "snr_db": 6.4,
+          "onset": 6.029,
+          "offset": 7.193
+        },
+        "_input_duration": 7.1929375,
+        "_output_duration": 7.1929375,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00295/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00295/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "edge_clip",
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:06.028"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00295/turn1_clipping.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:06.028"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00295/turn1_clipping.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01308",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01308.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "end",
+          "duration_sec": 1.85,
+          "noise_type": "white",
+          "snr_db": 18.6
+        },
+        "_input_duration": 10.399546485260771,
+        "_output_duration": 12.24954648526077,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01308/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01308/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "clip_off_padding",
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:10.399"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01308/turn1_clipping.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:10.399"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01308/turn1_clipping.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00173",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00173.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": 3
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00173/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00173/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -3
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00173/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -3
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00173/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01297",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01297.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Rain",
+          "timestamp": "00:00:08.679",
+          "snr_db": 6.4,
+          "onset": 8.679,
+          "offset": 10.4
+        },
+        "_input_duration": 10.399546485260771,
+        "_output_duration": 10.399546485260771,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01297/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01297/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01297/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01297/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01498",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01498.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 1.1
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 9.090916666666667,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01498/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01498/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01498/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.909091
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01498/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_0001525",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001525.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Siren",
+          "timestamp": "00:00:09.239",
+          "snr_db": 2.4,
+          "onset": 9.239,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001525/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001525/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "edge_clip",
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.238"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001525/turn1_clipping.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.238"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001525/turn1_clipping.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00190",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00190.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Dog",
+          "timestamp": "00:00:04.879",
+          "snr_db": 7.5,
+          "onset": 4.879,
+          "offset": 14.879
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00190/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00190/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00190/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00190/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01695",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01695.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 0.8
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 12.5,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01695/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01695/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01695/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01695/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01170",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01170.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Wind",
+          "timestamp": "00:00:04.819",
+          "snr_db": 6.9,
+          "onset": 4.819,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01170/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01170/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01170/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "noise"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01170/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00615",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00615.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 1.25
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 8.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00615/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00615/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.8
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00615/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.8
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00615/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_0001459",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001459.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Vehicle",
+          "timestamp": "00:00:00.459",
+          "snr_db": 3.8,
+          "onset": 0.459,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001459/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001459/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001459/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_0001459/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-a-0011",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0011.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "white",
+          "snr_db": 10.6
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0011/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0011/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_spectral_subtraction",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 2.2
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0011/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 2.2
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0011/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01513",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01513.wav",
+    "disturb_chain": [
+      {
+        "op": "change_pitch",
+        "params": {
+          "n_steps": 5
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01513/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01513/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_pitch",
+        "strategy": "inverse_pitch_shift",
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -5
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01513/turn1_pitch_shift.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01513/turn1_pitch_shift.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00546",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00546.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "pink",
+          "snr_db": 10.4
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00546/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00546/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_wiener",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00546/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00546/turn1_denoise.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-a-0086",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0086.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "end",
+          "duration_sec": 1.68,
+          "noise_type": "white",
+          "snr_db": 24.4
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 11.68,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0086/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0086/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "trim_silence_heuristic",
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:11.679",
+          "threshold_db": 30.0
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0086/turn1_trim_silence.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:11.679",
+          "threshold_db": 30.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-a-0086/turn1_trim_silence.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00107",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00107.wav",
+    "disturb_chain": [
+      {
+        "op": "pad_noise",
+        "params": {
+          "position": "start",
+          "duration_sec": 0.56,
+          "noise_type": "pink",
+          "snr_db": 16.7
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 30.56,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00107/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00107/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "pad_noise",
+        "strategy": "clip_off_padding",
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.559",
+          "audio_end": "00:00:30.559"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00107/turn1_clipping.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.559",
+          "audio_end": "00:00:30.559"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00107/turn1_clipping.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_00254",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00254.wav",
+    "disturb_chain": [
+      {
+        "op": "change_speed",
+        "params": {
+          "rate": 0.8
+        },
+        "_input_duration": 30.0,
+        "_output_duration": 37.5,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00254/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00254/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "change_speed",
+        "strategy": "inverse_time_stretch",
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00254/turn1_time_stretch.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_00254/turn1_time_stretch.wav"
+      }
+    ]
+  },
+  {
+    "id": "fold2-c-0072",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-c-0072.wav",
+    "disturb_chain": [
+      {
+        "op": "insert_background_event",
+        "params": {
+          "label": "Siren",
+          "timestamp": "00:00:08.829",
+          "snr_db": 7.6,
+          "onset": 8.829,
+          "offset": 10.0
+        },
+        "_input_duration": 10.0,
+        "_output_duration": 10.0,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0072/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0072/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "insert_background_event",
+        "strategy": "remove_target_by_label",
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-c-0072/turn1_remove_target.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "remove_target",
+        "parameters": {
+          "target_description": "background sound"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/fold2-c-0072/turn1_remove_target.wav"
+      }
+    ]
+  },
+  {
+    "id": "dev_audio_01279",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01279.wav",
+    "disturb_chain": [
+      {
+        "op": "add_noise",
+        "params": {
+          "noise_type": "pink",
+          "snr_db": 9.1
+        },
+        "_input_duration": 10.399546485260771,
+        "_output_duration": 10.399546485260771,
+        "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01279/disturbed.wav"
+      }
+    ],
+    "disturbed_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01279/disturbed.wav",
+    "recovery_chain": [
+      {
+        "recovers_op": "add_noise",
+        "strategy": "denoise_spectral_subtraction",
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 1.65
+        }
+      }
+    ],
+    "current_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01279/turn1_denoise.wav",
+    "turn_results": [
+      {
+        "turn": 1,
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 1.65
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/recovered/dev_audio_01279/turn1_denoise.wav"
+      }
+    ]
+  }
+]

@@ -11,15 +11,26 @@ as the ground-truth `tool_calls` entry for that step (after swapping in the
 placeholder audio reference). Availability is probed once at import time so the
 registry only exposes tools whose backend dependencies actually import in the
 current interpreter -- run this under the project's `ms-swift` (or similar)
-conda env to unlock librosa/soundfile-backed tools, and under `deepfilternet`,
-`audiosr`, or `sam_audio` to unlock those specific heavy tools.
+conda env to unlock librosa/soundfile-backed tools.
+
+Heavy ML tools (`human_voice_enhance`, `super_resolution`, `extract_target`,
+`remove_target`) are never imported into this interpreter -- this registry is
+meant to run in the ms-swift env, which deliberately doesn't carry torch,
+DeepFilterNet, AudioSR, or sam_audio. Instead each call is dispatched
+out-of-process via `tools/tool_batch_execute.py`, run under that tool's own
+conda env (see `_CONDA_ENV_PYTHON`, mirroring `apply_tools.py`'s `TOOL_ENV`).
+Availability is therefore probed by checking the target env's python exists
+on disk, not by importing anything.
 """
 
 from __future__ import annotations
 
 import importlib
+import json
 import shutil
+import subprocess
 import sys
+import tempfile
 import wave
 from dataclasses import dataclass
 from pathlib import Path
@@ -58,27 +69,65 @@ def _probe(module_name: str) -> bool:
 
 
 _HAS_LIBROSA = _probe("librosa") and hasattr(importlib.import_module("librosa"), "load")
-_HAS_TORCH = _probe("torch")
-_HAS_DEEPFILTER = _HAS_TORCH and _probe("df.enhance")
-_HAS_AUDIOSR = _HAS_TORCH and _probe("audiosr")
-_HAS_SAM_AUDIO = _HAS_TORCH and _probe("sam_audio")
 _HAS_SOUNDFILE = _probe("soundfile")
 
-if _HAS_DEEPFILTER:
-    from tools.human_voice_enhance import HumanVoiceAmplifyTool, HumanVoiceEnhanceTool, VOICE_AMPLIFY_GAIN_DB  # noqa: E402
-if _HAS_AUDIOSR:
-    from tools.super_resolution import SuperResolutionTool  # noqa: E402
-if _HAS_SAM_AUDIO:
-    from tools.extract_remove_target import SEPARATION_LABELS, ExtractTargetTool, RemoveTargetTool  # noqa: E402
+# Heavy ML tools (DeepFilterNet / AudioSR / sam_audio) don't get imported into
+# this interpreter -- this registry runs under the ms-swift env, which
+# intentionally doesn't carry torch or those packages. Instead they're
+# dispatched out-of-process to their own dedicated conda envs via
+# `tools/tool_batch_execute.py`, the same split apply_tools.py's TOOL_ENV
+# uses. Availability is therefore probed by checking the env's python exists,
+# not by importing anything here.
+_CONDA_ENV_PYTHON: Dict[str, str] = {
+    "human_voice_enhance": "/home/u1501463/miniconda3/envs/deepfilternet/bin/python",
+    "super_resolution": "/home/u1501463/miniconda3/envs/audiosr/bin/python",
+    "extract_target": "/home/u1501463/miniconda3/envs/sam_audio/bin/python",
+    "remove_target": "/home/u1501463/miniconda3/envs/sam_audio/bin/python",
+}
 
+
+def _run_tool_subprocess(tool_name: str, params: Dict[str, Any]) -> Dict[str, Any]:
+    """Run one heavy ML tool call out-of-process, in the conda env that owns it."""
+    python_executable = _CONDA_ENV_PYTHON[tool_name]
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        input_path = Path(tmp_dir) / "input.json"
+        output_path = Path(tmp_dir) / "output.json"
+        input_path.write_text(json.dumps([params]), encoding="utf-8")
+        subprocess.run(
+            [
+                python_executable,
+                str(REPO_ROOT / "tools" / "tool_batch_execute.py"),
+                "--tool-name", tool_name,
+                "--input-file", str(input_path),
+                "--output-file", str(output_path),
+            ],
+            check=True,
+        )
+        results = json.loads(output_path.read_text(encoding="utf-8"))
+
+    if not isinstance(results, list) or len(results) != 1:
+        raise RuntimeError(f"Unexpected batch result for {tool_name}: {results!r}")
+    result = results[0]
+    if result.get("status") not in (None, "success"):
+        raise RuntimeError(f"{tool_name} failed: {result.get('message') or result.get('error')}")
+    return result
+
+
+_HAS_DEEPFILTER = Path(_CONDA_ENV_PYTHON["human_voice_enhance"]).exists()
+_HAS_AUDIOSR = Path(_CONDA_ENV_PYTHON["super_resolution"]).exists()
+_HAS_SAM_AUDIO = Path(_CONDA_ENV_PYTHON["extract_target"]).exists()
+
+_SEPARATION_LABELS = ["vocals", "background sound", "background music", "noise"]
+
+# add_noise / pad_noise / insert_event (below) are all disabled, so nothing
+# currently needs audio_edit.editor -- left as a flag/import stub in case
+# any of them get re-enabled later.
 _HAS_AUDIO_EDIT = _HAS_SOUNDFILE and _HAS_LIBROSA
-if _HAS_AUDIO_EDIT:
-    try:
-        from audio_edit.editor import add_noise as _ae_add_noise  # noqa: E402
-        from audio_edit.editor import insert_background_event as _ae_insert_event  # noqa: E402
-        from audio_edit.editor import pad_noise as _ae_pad_noise  # noqa: E402
-    except ImportError:
-        _HAS_AUDIO_EDIT = False
+# if _HAS_AUDIO_EDIT:
+#     try:
+#         from audio_edit.editor import insert_background_event as _ae_insert_event  # noqa: E402
+#     except ImportError:
+#         _HAS_AUDIO_EDIT = False
 
 
 # ---------------------------------------------------------------------------
@@ -314,105 +363,113 @@ def _apply_time_stretch(audio_path: Path, output_path: Path, rng: random.Random,
 
 
 # ---------------------------------------------------------------------------
-# Heavy ML-backed tools, only registered when their dependency actually imports.
+# Heavy ML-backed tools, dispatched via subprocess to their own conda env (see
+# `_run_tool_subprocess` above), only registered when that env's python exists.
 # ---------------------------------------------------------------------------
 
-if _HAS_DEEPFILTER:
-    @register("human_voice_enhance", HumanVoiceEnhanceTool.description())
-    def _apply_human_voice_enhance(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-        params = {"audio_path": str(audio_path), "output_path": str(output_path)}
-        result = HumanVoiceEnhanceTool.execute(params)
-        params.pop("output_path")
-        return params, Path(result["output_path"])
+# if _HAS_DEEPFILTER:
+#     @register(
+#         "human_voice_enhance",
+#         "Enhance human voice in an audio file by reducing background noise using DeepFilterNet.",
+#     )
+#     def _apply_human_voice_enhance(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+#         params = {"audio_path": str(audio_path)}
+#         result = _run_tool_subprocess("human_voice_enhance", params)
+#         final_path = _finalize(Path(result["output_path"]), output_path)
+#         return params, final_path
 
-    @register("human_voice_amplify", HumanVoiceAmplifyTool.description())
-    def _apply_human_voice_amplify(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-        params = {
-            "audio_path": str(audio_path),
-            "gain_db": rng.choice(VOICE_AMPLIFY_GAIN_DB),
-            "output_path": str(output_path),
-        }
-        result = HumanVoiceAmplifyTool.execute(params)
-        params.pop("output_path")
-        return params, Path(result["output_path"])
+# if _HAS_AUDIOSR:
+#     @register(
+#         "super_resolution",
+#         "Upsample and restore high-frequency detail of an audio file using the AudioSR "
+#         "latent diffusion model, producing a 48kHz output.",
+#     )
+#     def _apply_super_resolution(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+#         params = {
+#             "audio_path": str(audio_path),
+#             "model_name": rng.choice(["basic", "speech"]),
+#         }
+#         result = _run_tool_subprocess("super_resolution", params)
+#         final_path = _finalize(Path(result["output_path"]), output_path)
+#         return params, final_path
 
-if _HAS_AUDIOSR:
-    @register("super_resolution", SuperResolutionTool.description())
-    def _apply_super_resolution(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-        params = {
-            "audio_path": str(audio_path),
-            "model_name": rng.choice(["basic", "speech"]),
-            "output_path": str(output_path),
-        }
-        result = SuperResolutionTool.execute(params)
-        params.pop("output_path")
-        return params, Path(result["output_path"])
+# if _HAS_SAM_AUDIO:
+#     @register(
+#         "extract_target",
+#         "Extract a specific sound source from a WAV audio segment. "
+#         f"The label must be one of the fixed supported values: {', '.join(_SEPARATION_LABELS)}.",
+#     )
+#     def _apply_extract_target(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+#         params = {
+#             "audio_path": str(audio_path),
+#             "target_description": rng.choice(_SEPARATION_LABELS),
+#         }
+#         result = _run_tool_subprocess("extract_target", params)
+#         final_path = _finalize(Path(result["output_path"]), output_path)
+#         return params, final_path
 
-if _HAS_SAM_AUDIO:
-    @register("extract_target", ExtractTargetTool.description())
-    def _apply_extract_target(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-        params = {
-            "audio_path": str(audio_path),
-            "target_description": rng.choice(SEPARATION_LABELS),
-        }
-        result = ExtractTargetTool.execute(params)
-        final_path = _finalize(Path(result["output_path"]), output_path)
-        return params, final_path
-
-    @register("remove_target", RemoveTargetTool.description())
-    def _apply_remove_target(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-        params = {
-            "audio_path": str(audio_path),
-            "target_description": rng.choice(SEPARATION_LABELS),
-        }
-        result = RemoveTargetTool.execute(params)
-        final_path = _finalize(Path(result["output_path"]), output_path)
-        return params, final_path
+#     @register(
+#         "remove_target",
+#         "Remove a specific sound source from a WAV audio segment. "
+#         f"The label must be one of the fixed supported values: {', '.join(_SEPARATION_LABELS)}.",
+#     )
+#     def _apply_remove_target(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+#         params = {
+#             "audio_path": str(audio_path),
+#             "target_description": rng.choice(_SEPARATION_LABELS),
+#         }
+#         result = _run_tool_subprocess("remove_target", params)
+#         final_path = _finalize(Path(result["output_path"]), output_path)
+#         return params, final_path
 
 
 # ---------------------------------------------------------------------------
 # audio_edit ops: noise mixing / padding / background-event insertion.
 # ---------------------------------------------------------------------------
 
-if _HAS_AUDIO_EDIT:
-    _INSERT_EVENT_LABELS = ["Dog", "Bird", "Wind", "Rain", "Siren", "Traffic noise", "Cat", "Vehicle"]
-
-    @register("add_noise", "Mix Gaussian (or a real recording's) noise into the whole clip at a target SNR.")
-    def _apply_add_noise(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-        params = {
-            "audio_path": str(audio_path),
-            "snr_db": round(rng.uniform(5.0, 20.0), 1),
-            "output_path": str(output_path),
-        }
-        result = _ae_add_noise(**params)
-        params.pop("output_path")
-        return params, Path(result["output_path"])
-
-    @register("pad_noise", "Extend the clip with noise padding at the start, end, or both.")
-    def _apply_pad_noise(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-        params = {
-            "audio_path": str(audio_path),
-            "position": rng.choice(["start", "end", "both"]),
-            "duration_sec": round(rng.uniform(0.3, 1.5), 2),
-            "output_path": str(output_path),
-        }
-        result = _ae_pad_noise(**params)
-        params.pop("output_path")
-        return params, Path(result["output_path"])
-
-    @register("insert_event", "Insert a labeled AudioSet background sound event at a timestamp.")
-    def _apply_insert_event(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-        timestamp = round(rng.uniform(0.0, max(0.0, duration - 0.2)), 2)
-        params = {
-            "audio_path": str(audio_path),
-            "label": rng.choice(_INSERT_EVENT_LABELS),
-            "timestamp": format_timestamp(timestamp),
-            "snr_db": round(rng.uniform(0.0, 10.0), 1),
-            "output_path": str(output_path),
-        }
-        result = _ae_insert_event(**params)
-        params.pop("output_path")
-        return params, Path(result["output_path"])
+# Disabled: add_noise/pad_noise only ever mix in generic noise (busywork, not
+# a meaningful edit); insert_event was disabled at the user's request too.
+# Kept here (commented) rather than deleted in case they're wanted again later.
+#
+# if _HAS_AUDIO_EDIT:
+#     _INSERT_EVENT_LABELS = ["Dog", "Bird", "Wind", "Rain", "Siren", "Traffic noise", "Cat", "Vehicle"]
+#
+#     @register("add_noise", "Mix Gaussian (or a real recording's) noise into the whole clip at a target SNR.")
+#     def _apply_add_noise(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+#         params = {
+#             "audio_path": str(audio_path),
+#             "snr_db": round(rng.uniform(5.0, 20.0), 1),
+#             "output_path": str(output_path),
+#         }
+#         result = _ae_add_noise(**params)
+#         params.pop("output_path")
+#         return params, Path(result["output_path"])
+#
+#     @register("pad_noise", "Extend the clip with noise padding at the start, end, or both.")
+#     def _apply_pad_noise(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+#         params = {
+#             "audio_path": str(audio_path),
+#             "position": rng.choice(["start", "end", "both"]),
+#             "duration_sec": round(rng.uniform(0.3, 1.5), 2),
+#             "output_path": str(output_path),
+#         }
+#         result = _ae_pad_noise(**params)
+#         params.pop("output_path")
+#         return params, Path(result["output_path"])
+#
+#     @register("insert_event", "Insert a labeled AudioSet background sound event at a timestamp.")
+#     def _apply_insert_event(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+#         timestamp = round(rng.uniform(0.0, max(0.0, duration - 0.2)), 2)
+#         params = {
+#             "audio_path": str(audio_path),
+#             "label": rng.choice(_INSERT_EVENT_LABELS),
+#             "timestamp": format_timestamp(timestamp),
+#             "snr_db": round(rng.uniform(0.0, 10.0), 1),
+#             "output_path": str(output_path),
+#         }
+#         result = _ae_insert_event(**params)
+#         params.pop("output_path")
+#         return params, Path(result["output_path"])
 
 
 def available_tool_names() -> list[str]:

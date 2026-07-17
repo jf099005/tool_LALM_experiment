@@ -6,7 +6,7 @@ tool_use_benchmark/model_engine.py).
 """
 
 from __future__ import annotations
-
+from argparse import Namespace, ArgumentParser
 import sys
 
 
@@ -25,6 +25,40 @@ def report_gpu_status() -> None:
         total_gb = total_bytes / 1024**3
         print(f"[GPU {i}] {name}: {used_gb:.2f} GiB used / {total_gb:.2f} GiB total")
 
+def parse_args() -> Namespace:
+    parser = ArgumentParser(description="Train a model using ms-swift's SFT.")
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="/work/u1501463/hf_cache/",
+        help="Model name or path (default: Qwen/Qwen2.5-Omni-7B)",
+    )
+    parser.add_argument(
+        "--dataset",
+        type=str,
+        nargs="+",
+        default=["./train.jsonl"],
+        help="Path(s) to dataset file(s) (default: ./train.jsonl)",
+    )
+    parser.add_argument(
+        "--output_dir",
+        type=str,
+        default="output",
+        help="Directory to save the trained model (default: output)",
+    )
+    parser.add_argument(
+        "--max_length",
+        type=int,
+        default=20000,
+        help="Maximum sequence length",
+    )
+    parser.add_argument(
+        "--torch_dtype",
+        type=str,
+        default="float16",
+        help="Torch data type for training (default: float16)",
+    )
+    return parser.parse_args()
 
 def main() -> None:
     report_gpu_status()
@@ -34,13 +68,14 @@ def main() -> None:
     sys.path = [p for p in sys.path if ".local" not in p]
     from swift import SftArguments, sft_main  # noqa: E402
 
+    args = parse_args()
     args = SftArguments(
-        model="Qwen/Qwen2.5-Omni-7B",
-        dataset=["./train.jsonl"],
+        model=args.model,
+        dataset=args.dataset,
         tuner_type="lora",
-        output_dir="output",
-        max_length=4096,
-        torch_dtype="float16",
+        output_dir=args.output_dir,
+        max_length=args.max_length,
+        torch_dtype=args.torch_dtype,
     )
     sft_main(args)
 

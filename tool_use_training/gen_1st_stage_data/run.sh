@@ -1,9 +1,11 @@
+stage1_dir=/work/u1501463/tool_use_stage1/
+# stage1_dir=./exp/
 python build_dataset.py \
     --sources audioset \
-    --num-samples 10000   \
+    --num-samples 20000   \
     --min-tools 1 \
-    --max-tools 2   \
+    --max-tools 1   \
     --seed 0   \
-    --output-dir /work/u1501463/gen_tool_usage_QA/audio   \
-    --output-file ../tool_usage_qa_audioset.json \
-    --swift-output-file ../train.jsonl
+    --output-dir ${stage1_dir}/audio   \
+    --output-file ${stage1_dir}/tool_usage_qa_audioset.json \
+    --swift-output-file ${stage1_dir}/train.jsonl

@@ -1,0 +1,71 @@
+[
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00375/disturbed.wav"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "noise_factor": 2.18,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01518/disturbed.wav"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "noise_factor": 1.83,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00356/disturbed.wav"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "noise_factor": 1.55,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0071/disturbed.wav"
+  },
+  {
+    "algorithm": "adaptive",
+    "sensitivity": 0.63,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0249/disturbed.wav"
+  },
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00194/disturbed.wav"
+  },
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001409/disturbed.wav"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "noise_factor": 2.48,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-c-0046/disturbed.wav"
+  },
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01210/disturbed.wav"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "noise_factor": 1.56,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00287/disturbed.wav"
+  },
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01329/disturbed.wav"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "noise_factor": 1.54,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01264/disturbed.wav"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "noise_factor": 2.2,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0011/disturbed.wav"
+  },
+  {
+    "algorithm": "wiener",
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00546/disturbed.wav"
+  },
+  {
+    "algorithm": "spectral_subtraction",
+    "noise_factor": 1.65,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01279/disturbed.wav"
+  }
+]

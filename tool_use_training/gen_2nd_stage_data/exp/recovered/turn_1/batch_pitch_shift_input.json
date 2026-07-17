@@ -1,0 +1,78 @@
+[
+  {
+    "n_steps": 5,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001512/disturbed.wav"
+  },
+  {
+    "n_steps": 3,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01117/disturbed.wav"
+  },
+  {
+    "n_steps": 5,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00594/disturbed.wav"
+  },
+  {
+    "n_steps": 3,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01290/disturbed.wav"
+  },
+  {
+    "n_steps": 3,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0096/disturbed.wav"
+  },
+  {
+    "n_steps": 5,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01686/disturbed.wav"
+  },
+  {
+    "n_steps": 5,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01018/disturbed.wav"
+  },
+  {
+    "n_steps": 5,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00410/disturbed.wav"
+  },
+  {
+    "n_steps": 5,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00112/disturbed.wav"
+  },
+  {
+    "n_steps": -5,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00186/disturbed.wav"
+  },
+  {
+    "n_steps": 3,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_0001571/disturbed.wav"
+  },
+  {
+    "n_steps": 5,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01379/disturbed.wav"
+  },
+  {
+    "n_steps": -3,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0261/disturbed.wav"
+  },
+  {
+    "n_steps": -3,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0122/disturbed.wav"
+  },
+  {
+    "n_steps": 3,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-b-0068/disturbed.wav"
+  },
+  {
+    "n_steps": 3,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/fold2-a-0225/disturbed.wav"
+  },
+  {
+    "n_steps": 5,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00146/disturbed.wav"
+  },
+  {
+    "n_steps": -3,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_00173/disturbed.wav"
+  },
+  {
+    "n_steps": -5,
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed/dev_audio_01513/disturbed.wav"
+  }
+]

@@ -15,7 +15,7 @@ uq_semantic_entropy=false              # H_sem via NLI entailment clustering (lo
 uq_p_true=true                         # P(True) self-verification (one extra generation per item)
 # -----------------------------------------------------------------------------
 
-output_path=predictions/qwen25/MMAU_${exp_name}_overwrite_uq.json
+result_path=/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/results
 
 to_flag() {
     # $1 = flag base name (e.g. uq_p_true), $2 = true/false
@@ -25,10 +25,35 @@ to_flag() {
         echo "--no-$1"
     fi
 }
-    
+
+disturbed_path=tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed_subset.json
+recovered_path=tool_use_training/gen_2nd_stage_data/exp/recovered/recovered_subset.json
+
+echo "Running uncertainty quantification on disturbed subset..."
+
+# python qwen25_with_tool_chain_evaluation.py \
+#     --subset_path ${disturbed_path} \
+#     --compute_uncertainty \
+#     --output_path ${result_path}/disturbed_uq_results.json \
+#     --uq_num_samples ${uq_num_samples} \
+#     --uq_sample_temperature ${uq_sample_temperature} \
+#     # --load_tool_chain_results \
+#     # --overwrite_original_audio \
+#     # --output_path predictions/qwen25/Dcase_${exp_name}_overwrite_uq.json \
+#     # --tool_results_path ./tool_outputs/dcase_small_${exp_name}/tool_outputs/ \
+
+#     # $(to_flag uq_predictive_entropy ${uq_predictive_entropy}) \
+#     # $(to_flag uq_length_normalized_entropy ${uq_length_normalized_entropy}) \
+#     # $(to_flag uq_discrete_semantic_entropy ${uq_discrete_semantic_entropy}) \
+#     # $(to_flag uq_semantic_entropy ${uq_semantic_entropy}) \
+#     # $(to_flag uq_p_true ${uq_p_true}) \
+
+echo "Running uncertainty quantification on recovered subset..."
+
 python qwen25_with_tool_chain_evaluation.py \
-    --subset_path tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed_subset.json \
+    --subset_path ${recovered_path} \
     --compute_uncertainty \
+    --output_path ${result_path}/recovered_uq_results.json \
     --uq_num_samples ${uq_num_samples} \
     --uq_sample_temperature ${uq_sample_temperature} \
     # --load_tool_chain_results \
@@ -41,3 +66,4 @@ python qwen25_with_tool_chain_evaluation.py \
     # $(to_flag uq_discrete_semantic_entropy ${uq_discrete_semantic_entropy}) \
     # $(to_flag uq_semantic_entropy ${uq_semantic_entropy}) \
     # $(to_flag uq_p_true ${uq_p_true}) \
+

@@ -8,7 +8,8 @@
 PY=/home/u1501463/miniconda3/envs/Whisper/bin/python
 
 exp=mmau_stage2
-work_dir=/work/u1501463/gen_2nd_stage/${exp}
+# work_dir=/work/u1501463/gen_2nd_stage/${exp}
+work_dir=./exp/
 
 mkdir ${work_dir}
 # 1. Sample QA pairs from a larger benchmark file (independent of disturb/recover --

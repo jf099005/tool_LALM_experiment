@@ -7,12 +7,14 @@ target audio B, then emit a (Question, Answer) pair where the Answer is a pure
 tool-call JSON trace (no natural language) that reproduces B from A.
 
 Each audio involved is given a unique audio_id (audio_0 = A, audio_1 = B, then
-audio_2, audio_3, ... for intermediate step outputs in the order they're
-produced) -- see `audio_id_map` on each entry. Tool calls reference their input
-audio by `parameters["audio_id"]` rather than a literal path, and declare an
-`output_audio_id` for their own output -- an id that doesn't exist yet at call
-time, except on the final step, where it aliases the already-known audio_1
-(the target), since that step's output *is* the target.
+audio_2, audio_3, ... for every tool-call output, final step included, in the
+order they're produced) -- see `audio_id_map` on each entry. Tool calls
+reference their input audio by `parameters["audio_id"]` rather than a literal
+path, and declare an `output_audio_id` for their own output -- an id that
+doesn't exist yet at call time. The final step's output id is a fresh one too
+(never audio_1): a model can't know in advance that a call's output will
+exactly equal the pre-revealed target, so the chain's end is signalled purely
+by the explicit trailing `{"done": true}` turn, not by an id choice.
 
 Usage:
     python build_dataset.py --num-samples 200 --output-dir /work/u1501463/gen_tool_usage_QA
@@ -38,8 +40,12 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from generate.gen_tool_usage_QA import tool_registry  # noqa: E402
-from generate.gen_tool_usage_QA.question_templates import render_question  # noqa: E402
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+import tool_registry  # noqa: E402
+from question_templates import render_question  # noqa: E402
 
 DEFAULT_AUDIOSET_DIR = Path("/work/u1501463/audioset_20k/20k/train")
 DEFAULT_VCTK_DIR = Path("/work/u1501463/VCTK/wav48_silence_trimmed")
@@ -60,18 +66,20 @@ def assign_audio_ids(num_steps: int) -> tuple[List[str], List[str]]:
     """Compute (input_id, output_id) per step for a chain of `num_steps` tool calls.
 
     Ids mirror the order audios are introduced to the model: audio_0 is the
-    source, audio_1 is the target. Every step's output mints a fresh id
-    (audio_2, audio_3, ...) that doesn't exist until that step runs, *except*
-    the final step -- its output is by definition the target, so it aliases
-    the already-known audio_1 instead of minting a new one. A model emitting
-    output_audio_id == "audio_1" is therefore claiming "this call finishes the
-    chain", which doubles as an implicit done signal.
+    source, audio_1 is the target. Every step's output -- including the final
+    one -- mints a fresh id (audio_2, audio_3, ...) that doesn't exist until
+    that step runs. The final step's real output happens to be byte-identical
+    to the target, but it keeps its own fresh id rather than aliasing
+    audio_1: at generation time the model has no way to know a given call
+    will exactly reproduce the target before the tool actually runs it, so
+    the chain's end is signalled only by the explicit trailing
+    `{"done": true}` turn.
     """
     input_ids: List[str] = []
     output_ids: List[str] = []
     for step_index in range(1, num_steps + 1):
         input_ids.append("audio_0" if step_index == 1 else output_ids[-1])
-        output_ids.append("audio_1" if step_index == num_steps else f"audio_{step_index + 1}")
+        output_ids.append(f"audio_{step_index + 1}")
     return input_ids, output_ids
 
 
@@ -103,13 +111,14 @@ def to_swift_sample(
     """
     audio_id_map = entry["audio_id_map"]
     audios: List[str] = []
-    bound: Dict[str, str] = {}
 
     def tag(audio_id: str) -> str:
-        if audio_id not in bound:
-            bound[audio_id] = f"<{audio_id}>{audio_token}"
-            audios.append(audio_id_map[audio_id])
-        return bound[audio_id]
+        # ms-swift binds each `audio_token` occurrence in the text, in order, to
+        # one entry in `audios` -- it does not dedupe by audio_id. So every
+        # occurrence must append a path, even if the same id were ever tagged
+        # more than once.
+        audios.append(audio_id_map[audio_id])
+        return f"<{audio_id}>{audio_token}"
 
     question_text = entry["question"].replace(entry["source_audio"], tag("audio_0"), 1)
     question_text = question_text.replace(entry["target_audio"], tag("audio_1"), 1)
@@ -180,7 +189,9 @@ def build_one_sample(
         step_outputs[-1] = audio_b
 
     audio_id_map = {"audio_0": str(audio_a), "audio_1": str(audio_b)}
-    for step_index in range(1, len(chosen_tools)):  # excludes the final step, which aliases audio_1
+    for step_index in range(1, len(chosen_tools) + 1):
+        # The final step's fresh id maps to the same file as audio_1 (its
+        # output *is* the target) -- two ids for one file, not a conflict.
         audio_id_map[output_ids[step_index - 1]] = str(step_outputs[step_index - 1])
 
     tools_block = tool_registry.describe_available_tools()
@@ -259,6 +270,7 @@ def main() -> None:
         raise SystemExit("No tools are available in the current environment -- check tool_registry dependencies.")
     print(f"Available tools ({len(tool_names)}): {tool_names}", file=sys.stderr)
 
+    args.output_dir = args.output_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     dataset: List[Dict[str, Any]] = []
