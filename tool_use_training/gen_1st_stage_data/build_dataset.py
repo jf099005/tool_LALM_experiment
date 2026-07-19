@@ -29,12 +29,26 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import random
 import sys
 import traceback
 import uuid
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
+
+# Each worker process handles one sample at a time on a small (few-second)
+# clip -- BLAS/OpenMP intra-op threading buys nothing there and just causes
+# oversubscription once samples are parallelized across processes. Must be
+# set (via setdefault, so an explicit env config still wins) before numpy
+# ever gets imported -- e.g. transitively through tool_registry below --
+# since these libraries fix their thread count at first import.
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+os.environ.setdefault("NUMEXPR_NUM_THREADS", "1")
+os.environ.setdefault("VECLIB_MAXIMUM_THREADS", "1")
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
@@ -210,6 +224,47 @@ def build_one_sample(
     }
 
 
+def _build_sample_task(
+    task_index: int,
+    seed: int,
+    source_files: List[Path],
+    work_dir: Path,
+    tool_names: List[str],
+    min_tools: int,
+    max_tools: int,
+    max_attempts: int,
+) -> Optional[Dict[str, Any]]:
+    """Run in a worker process: build one sample, retrying with fresh draws.
+
+    `task_index` seeds a private `random.Random` so results stay reproducible
+    for a given `seed` regardless of how many workers run or in what order
+    they finish (unlike a single shared `random.Random` mutated across
+    threads, which can't be replayed deterministically).
+    """
+    rng = random.Random(seed + task_index)
+    sample_id = f"sample_{uuid.uuid4().hex[:12]}"
+    source_file = rng.choice(source_files)
+
+    for attempt in range(max_attempts):
+        try:
+            return build_one_sample(
+                sample_id=sample_id,
+                source_file=source_file,
+                work_dir=work_dir,
+                tool_names=tool_names,
+                min_tools=min_tools,
+                max_tools=max_tools,
+                rng=rng,
+            )
+        except Exception:
+            print(f"Attempt {attempt + 1} failed for {sample_id} ({source_file}):", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
+            source_file = rng.choice(source_files)
+
+    print(f"Giving up on {sample_id} after {max_attempts} attempts.", file=sys.stderr)
+    return None
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate a synthetic audio tool-use QA dataset.")
     parser.add_argument("--num-samples", type=int, default=50)
@@ -237,6 +292,17 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--max-attempts-per-sample", type=int, default=5)
     parser.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help=(
+            "Number of worker processes to build samples in parallel. "
+            "1 = sequential (original behavior). Each active tool here is "
+            "CPU-only, so this scales with core count -- avoid setting it "
+            "above os.cpu_count()."
+        ),
+    )
+    parser.add_argument(
         "--swift-output-file",
         type=Path,
         default=None,
@@ -259,8 +325,6 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    rng = random.Random(args.seed)
-
     source_files = collect_source_files(args.sources)
     if not source_files:
         raise SystemExit(f"No source audio files found for sources={args.sources}")
@@ -273,31 +337,82 @@ def main() -> None:
     args.output_dir = args.output_dir.resolve()
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
-    dataset: List[Dict[str, Any]] = []
-    while len(dataset) < args.num_samples:
-        source_file = rng.choice(source_files)
-        sample_id = f"sample_{uuid.uuid4().hex[:12]}"
+    results: Dict[int, Dict[str, Any]] = {}
 
-        for attempt in range(args.max_attempts_per_sample):
-            try:
-                entry = build_one_sample(
-                    sample_id=sample_id,
-                    source_file=source_file,
-                    work_dir=args.output_dir,
-                    tool_names=tool_names,
-                    min_tools=args.min_tools,
-                    max_tools=args.max_tools,
-                    rng=rng,
+    if args.workers <= 1:
+        # Sequential path: same behavior as before, minus the process-pool
+        # bookkeeping. Kept separate rather than routed through the pool so
+        # --workers 1 has zero parallel-machinery overhead.
+        next_index = 0
+        while len(results) < args.num_samples:
+            entry = _build_sample_task(
+                task_index=next_index,
+                seed=args.seed,
+                source_files=source_files,
+                work_dir=args.output_dir,
+                tool_names=tool_names,
+                min_tools=args.min_tools,
+                max_tools=args.max_tools,
+                max_attempts=args.max_attempts_per_sample,
+            )
+            next_index += 1
+            if entry is not None:
+                results[len(results)] = entry
+                print(
+                    f"[{len(results)}/{args.num_samples}] {entry['id']}: {entry['num_steps']} steps",
+                    file=sys.stderr,
                 )
-                dataset.append(entry)
-                print(f"[{len(dataset)}/{args.num_samples}] {sample_id}: {entry['num_steps']} steps", file=sys.stderr)
-                break
-            except Exception:
-                print(f"Attempt {attempt + 1} failed for {sample_id} ({source_file}):", file=sys.stderr)
-                traceback.print_exc(file=sys.stderr)
-                source_file = rng.choice(source_files)
-        else:
-            print(f"Giving up on {sample_id} after {args.max_attempts_per_sample} attempts.", file=sys.stderr)
+    else:
+        # Each sample is independent (own sample_dir, own private rng seeded
+        # from task_index), so samples parallelize cleanly across processes.
+        # Tasks that exhaust their retries are replaced by a freshly-seeded
+        # task rather than just dropped, so the run still ends with exactly
+        # `num_samples` entries -- matching the original sequential behavior.
+        with ProcessPoolExecutor(max_workers=args.workers) as executor:
+            next_index = 0
+            pending: Dict[Any, int] = {}
+            for _ in range(args.num_samples):
+                future = executor.submit(
+                    _build_sample_task,
+                    next_index,
+                    args.seed,
+                    source_files,
+                    args.output_dir,
+                    tool_names,
+                    args.min_tools,
+                    args.max_tools,
+                    args.max_attempts_per_sample,
+                )
+                pending[future] = next_index
+                next_index += 1
+
+            while len(results) < args.num_samples:
+                done, _ = wait(list(pending.keys()), return_when=FIRST_COMPLETED)
+                for future in done:
+                    pending.pop(future)
+                    entry = future.result()
+                    if entry is not None:
+                        results[len(results)] = entry
+                        print(
+                            f"[{len(results)}/{args.num_samples}] {entry['id']}: {entry['num_steps']} steps",
+                            file=sys.stderr,
+                        )
+                    else:
+                        replacement = executor.submit(
+                            _build_sample_task,
+                            next_index,
+                            args.seed,
+                            source_files,
+                            args.output_dir,
+                            tool_names,
+                            args.min_tools,
+                            args.max_tools,
+                            args.max_attempts_per_sample,
+                        )
+                        pending[replacement] = next_index
+                        next_index += 1
+
+    dataset: List[Dict[str, Any]] = [results[i] for i in range(len(results))]
 
     with args.output_file.open("w", encoding="utf-8") as handle:
         json.dump(dataset, handle, indent=2)
