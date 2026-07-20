@@ -1,44 +1,22 @@
+import importlib
 from typing import Dict, List, Type
 
 from .abstract_tool import Tool, ToolValidationError
-from .asr import ASRTool
-from .clipping import ClippingTool
-from .human_voice_enhance import HumanVoiceEnhanceTool
-from .normalize import (
-    AmplitudeNormalizeTool,
-    DCOffsetRemovalTool,
-    LoudnessNormalizeTool,
-    PreEmphasisTool,
-    SpectralNormalizeTool,
-    TrimSilenceTool,
-)
-from .source_separation import SourceSeparationTool
-from .super_resolution import SuperResolutionTool
-from .pitch_time import PitchShiftTool, TimeStretchTool
-# from .extract_remove_source import ExtractSourceTool, RemoveSourceTool
-from .extract_remove_target import ExtractTargetTool, RemoveTargetTool
-from .tool_execute import _TOOL_MODULES
+from ._tool_table import TOOL_MODULES
 
-TOOL_NAMES = sorted(_TOOL_MODULES.keys())
+TOOL_NAMES: List[str] = sorted(TOOL_MODULES.keys())
 
+# Single source of truth for tool_name -> class, built from `_tool_table.TOOL_MODULES`
+# (see that file's docstring for why this stays data-driven instead of one-off
+# `from .xxx import YyyTool` lines: it's the same table `tools/tool_execute.py`
+# uses for its own lazy, per-subprocess loading, so the two can never drift again).
+TOOL_NAME_TO_CLASS: Dict[str, Type[Tool]] = {}
+for _name, (_module_path, _class_name) in TOOL_MODULES.items():
+    _module = importlib.import_module(_module_path)
+    TOOL_NAME_TO_CLASS[_name] = getattr(_module, _class_name)
+del _name, _module_path, _class_name, _module
 
-TOOL_CLASSES: List[Type[Tool]] = [
-    ASRTool,
-    ClippingTool,
-    HumanVoiceEnhanceTool,
-    AmplitudeNormalizeTool,
-    LoudnessNormalizeTool,
-    DCOffsetRemovalTool,
-    SpectralNormalizeTool,
-    TrimSilenceTool,
-    PreEmphasisTool,
-    SourceSeparationTool,
-    ExtractTargetTool,
-    RemoveTargetTool,
-    SuperResolutionTool,
-    PitchShiftTool,
-    TimeStretchTool,
-]
+TOOL_CLASSES: List[Type[Tool]] = [TOOL_NAME_TO_CLASS[name] for name in TOOL_NAMES]
 
 
 def _format_parameter_schema(schema: Dict[str, Dict[str, object]]) -> List[str]:
@@ -85,30 +63,12 @@ def generate_tool_descriptions(tool_classes: List[Type[Tool]] | None = None) -> 
 
     return "\n".join(lines).strip()
 
+
 __all__ = [
     "Tool",
     "ToolValidationError",
-    "ASRTool",
-    "ClippingTool",
-    "HumanVoiceEnhanceTool",
-    "BandPassFilterTool",
-    "DynamicCompressTool",
-    "HarmonicEnhanceTool",
-    "SpectralEnhanceTool",
-    "TemporalCorrectTool",
-    "AmplitudeNormalizeTool",
-    "DCOffsetRemovalTool",
-    "LoudnessNormalizeTool",
-    "PreEmphasisTool",
-    "SpectralNormalizeTool",
-    "TrimSilenceTool",
-    "SourceSeparationTool",
-    "ExtractSourceTool",
-    "RemoveSourceTool",
-    "ExtractTargetTool",
-    "RemoveTargetTool",
-    "SuperResolutionTool",
-    "PitchShiftTool",
-    "TimeStretchTool",
+    "TOOL_NAMES",
+    "TOOL_CLASSES",
+    "TOOL_NAME_TO_CLASS",
     "generate_tool_descriptions",
 ]

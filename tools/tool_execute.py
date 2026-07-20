@@ -28,24 +28,14 @@ def parse_coefficients(value: str) -> Any:
         return value
 
 
-_TOOL_MODULES = {
-    "asr": ("tools.asr", "ASRTool"),
-    "clipping": ("tools.clipping", "ClippingTool"),
-    "denoise": ("tools.denoise", "DenoiseTool"),
-    "amplitude_normalize": ("tools.normalize", "AmplitudeNormalizeTool"),
-    "loudness_normalize": ("tools.normalize", "LoudnessNormalizeTool"),
-    "remove_dc_offset": ("tools.normalize", "DCOffsetRemovalTool"),
-    "spectral_normalize": ("tools.normalize", "SpectralNormalizeTool"),
-    "trim_silence": ("tools.normalize", "TrimSilenceTool"),
-    "pre_emphasis": ("tools.normalize", "PreEmphasisTool"),
-    "source_separation": ("tools.source_separation", "SourceSeparationTool"),
-    "extract_target": ("tools.extract_remove_target", "ExtractTargetTool"),
-    "remove_target": ("tools.extract_remove_target", "RemoveTargetTool"),
-    "human_voice_enhance": ("tools.human_voice_enhance", "HumanVoiceEnhanceTool"),
-    "super_resolution": ("tools.super_resolution", "SuperResolutionTool"),
-    "pitch_shift": ("tools.pitch_time", "PitchShiftTool"),
-    "time_stretch": ("tools.pitch_time", "TimeStretchTool"),
-}
+# This module runs both as a standalone script (`python tools/tool_execute.py ...`,
+# invoked by `tool_batch_execute.py` via a same-directory sibling import) and,
+# less commonly, imported through the `tools` package -- so the table lookup
+# supports both import styles rather than assuming a package context.
+try:
+    from _tool_table import TOOL_MODULES as _TOOL_MODULES  # sibling import (script mode)
+except ImportError:
+    from tools._tool_table import TOOL_MODULES as _TOOL_MODULES  # package import
 
 
 def get_tool_class(tool_name: str) -> type:

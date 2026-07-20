@@ -1,6 +1,6 @@
 """Build a held-out benchmark for evaluating a trained LALM's tool-use ability.
 
-Same construction recipe as tool_use_training/gen_tool_usage_QA/build_dataset.py
+Same construction recipe as tool_use_training/gen_1st_stage_data/build_dataset.py
 (pick a source audio A, draw a tool chain, apply it to get target audio B), but the
 output schema is eval-oriented: it keeps the per-step ground-truth tool calls
 *and* per-step audio paths so a grader can later (a) check whether the model's
@@ -35,7 +35,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from tool_use_training.gen_1st_stage_data.build_dataset import build_one_sample, collect_source_files  # noqa: E402
-from generate.gen_tool_usage_QA import tool_registry  # noqa: E402
+from tools import synthetic_registry as tool_registry  # noqa: E402
 
 
 def main() -> None:

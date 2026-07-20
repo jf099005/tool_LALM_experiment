@@ -102,7 +102,7 @@ TOOL_ENV: Dict[str, str] = {
 
 # ---------------------------------------------------------------------------
 # Disturbance registry: name -> (description, apply-fn). Every apply-fn has
-# the same shape as `gen_1st_stage_data/tool_registry.py`'s:
+# the same shape as `tools/synthetic_registry.py`'s:
 #   params, output_path = fn(audio_path, output_path, rng, duration)
 # `params` is the exact kwargs passed to `audio_edit.editor.edit_audio`, so it
 # doubles as the ground-truth record of what was done (and everything the

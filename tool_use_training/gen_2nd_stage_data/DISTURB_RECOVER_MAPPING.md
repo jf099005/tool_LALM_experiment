@@ -71,7 +71,9 @@ additive, non-breaking):
   "denoise" at `tools.denoise.DenoiseTool`, but the implementation lived in
   `denoise_old.py`), so any schedule calling `"denoise"` through
   `apply_tools.py`/`tool_batch_execute.py` failed with "Tool source file not found".
-  Added a one-line re-export shim.
+  Originally patched with a one-line re-export shim; later superseded by moving
+  `denoise_old.py`'s implementation directly into `tools/denoise.py` and deleting
+  the shim, when all tool-related code was consolidated under `tools/`.
 - `Tool.execute_batch` had no default implementation in `tools/abstract_tool.py` — only
   the tools that happened to define their own (`denoise`, `pitch_shift`, `time_stretch`,
   `remove_target`, ...) worked with `tools/tool_batch_execute.py`. `ClippingTool` and

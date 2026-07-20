@@ -39,7 +39,7 @@ if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from audio_metrics import compare_audio  # noqa: E402
-from tool_executor import ToolExecutionError, UnknownToolError, execute_predicted_tool_call  # noqa: E402
+from tools.predicted_executor import ToolExecutionError, UnknownToolError, execute_predicted_tool_call  # noqa: E402
 
 AUDIO_TOKEN = "<audio>"
 
@@ -181,6 +181,14 @@ def run_sample(
     recall = overlap / len(gt_tool_names) if gt_tool_names else 0.0
     f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) else 0.0
 
+    # Distinct-tool coverage: did the model actually invoke (successfully) each
+    # unique tool that appears in the ground-truth chain, regardless of order/count.
+    gt_tool_set = set(gt_tool_names)
+    pred_successful_set = set(pred_successful_names)
+    gt_tools_used = sorted(gt_tool_set & pred_successful_set)
+    gt_tools_missed = sorted(gt_tool_set - pred_successful_set)
+    gt_tool_coverage = (len(gt_tools_used) / len(gt_tool_set)) if gt_tool_set else 1.0
+
     audio_metrics = compare_audio(str(current_audio), audio_b)
 
     return {
@@ -198,6 +206,11 @@ def run_sample(
         "tool_name_precision": precision,
         "tool_name_recall": recall,
         "tool_name_f1": f1,
+        "gt_tools_used": gt_tools_used,
+        "gt_tools_missed": gt_tools_missed,
+        "gt_tool_coverage": gt_tool_coverage,
+        "used_any_gt_tool": bool(gt_tools_used) if gt_tool_set else None,
+        "used_all_gt_tools": (len(gt_tools_missed) == 0) if gt_tool_set else None,
         "final_audio_path": str(current_audio),
         "audio_metrics": audio_metrics,
         "LLM_output": accumulated_text,
@@ -241,6 +254,9 @@ def aggregate(results: List[Dict[str, Any]]) -> Dict[str, Any]:
         "mean_tool_name_precision": avg(lambda r: r["tool_name_precision"]),
         "mean_tool_name_recall": avg(lambda r: r["tool_name_recall"]),
         "mean_tool_name_f1": avg(lambda r: r["tool_name_f1"]),
+        "mean_gt_tool_coverage": avg(lambda r: r["gt_tool_coverage"]),
+        "mean_used_any_gt_tool": avg(lambda r: float(r["used_any_gt_tool"]) if r["used_any_gt_tool"] is not None else None),
+        "mean_used_all_gt_tools": avg(lambda r: float(r["used_all_gt_tools"]) if r["used_all_gt_tools"] is not None else None),
         "mean_audio_log_mel_cosine": avg(lambda r: r["audio_metrics"]["log_mel_cosine"]),
         "mean_audio_mfcc_cosine": avg(lambda r: r["audio_metrics"]["mfcc_cosine"]),
         "mean_audio_closeness_score": avg(lambda r: r["audio_metrics"]["closeness_score"]),
@@ -286,6 +302,11 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    output_file = args.output_file
+    output_file = Path(output_file) if isinstance(output_file, str) else output_file
+
+    output_summary_file = output_file.parent / (output_file.stem + "_summary.json")
+    
     if args.backend == "vllm" and args.adapter_dir:
         raise SystemExit("--adapter-dir requires --backend swift; the vLLM backend only runs raw official weights.")
 
@@ -338,6 +359,8 @@ def main() -> None:
     with args.output_file.open("w", encoding="utf-8") as f:
         json.dump({"results": results, "summary": summary}, f, indent=2)
 
+    with output_summary_file.open("w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=2)
 
 if __name__ == "__main__":
     main()

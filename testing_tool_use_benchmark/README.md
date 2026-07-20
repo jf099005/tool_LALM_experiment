@@ -1,6 +1,6 @@
 # Tool-use benchmark for trained LALMs
 
-Evaluates a model trained with the `generate/gen_tool_usage_QA` recipe
+Evaluates a model trained with the `tool_use_training/gen_1st_stage_data` recipe
 (`build_dataset.py`) on the task it was trained for: given source audio A and
 target audio B, predict the tool-call chain that turns A into B. This folder
 is self-contained and does not modify anything under `generate/` or `tools/`.
@@ -18,13 +18,13 @@ Two things get measured per sample:
 ## Files
 
 - `build_benchmark.py` — generates held-out (A, B, ground-truth tool chain)
-  triples, reusing `generate/gen_tool_usage_QA/tool_registry.py` and
-  `question_templates.py` so the benchmark matches the training distribution.
-  Use a different `--seed` (and optionally `--held-out-fraction`) from
-  whatever generated `train.jsonl` so samples don't leak into eval.
-- `tool_executor.py` — runs one *model-predicted* `(tool_name, parameters)`
-  call against a real audio file (as opposed to `tool_registry.REGISTRY`,
-  which invents random parameters to synthesize ground truth).
+  triples, reusing `tools/synthetic_registry.py` and `question_templates.py`
+  so the benchmark matches the training distribution. Use a different `--seed`
+  (and optionally `--held-out-fraction`) from whatever generated `train.jsonl`
+  so samples don't leak into eval.
+- `tools/predicted_executor.py` — runs one *model-predicted* `(tool_name, parameters)`
+  call against a real audio file (as opposed to `tools/synthetic_registry.py`'s
+  `REGISTRY`, which invents random parameters to synthesize ground truth).
 - `audio_metrics.py` — length-robust audio similarity metrics.
 - `model_engine.py` — two interchangeable backends behind one
   `generate_turn(messages, audios) -> str` interface: `SwiftEngine` (ms-swift's

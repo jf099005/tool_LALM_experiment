@@ -19,7 +19,7 @@ by the explicit trailing `{"done": true}` turn, not by an id choice.
 Usage:
     python build_dataset.py --num-samples 200 --output-dir /work/u1501463/gen_tool_usage_QA
 
-See tool_registry.py for which tools are active -- it depends on what's
+See tools/synthetic_registry.py for which tools are active -- it depends on what's
 importable in the current interpreter (run under the project's `ms-swift` env
 for librosa/soundfile-backed tools, or `deepfilternet`/`audiosr`/`sam_audio`
 to unlock those specific heavy tools).
@@ -58,7 +58,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-import tool_registry  # noqa: E402
+from tools import synthetic_registry as tool_registry  # noqa: E402
 from question_templates import render_question  # noqa: E402
 
 DEFAULT_AUDIOSET_DIR = Path("/work/u1501463/audioset_20k/20k/train")
