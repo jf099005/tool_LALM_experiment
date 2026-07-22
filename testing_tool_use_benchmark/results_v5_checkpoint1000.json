@@ -6325,36 +6325,443 @@
         "closeness_score": 0.9895715713500977
       },
       "LLM_output": "{\"tool_name\": \"denoise\", \"parameters\": {\"algorithm\": \"adaptive\", \"sensitivity\": 0.53, \"audio_id\": \"audio_0\"}, \"output_audio_id\": \"audio_2\"}\n{\"done\": true}\n"
+    },
+    {
+      "id": "bench_96abcf7587c3",
+      "num_gt_steps": 1,
+      "gt_tool_sequence": [
+        "loudness_normalize"
+      ],
+      "predicted_steps": [
+        {
+          "step": 1,
+          "tool_name": "loudness_normalize",
+          "parameters": {
+            "audio_begin": "00:00:00.000",
+            "audio_end": "00:00:09.999",
+            "target_lufs": -14.0,
+            "audio_id": "audio_0"
+          },
+          "success": true
+        }
+      ],
+      "predicted_attempted_sequence": [
+        "loudness_normalize"
+      ],
+      "predicted_successful_sequence": [
+        "loudness_normalize"
+      ],
+      "stop_reason": "model_signaled_done",
+      "num_predicted_calls": 1,
+      "num_successful_calls": 1,
+      "tool_call_success_rate": 1.0,
+      "exact_sequence_match": true,
+      "tool_name_precision": 1.0,
+      "tool_name_recall": 1.0,
+      "tool_name_f1": 1.0,
+      "gt_tools_used": [
+        "loudness_normalize"
+      ],
+      "gt_tools_missed": [],
+      "gt_tool_coverage": 1.0,
+      "used_any_gt_tool": true,
+      "used_all_gt_tools": true,
+      "final_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/tool_use_RL/output/model_qwen_25/v1-20260722-005330/checkpoint-5000/bench_96abcf7587c3/pred_step1_loudness_normalize.wav",
+      "audio_metrics": {
+        "duration_pred_sec": 9.999,
+        "duration_target_sec": 9.999,
+        "duration_ratio": 1.0,
+        "log_mel_cosine": 1.0,
+        "log_mel_l1": 0.0,
+        "mfcc_cosine": 1.0000001192092896,
+        "rms_db_pred": -21.042247772216797,
+        "rms_db_target": -21.042247772216797,
+        "rms_db_diff": 0.0,
+        "si_sdr_db": 110.99852752685547,
+        "closeness_score": 1.0
+      },
+      "baseline_metrics": {
+        "duration_pred_sec": 10.0,
+        "duration_target_sec": 9.999,
+        "duration_ratio": 1.000100010001,
+        "log_mel_cosine": 0.9873995184898376,
+        "log_mel_l1": 3.568814992904663,
+        "mfcc_cosine": 0.9898540377616882,
+        "rms_db_pred": -24.554969787597656,
+        "rms_db_target": -21.042247772216797,
+        "rms_db_diff": -3.5127220153808594,
+        "si_sdr_db": 75.93608856201172,
+        "closeness_score": 0.9943133890628815
+      },
+      "LLM_output": "{\"tool_name\": \"loudness_normalize\", \"parameters\": {\"audio_begin\": \"00:00:00.000\", \"audio_end\": \"00:00:09.999\", \"target_lufs\": -14.0, \"audio_id\": \"audio_0\"}, \"output_audio_id\": \"audio_2\"}\n{\"done\": true}\n"
+    },
+    {
+      "id": "bench_f06e8d5ecf7f",
+      "num_gt_steps": 1,
+      "gt_tool_sequence": [
+        "remove_dc_offset"
+      ],
+      "predicted_steps": [
+        {
+          "step": 1,
+          "tool_name": "remove_dc_offset",
+          "parameters": {
+            "audio_begin": "00:00:00.000",
+            "audio_end": "00:00:09.999",
+            "audio_id": "audio_0"
+          },
+          "success": true
+        }
+      ],
+      "predicted_attempted_sequence": [
+        "remove_dc_offset"
+      ],
+      "predicted_successful_sequence": [
+        "remove_dc_offset"
+      ],
+      "stop_reason": "model_signaled_done",
+      "num_predicted_calls": 1,
+      "num_successful_calls": 1,
+      "tool_call_success_rate": 1.0,
+      "exact_sequence_match": true,
+      "tool_name_precision": 1.0,
+      "tool_name_recall": 1.0,
+      "tool_name_f1": 1.0,
+      "gt_tools_used": [
+        "remove_dc_offset"
+      ],
+      "gt_tools_missed": [],
+      "gt_tool_coverage": 1.0,
+      "used_any_gt_tool": true,
+      "used_all_gt_tools": true,
+      "final_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/tool_use_RL/output/model_qwen_25/v1-20260722-005330/checkpoint-5000/bench_f06e8d5ecf7f/pred_step1_remove_dc_offset.wav",
+      "audio_metrics": {
+        "duration_pred_sec": 9.999,
+        "duration_target_sec": 9.999,
+        "duration_ratio": 1.0,
+        "log_mel_cosine": 1.0,
+        "log_mel_l1": 0.0,
+        "mfcc_cosine": 1.0000001192092896,
+        "rms_db_pred": -19.614503860473633,
+        "rms_db_target": -19.614503860473633,
+        "rms_db_diff": 0.0,
+        "si_sdr_db": 112.42626190185547,
+        "closeness_score": 1.0
+      },
+      "baseline_metrics": {
+        "duration_pred_sec": 10.0,
+        "duration_target_sec": 9.999,
+        "duration_ratio": 1.000100010001,
+        "log_mel_cosine": 0.998114824295044,
+        "log_mel_l1": 1.1913496255874634,
+        "mfcc_cosine": 0.9989483952522278,
+        "rms_db_pred": -19.614049911499023,
+        "rms_db_target": -19.614503860473633,
+        "rms_db_diff": 0.000453948974609375,
+        "si_sdr_db": 62.629493713378906,
+        "closeness_score": 0.9992658048868179
+      },
+      "LLM_output": "{\"tool_name\": \"remove_dc_offset\", \"parameters\": {\"audio_begin\": \"00:00:00.000\", \"audio_end\": \"00:00:09.999\", \"audio_id\": \"audio_0\"}, \"output_audio_id\": \"audio_2\"}\n{\"done\": true}\n"
+    },
+    {
+      "id": "bench_d0271a27b4e4",
+      "num_gt_steps": 1,
+      "gt_tool_sequence": [
+        "clipping"
+      ],
+      "predicted_steps": [
+        {
+          "step": 1,
+          "tool_name": "clipping",
+          "parameters": {
+            "audio_begin": "00:00:00.000",
+            "audio_end": "00:00:07.873",
+            "audio_id": "audio_0"
+          },
+          "success": false,
+          "error": "clipping validation failed: Unexpected parameter: output_path"
+        }
+      ],
+      "predicted_attempted_sequence": [
+        "clipping"
+      ],
+      "predicted_successful_sequence": [],
+      "stop_reason": "tool_execution_failed",
+      "num_predicted_calls": 1,
+      "num_successful_calls": 0,
+      "tool_call_success_rate": 0.0,
+      "exact_sequence_match": false,
+      "tool_name_precision": 0.0,
+      "tool_name_recall": 0.0,
+      "tool_name_f1": 0.0,
+      "gt_tools_used": [],
+      "gt_tools_missed": [
+        "clipping"
+      ],
+      "gt_tool_coverage": 0.0,
+      "used_any_gt_tool": false,
+      "used_all_gt_tools": false,
+      "final_audio_path": "/work/u1501463/tool_use_benchmark_audio/bench_d0271a27b4e4/A_sample-000000793.wav",
+      "audio_metrics": {
+        "duration_pred_sec": 10.0,
+        "duration_target_sec": 7.872,
+        "duration_ratio": 1.2703252032520325,
+        "log_mel_cosine": 0.8289248943328857,
+        "log_mel_l1": 11.462911605834961,
+        "mfcc_cosine": 0.8423242568969727,
+        "rms_db_pred": -23.822431564331055,
+        "rms_db_target": -23.22646713256836,
+        "rms_db_diff": -0.5959644317626953,
+        "si_sdr_db": null,
+        "closeness_score": 0.9178122878074646
+      },
+      "baseline_metrics": {
+        "duration_pred_sec": 10.0,
+        "duration_target_sec": 7.872,
+        "duration_ratio": 1.2703252032520325,
+        "log_mel_cosine": 0.8289248943328857,
+        "log_mel_l1": 11.462911605834961,
+        "mfcc_cosine": 0.8423242568969727,
+        "rms_db_pred": -23.822431564331055,
+        "rms_db_target": -23.22646713256836,
+        "rms_db_diff": -0.5959644317626953,
+        "si_sdr_db": null,
+        "closeness_score": 0.9178122878074646
+      },
+      "LLM_output": "{\"tool_name\": \"clipping\", \"parameters\": {\"audio_begin\": \"00:00:00.000\", \"audio_end\": \"00:00:07.873\", \"audio_id\": \"audio_0\"}, \"output_audio_id\": \"audio_2\"}\n"
+    },
+    {
+      "id": "bench_38adf26b4bc4",
+      "num_gt_steps": 1,
+      "gt_tool_sequence": [
+        "remove_dc_offset"
+      ],
+      "predicted_steps": [
+        {
+          "step": 1,
+          "tool_name": "loudness_normalize",
+          "parameters": {
+            "audio_begin": "00:00:00.000",
+            "audio_end": "00:00:09.999",
+            "target_lufs": -14.0,
+            "audio_id": "audio_0"
+          },
+          "success": true
+        }
+      ],
+      "predicted_attempted_sequence": [
+        "loudness_normalize"
+      ],
+      "predicted_successful_sequence": [
+        "loudness_normalize"
+      ],
+      "stop_reason": "model_signaled_done",
+      "num_predicted_calls": 1,
+      "num_successful_calls": 1,
+      "tool_call_success_rate": 1.0,
+      "exact_sequence_match": false,
+      "tool_name_precision": 0.0,
+      "tool_name_recall": 0.0,
+      "tool_name_f1": 0.0,
+      "gt_tools_used": [],
+      "gt_tools_missed": [
+        "remove_dc_offset"
+      ],
+      "gt_tool_coverage": 0.0,
+      "used_any_gt_tool": false,
+      "used_all_gt_tools": false,
+      "final_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/tool_use_RL/output/model_qwen_25/v1-20260722-005330/checkpoint-5000/bench_38adf26b4bc4/pred_step1_loudness_normalize.wav",
+      "audio_metrics": {
+        "duration_pred_sec": 9.999,
+        "duration_target_sec": 9.999,
+        "duration_ratio": 1.0,
+        "log_mel_cosine": 0.9979029893875122,
+        "log_mel_l1": 2.928354024887085,
+        "mfcc_cosine": 0.9983035922050476,
+        "rms_db_pred": -19.62748908996582,
+        "rms_db_target": -22.500619888305664,
+        "rms_db_diff": 2.8731307983398438,
+        "si_sdr_db": 26.946123123168945,
+        "closeness_score": 0.99905164539814
+      },
+      "baseline_metrics": {
+        "duration_pred_sec": 10.0,
+        "duration_target_sec": 9.999,
+        "duration_ratio": 1.000100010001,
+        "log_mel_cosine": 0.9966635704040527,
+        "log_mel_l1": 1.2898952960968018,
+        "mfcc_cosine": 0.998269259929657,
+        "rms_db_pred": -22.49126625061035,
+        "rms_db_target": -22.500619888305664,
+        "rms_db_diff": 0.0093536376953125,
+        "si_sdr_db": 26.942378997802734,
+        "closeness_score": 0.9987332075834274
+      },
+      "LLM_output": "{\"tool_name\": \"loudness_normalize\", \"parameters\": {\"audio_begin\": \"00:00:00.000\", \"audio_end\": \"00:00:09.999\", \"target_lufs\": -14.0, \"audio_id\": \"audio_0\"}, \"output_audio_id\": \"audio_2\"}\n{\"done\": true}\n"
+    },
+    {
+      "id": "bench_86fa4b3e639f",
+      "num_gt_steps": 1,
+      "gt_tool_sequence": [
+        "pitch_shift"
+      ],
+      "predicted_steps": [
+        {
+          "step": 1,
+          "tool_name": "pitch_shift",
+          "parameters": {
+            "n_steps": 4,
+            "audio_id": "audio_0"
+          },
+          "success": true
+        }
+      ],
+      "predicted_attempted_sequence": [
+        "pitch_shift"
+      ],
+      "predicted_successful_sequence": [
+        "pitch_shift"
+      ],
+      "stop_reason": "model_signaled_done",
+      "num_predicted_calls": 1,
+      "num_successful_calls": 1,
+      "tool_call_success_rate": 1.0,
+      "exact_sequence_match": true,
+      "tool_name_precision": 1.0,
+      "tool_name_recall": 1.0,
+      "tool_name_f1": 1.0,
+      "gt_tools_used": [
+        "pitch_shift"
+      ],
+      "gt_tools_missed": [],
+      "gt_tool_coverage": 1.0,
+      "used_any_gt_tool": true,
+      "used_all_gt_tools": true,
+      "final_audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/tool_use_RL/output/model_qwen_25/v1-20260722-005330/checkpoint-5000/bench_86fa4b3e639f/pred_step1_pitch_shift.wav",
+      "audio_metrics": {
+        "duration_pred_sec": 10.0,
+        "duration_target_sec": 10.0,
+        "duration_ratio": 1.0,
+        "log_mel_cosine": 1.0,
+        "log_mel_l1": 0.0,
+        "mfcc_cosine": 1.0000001192092896,
+        "rms_db_pred": -19.12040901184082,
+        "rms_db_target": -19.12040901184082,
+        "rms_db_diff": 0.0,
+        "si_sdr_db": 112.92079162597656,
+        "closeness_score": 1.0
+      },
+      "baseline_metrics": {
+        "duration_pred_sec": 10.0,
+        "duration_target_sec": 10.0,
+        "duration_ratio": 1.0,
+        "log_mel_cosine": 0.9272452592849731,
+        "log_mel_l1": 7.15819787979126,
+        "mfcc_cosine": 0.9501577019691467,
+        "rms_db_pred": -11.909181594848633,
+        "rms_db_target": -19.12040901184082,
+        "rms_db_diff": 7.2112274169921875,
+        "si_sdr_db": -55.66535949707031,
+        "closeness_score": 0.96935074031353
+      },
+      "LLM_output": "{\"tool_name\": \"pitch_shift\", \"parameters\": {\"n_steps\": 4, \"audio_id\": \"audio_0\"}, \"output_audio_id\": \"audio_2\"}\n{\"done\": true}\n"
+    },
+    {
+      "id": "bench_8de0e6d498d0",
+      "num_gt_steps": 1,
+      "gt_tool_sequence": [
+        "clipping"
+      ],
+      "predicted_steps": [
+        {
+          "step": 1,
+          "tool_name": "clipping",
+          "parameters": {
+            "audio_begin": "00:00:00.000",
+            "audio_end": "00:00:06.201",
+            "audio_id": "audio_0"
+          },
+          "success": false,
+          "error": "clipping validation failed: Unexpected parameter: output_path"
+        }
+      ],
+      "predicted_attempted_sequence": [
+        "clipping"
+      ],
+      "predicted_successful_sequence": [],
+      "stop_reason": "tool_execution_failed",
+      "num_predicted_calls": 1,
+      "num_successful_calls": 0,
+      "tool_call_success_rate": 0.0,
+      "exact_sequence_match": false,
+      "tool_name_precision": 0.0,
+      "tool_name_recall": 0.0,
+      "tool_name_f1": 0.0,
+      "gt_tools_used": [],
+      "gt_tools_missed": [
+        "clipping"
+      ],
+      "gt_tool_coverage": 0.0,
+      "used_any_gt_tool": false,
+      "used_all_gt_tools": false,
+      "final_audio_path": "/work/u1501463/tool_use_benchmark_audio/bench_8de0e6d498d0/A_sample-000016986.wav",
+      "audio_metrics": {
+        "duration_pred_sec": 10.0000625,
+        "duration_target_sec": 6.21,
+        "duration_ratio": 1.6103160225442834,
+        "log_mel_cosine": 0.8936058878898621,
+        "log_mel_l1": 14.902915000915527,
+        "mfcc_cosine": 0.8987343907356262,
+        "rms_db_pred": -36.26426315307617,
+        "rms_db_target": -36.48910140991211,
+        "rms_db_diff": 0.2248382568359375,
+        "si_sdr_db": null,
+        "closeness_score": 0.9480850696563721
+      },
+      "baseline_metrics": {
+        "duration_pred_sec": 10.0000625,
+        "duration_target_sec": 6.21,
+        "duration_ratio": 1.6103160225442834,
+        "log_mel_cosine": 0.8936058878898621,
+        "log_mel_l1": 14.902915000915527,
+        "mfcc_cosine": 0.8987343907356262,
+        "rms_db_pred": -36.26426315307617,
+        "rms_db_target": -36.48910140991211,
+        "rms_db_diff": 0.2248382568359375,
+        "si_sdr_db": null,
+        "closeness_score": 0.9480850696563721
+      },
+      "LLM_output": "{\"tool_name\": \"clipping\", \"parameters\": {\"audio_begin\": \"00:00:00.000\", \"audio_end\": \"00:00:06.201\", \"audio_id\": \"audio_0\"}, \"output_audio_id\": \"audio_2\"}\n"
     }
   ],
   "summary": {
-    "num_samples": 93,
-    "total_predicted_tool_calls": 93,
-    "total_successful_tool_calls": 81,
-    "overall_tool_call_success_rate": 0.8709677419354839,
-    "mean_exact_sequence_match": 0.5913978494623656,
-    "mean_tool_name_precision": 0.5913978494623656,
-    "mean_tool_name_recall": 0.5913978494623656,
-    "mean_tool_name_f1": 0.5913978494623656,
-    "mean_gt_tool_coverage": 0.5913978494623656,
-    "mean_used_any_gt_tool": 0.5913978494623656,
-    "mean_used_all_gt_tools": 0.5913978494623656,
-    "mean_audio_log_mel_cosine": 0.9851835626427845,
-    "mean_audio_mfcc_cosine": 0.987735411172272,
-    "mean_audio_closeness_score": 0.9932297375253452,
-    "mean_audio_log_mel_cosine_diff": 0.03870598859684442,
-    "mean_audio_mfcc_cosine_diff": 0.03430486750859086,
-    "mean_audio_closeness_diff": 0.01825270809793985,
-    "mean_duration_ratio": 1.0460194627296546,
+    "num_samples": 99,
+    "total_predicted_tool_calls": 99,
+    "total_successful_tool_calls": 85,
+    "overall_tool_call_success_rate": 0.8585858585858586,
+    "mean_exact_sequence_match": 0.5858585858585859,
+    "mean_tool_name_precision": 0.5858585858585859,
+    "mean_tool_name_recall": 0.5858585858585859,
+    "mean_tool_name_f1": 0.5858585858585859,
+    "mean_gt_tool_coverage": 0.5858585858585859,
+    "mean_used_any_gt_tool": 0.5858585858585859,
+    "mean_used_all_gt_tools": 0.5858585858585859,
+    "mean_audio_log_mel_cosine": 0.9832576272463558,
+    "mean_audio_mfcc_cosine": 0.9858460185503719,
+    "mean_audio_closeness_score": 0.9922759049769604,
+    "mean_audio_log_mel_cosine_diff": 0.03725390663050642,
+    "mean_audio_mfcc_cosine_diff": 0.03284269932544592,
+    "mean_audio_closeness_diff": 0.01752414501676656,
+    "mean_duration_ratio": 1.0521257702995372,
     "stop_reason_counts": {
-      "model_signaled_done": 81,
-      "tool_execution_failed": 12
+      "model_signaled_done": 85,
+      "tool_execution_failed": 14
     },
     "breakdown_by_num_gt_steps": {
       "1": {
-        "n": 93,
-        "mean_tool_name_f1": 0.5913978494623656,
-        "mean_audio_closeness": 0.9932297375253452
+        "n": 99,
+        "mean_tool_name_f1": 0.5858585858585859,
+        "mean_audio_closeness": 0.9922759049769604
       }
     }
   }

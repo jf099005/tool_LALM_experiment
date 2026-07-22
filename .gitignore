@@ -30,4 +30,5 @@ sample_audios/
 *.bin
 *.onnx
 *.h5
+checkpoint-*
 /home/u1501463/tool_use_LALM/tool_use_training/stage1_training
