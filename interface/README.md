@@ -28,11 +28,15 @@ folder to actually run the model on real audio for a real task.
   against `tools.TOOL_NAME_TO_CLASS`, and extracts whatever new audio (if
   any) the tool produced (`output_path` / `clip_path` / `separated_files`).
   Tools like `asr` that produce no new audio, only text, are handled too.
+  `testing_tool_use_benchmark/run_eval.py` drives its own predicted tool
+  calls through this same module.
 - `engine.py` — two interchangeable backends behind one
   `generate_turn(messages, audios) -> str` interface: `SwiftEngine` (ms-swift's
   `TransformersEngine`, for a fine-tuned LoRA checkpoint *or* any raw
   official model id ms-swift recognizes) and `VLLMEngine` (plain vLLM, no
   ms-swift dependency — fastest way to run an unmodified official checkpoint).
+  `testing_tool_use_benchmark/run_eval.py` imports these same classes for its
+  benchmark rather than keeping its own copy.
 - `agent.py` — `ToolCallingAgent`, which drives the multi-turn loop and
   returns an `AgentResult` (full transcript, every audio id produced along
   the way, the final audio, and why the chain stopped).

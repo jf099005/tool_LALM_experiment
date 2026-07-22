@@ -21,8 +21,8 @@ mkdir -p ${work_dir}
 # sample, and write original_subset.json / tool_applied_subset.json.
 $PY build_dataset.py \
     --tool-config ./tool_config.json \
-    --input-json /home/u1501463/tool_use_LALM/dcase_subset.json \
-    --num-samples 200 \
+    --input-json ./dcase_subset.json \
+    --num-samples 50 \
     --min-tools 1 \
     --max-tools 1 \
     --output-dir ${work_dir} \

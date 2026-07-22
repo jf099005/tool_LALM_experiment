@@ -1,0 +1,726 @@
+[
+  {
+    "id": "dev_audio_0001587",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001587.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001587/original.wav",
+    "tool_chain": [
+      {
+        "tool": "spectral_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.999",
+          "strength": 0.51
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_0001587/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_0001587/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01513",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01513.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01513/original.wav",
+    "tool_chain": [
+      {
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.999",
+          "threshold_db": 35
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01513/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01513/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00287",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00287.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00287/original.wav",
+    "tool_chain": [
+      {
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:29.999",
+          "threshold_db": 30
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00287/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00287/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01610",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01610.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01610/original.wav",
+    "tool_chain": [
+      {
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01610/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01610/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01290",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01290.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01290/original.wav",
+    "tool_chain": [
+      {
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 2.24
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01290/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01290/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01307",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01307.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01307/original.wav",
+    "tool_chain": [
+      {
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:12.999",
+          "threshold_db": 40
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01307/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01307/tool_applied.wav"
+  },
+  {
+    "id": "fold2-a-0099",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0099.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0099/original.wav",
+    "tool_chain": [
+      {
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 2.8
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-a-0099/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-a-0099/tool_applied.wav"
+  },
+  {
+    "id": "fold2-a-0086",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0086.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0086/original.wav",
+    "tool_chain": [
+      {
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-a-0086/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-a-0086/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00891",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00891.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00891/original.wav",
+    "tool_chain": [
+      {
+        "tool": "loudness_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.999",
+          "target_lufs": -14.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00891/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00891/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00173",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00173.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00173/original.wav",
+    "tool_chain": [
+      {
+        "tool": "trim_silence",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:29.999",
+          "threshold_db": 35
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00173/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00173/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00186",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00186.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00186/original.wav",
+    "tool_chain": [
+      {
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.9
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00186/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00186/tool_applied.wav"
+  },
+  {
+    "id": "fold2-c-0035",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-c-0035.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-c-0035/original.wav",
+    "tool_chain": [
+      {
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-c-0035/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-c-0035/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01279",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01279.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01279/original.wav",
+    "tool_chain": [
+      {
+        "tool": "amplitude_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:10.399",
+          "target_level": 0.89,
+          "method": "peak"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01279/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01279/tool_applied.wav"
+  },
+  {
+    "id": "fold2-c-0071",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-c-0071.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-c-0071/original.wav",
+    "tool_chain": [
+      {
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.9
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-c-0071/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-c-0071/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00134",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00134.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00134/original.wav",
+    "tool_chain": [
+      {
+        "tool": "spectral_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:29.999",
+          "strength": 0.65
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00134/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00134/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00107",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00107.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00107/original.wav",
+    "tool_chain": [
+      {
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:20.399"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00107/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00107/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00194",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00194.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00194/original.wav",
+    "tool_chain": [
+      {
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.1
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00194/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00194/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00295",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00295.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00295/original.wav",
+    "tool_chain": [
+      {
+        "tool": "amplitude_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:07.192",
+          "target_level": 0.71,
+          "method": "rms"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00295/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00295/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00937",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00937.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00937/original.wav",
+    "tool_chain": [
+      {
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "echo_cancellation"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00937/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00937/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00755",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00755.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00755/original.wav",
+    "tool_chain": [
+      {
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -3
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00755/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00755/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01518",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01518.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01518/original.wav",
+    "tool_chain": [
+      {
+        "tool": "loudness_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.999",
+          "target_lufs": -14.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01518/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01518/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00835",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00835.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00835/original.wav",
+    "tool_chain": [
+      {
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "wiener"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00835/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00835/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00319",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00319.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00319/original.wav",
+    "tool_chain": [
+      {
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:24.299"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00319/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00319/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00594",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00594.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00594/original.wav",
+    "tool_chain": [
+      {
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00594/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00594/tool_applied.wav"
+  },
+  {
+    "id": "fold2-a-0096",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0096.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0096/original.wav",
+    "tool_chain": [
+      {
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.7
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-a-0096/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-a-0096/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_0001571",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001571.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001571/original.wav",
+    "tool_chain": [
+      {
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_0001571/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_0001571/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01686",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01686.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01686/original.wav",
+    "tool_chain": [
+      {
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01686/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01686/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01377",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01377.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01377/original.wav",
+    "tool_chain": [
+      {
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -3
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01377/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01377/tool_applied.wav"
+  },
+  {
+    "id": "fold2-b-0093",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-b-0093.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-b-0093/original.wav",
+    "tool_chain": [
+      {
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.25
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-b-0093/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-b-0093/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00425",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00425.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00425/original.wav",
+    "tool_chain": [
+      {
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": 6
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00425/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00425/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_0001512",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001512.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001512/original.wav",
+    "tool_chain": [
+      {
+        "tool": "pre_emphasis",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.999",
+          "coef": 0.97
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_0001512/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_0001512/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01308",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01308.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01308/original.wav",
+    "tool_chain": [
+      {
+        "tool": "denoise",
+        "parameters": {
+          "algorithm": "spectral_subtraction",
+          "noise_factor": 1.97
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01308/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01308/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00327",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00327.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00327/original.wav",
+    "tool_chain": [
+      {
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 0.8
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00327/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00327/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00072",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00072.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00072/original.wav",
+    "tool_chain": [
+      {
+        "tool": "spectral_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:25.838",
+          "strength": 0.36
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00072/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00072/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00254",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00254.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00254/original.wav",
+    "tool_chain": [
+      {
+        "tool": "loudness_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:29.999",
+          "target_lufs": -20.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00254/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00254/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_0001459",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001459.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001459/original.wav",
+    "tool_chain": [
+      {
+        "tool": "loudness_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.999",
+          "target_lufs": -23.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_0001459/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_0001459/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01264",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01264.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01264/original.wav",
+    "tool_chain": [
+      {
+        "tool": "time_stretch",
+        "parameters": {
+          "rate": 1.5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01264/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01264/tool_applied.wav"
+  },
+  {
+    "id": "fold2-c-0072",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-c-0072.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-c-0072/original.wav",
+    "tool_chain": [
+      {
+        "tool": "amplitude_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.999",
+          "target_level": 0.8,
+          "method": "peak"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-c-0072/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-c-0072/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_00546",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_00546.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00546/original.wav",
+    "tool_chain": [
+      {
+        "tool": "clipping",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:04.899"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00546/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_00546/tool_applied.wav"
+  },
+  {
+    "id": "fold2-a-0207",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0207.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0207/original.wav",
+    "tool_chain": [
+      {
+        "tool": "loudness_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.999",
+          "target_lufs": -18.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-a-0207/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-a-0207/tool_applied.wav"
+  },
+  {
+    "id": "fold2-a-0249",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/fold2-a-0249.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0249/original.wav",
+    "tool_chain": [
+      {
+        "tool": "amplitude_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.999",
+          "target_level": 0.61,
+          "method": "peak"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-a-0249/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/fold2-a-0249/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_0001409",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_0001409.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001409/original.wav",
+    "tool_chain": [
+      {
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -6
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_0001409/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_0001409/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01291",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01291.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01291/original.wav",
+    "tool_chain": [
+      {
+        "tool": "pitch_shift",
+        "parameters": {
+          "n_steps": -5
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01291/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01291/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01297",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01297.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01297/original.wav",
+    "tool_chain": [
+      {
+        "tool": "amplitude_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:10.399",
+          "target_level": 0.63,
+          "method": "rms"
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01297/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01297/tool_applied.wav"
+  },
+  {
+    "id": "dev_audio_01498",
+    "source_audio": "/work/u1501463/2025_DCASE_AudioQA_Official/local_audio_path/dev/audio_01498.wav",
+    "original_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01498/original.wav",
+    "tool_chain": [
+      {
+        "tool": "loudness_normalize",
+        "parameters": {
+          "audio_begin": "00:00:00.000",
+          "audio_end": "00:00:09.999",
+          "target_lufs": -23.0
+        },
+        "output_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01498/tool_applied.wav"
+      }
+    ],
+    "tool_applied_audio": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/tool_applied/dev_audio_01498/tool_applied.wav"
+  }
+]

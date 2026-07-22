@@ -1,0 +1,31 @@
+{
+  "num_samples": 100,
+  "total_predicted_tool_calls": 100,
+  "total_successful_tool_calls": 87,
+  "overall_tool_call_success_rate": 0.87,
+  "mean_exact_sequence_match": 0.66,
+  "mean_tool_name_precision": 0.66,
+  "mean_tool_name_recall": 0.66,
+  "mean_tool_name_f1": 0.66,
+  "mean_gt_tool_coverage": 0.66,
+  "mean_used_any_gt_tool": 0.66,
+  "mean_used_all_gt_tools": 0.66,
+  "mean_audio_log_mel_cosine": 0.9836912459135055,
+  "mean_audio_mfcc_cosine": 0.986229642033577,
+  "mean_audio_closeness_score": 0.9924802155792714,
+  "mean_audio_log_mel_cosine_diff": 0.03726020336151123,
+  "mean_audio_mfcc_cosine_diff": 0.03285913109779358,
+  "mean_audio_closeness_diff": 0.01752982720732689,
+  "mean_duration_ratio": 1.051548273982736,
+  "stop_reason_counts": {
+    "model_signaled_done": 87,
+    "tool_execution_failed": 13
+  },
+  "breakdown_by_num_gt_steps": {
+    "1": {
+      "n": 100,
+      "mean_tool_name_f1": 0.66,
+      "mean_audio_closeness": 0.9924802155792714
+    }
+  }
+}

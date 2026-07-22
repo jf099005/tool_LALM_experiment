@@ -8,6 +8,13 @@ drives at eval time. This module generalizes that loop to an arbitrary
 natural-language instruction over one or more input audios, rather than only
 the fixed source/target reconstruction task the benchmark measures, and has
 no notion of a ground-truth chain to score against.
+
+`ToolCallingAgent.run()` also accepts a fully custom `messages`/`audio_id_map`
+seed (bypassing the instruction/audio_paths convenience path) and an
+arbitrary `max_steps`, so callers with their own prompt framing or stepping
+budget -- e.g. `testing_tool_use_benchmark/run_eval.py`'s source/target
+reconstruction task -- can drive the same loop/scoring hooks without being
+forced into the single-instruction convention.
 """
 
 from __future__ import annotations
@@ -46,7 +53,7 @@ class Step:
 
 @dataclass
 class AgentResult:
-    instruction: str
+    instruction: Optional[str]
     audio_id_map: Dict[str, str]
     steps: List[Step]
     stop_reason: str
@@ -84,26 +91,62 @@ class ToolCallingAgent:
 
     def run(
         self,
-        instruction: str,
-        audio_paths: List[str],
+        *,
+        instruction: Optional[str] = None,
+        audio_paths: Optional[List[str]] = None,
         work_dir: Path,
         max_steps: int = 8,
+        messages: Optional[List[Dict[str, str]]] = None,
+        audio_id_map: Optional[Dict[str, str]] = None,
+        last_audio_id: Optional[str] = None,
     ) -> AgentResult:
+        """Drive one bounded tool-calling run.
+
+        Two ways to seed it:
+          - `instruction` + `audio_paths` (the default): audios are
+            auto-tagged audio_0, audio_1, ... in order, and the initial
+            messages are built from `self.system_prompt` +
+            `protocol.render_user_prompt`.
+          - `messages` + `audio_id_map`: full control over the starting
+            conversation -- pass your own initial message list (any framing,
+            e.g. one that shows a target/reference audio alongside the
+            inputs) and the audio-id -> path mapping those messages' tags
+            refer to. `self.system_prompt` is ignored in this mode; include
+            a system turn in `messages` yourself if you want one. Pass
+            `last_audio_id` to say which id a tool call's `audio_id` should
+            default to when omitted (defaults to the last entry in
+            `audio_id_map`).
+
+        `max_steps` is always caller-controlled -- e.g. pass a budget derived
+        from a ground-truth chain length rather than a fixed constant.
+        """
         work_dir = Path(work_dir)
         work_dir.mkdir(parents=True, exist_ok=True)
 
-        audio_id_map: Dict[str, str] = {f"audio_{i}": str(p) for i, p in enumerate(audio_paths)}
-        audios: List[str] = list(audio_id_map.values())
-        next_fresh_id = len(audio_paths)
-        last_audio_id: Optional[str] = f"audio_{len(audio_paths) - 1}" if audio_paths else None
+        if messages is not None or audio_id_map is not None:
+            if messages is None or audio_id_map is None:
+                raise ValueError("`messages` and `audio_id_map` must be provided together")
+            messages = list(messages)
+            audio_id_map = dict(audio_id_map)
+            if last_audio_id is None and audio_id_map:
+                last_audio_id = next(reversed(audio_id_map))
+        else:
+            if instruction is None:
+                raise ValueError("`instruction` is required unless `messages`/`audio_id_map` are given")
+            audio_paths = audio_paths or []
+            audio_id_map = {f"audio_{i}": str(p) for i, p in enumerate(audio_paths)}
+            last_audio_id = f"audio_{len(audio_paths) - 1}" if audio_paths else None
 
-        messages: List[Dict[str, str]] = []
-        if self.system_prompt:
-            messages.append({"role": "system", "content": self.system_prompt})
-        messages.append({
-            "role": "user",
-            "content": protocol.render_user_prompt(instruction, list(audio_id_map.keys())),
-        })
+            messages = []
+            if self.system_prompt:
+                messages.append({"role": "system", "content": self.system_prompt})
+            messages.append({
+                "role": "user",
+                "content": protocol.render_user_prompt(instruction, list(audio_id_map.keys())),
+            })
+
+        audios: List[str] = list(audio_id_map.values())
+        next_fresh_id = len(audio_id_map)
 
         steps: List[Step] = []
         seen_calls = set()
@@ -163,8 +206,13 @@ class ToolCallingAgent:
             step.success = True
             step.result = result
 
-            output_audio_id = call.get("output_audio_id") or f"audio_{next_fresh_id}"
-            next_fresh_id += 1
+            if call.get("output_audio_id"):
+                output_audio_id = call["output_audio_id"]
+            else:
+                while f"audio_{next_fresh_id}" in audio_id_map:
+                    next_fresh_id += 1
+                output_audio_id = f"audio_{next_fresh_id}"
+                next_fresh_id += 1
             audio_outputs = extract_audio_outputs(result)
 
             if not audio_outputs:

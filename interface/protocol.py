@@ -6,10 +6,12 @@ tool call, rendered as a single JSON object
 (`tool_name` / `parameters` / `output_audio_id`), followed by a "tool" turn
 that shows the real output tagged with the id the call itself declared, and a
 final `{"done": true}` turn to close the chain. `testing_tool_use_benchmark/run_eval.py`
-drives the eval-time sibling of this same convention for its fixed
-source/target benchmark; this module (together with `agent.py`) generalizes
-it to an arbitrary natural-language instruction over one or more input
-audios, and describes the *real* tools in `tools/` (via
+imports `parse_turn`/`AUDIO_TOKEN` from here directly and drives the eval-time
+sibling of this same convention for its fixed source/target benchmark (its
+own system prompt and per-turn scoring, since it has a ground-truth chain to
+compare against); this module (together with `agent.py`) generalizes the
+convention to an arbitrary natural-language instruction over one or more
+input audios, and describes the *real* tools in `tools/` (via
 `tools.generate_tool_descriptions`) rather than the reduced, randomly
 parameterized set `tools/synthetic_registry.py` exposes for synthesizing
 training data.

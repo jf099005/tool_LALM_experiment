@@ -22,19 +22,18 @@ Two things get measured per sample:
   so the benchmark matches the training distribution. Use a different `--seed`
   (and optionally `--held-out-fraction`) from whatever generated `train.jsonl`
   so samples don't leak into eval.
-- `tools/predicted_executor.py` — runs one *model-predicted* `(tool_name, parameters)`
-  call against a real audio file (as opposed to `tools/synthetic_registry.py`'s
-  `REGISTRY`, which invents random parameters to synthesize ground truth).
 - `audio_metrics.py` — length-robust audio similarity metrics.
-- `model_engine.py` — two interchangeable backends behind one
-  `generate_turn(messages, audios) -> str` interface: `SwiftEngine` (ms-swift's
-  `TransformersEngine`, for the fine-tuned LoRA checkpoint *or* any raw
-  official model id ms-swift recognizes) and `VLLMEngine` (plain vLLM, no
-  ms-swift dependency at all — the fastest way to benchmark an unmodified
-  official checkpoint).
 - `run_eval.py` — drives the multi-turn loop (model emits a tool call ->
   executor runs it -> result audio fed back as the next turn's input, mirroring
   `build_dataset.to_swift_sample`'s turn structure) and writes `results.json`.
+  All of the actual tool/LALM interaction plumbing is shared with
+  [`interface/`](../interface): the model backends (`interface.engine.SwiftEngine`
+  / `VLLMEngine`), the per-turn JSON parsing (`interface.protocol.parse_turn`),
+  and predicted tool-call execution (`interface.executor.run_tool_call`).
+  This folder only keeps what's specific to *scoring* against a known
+  source/target pair: the fixed A/B prompt framing, `DEFAULT_PROTOCOL_SYSTEM_PROMPT`,
+  the step-budget-from-ground-truth-length logic, and the precision/recall/F1
+  and audio-fidelity metrics below.
 
 ## Usage
 

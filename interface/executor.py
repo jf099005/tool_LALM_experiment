@@ -6,10 +6,10 @@ registry exists only to *synthesize* ground-truth training samples (it
 invents random parameters and is deliberately limited to whatever's
 importable in the ms-swift env used for data generation); it isn't meant to
 replay an arbitrary parameter dict a model produced, and gates on its own
-active-tool set rather than the full one defined in `tools/`. This module is
-the interface's counterpart to `tools/predicted_executor.py` (used by
-`testing_tool_use_benchmark/run_eval.py`), generalized to run any tool in
-`tools.TOOL_NAME_TO_CLASS` -- including ones synthetic_registry never
+active-tool set rather than the full one defined in `tools/`. Both
+`agent.ToolCallingAgent` and `testing_tool_use_benchmark/run_eval.py` drive
+predicted tool calls through this same module -- generalized to run any tool
+in `tools.TOOL_NAME_TO_CLASS`, including ones synthetic_registry never
 registers, like `asr` and `source_separation` -- and to tolerate tools whose
 result carries no new audio at all (`asr`) or more than one (`source_separation`).
 """

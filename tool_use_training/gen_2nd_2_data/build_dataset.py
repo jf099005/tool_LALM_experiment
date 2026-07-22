@@ -68,6 +68,7 @@ import traceback
 import uuid
 from pathlib import Path
 from typing import Any, Dict, List
+from tqdm import tqdm
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
@@ -275,6 +276,7 @@ def main() -> None:
     parser.add_argument("--audio-glob", nargs="*", default=[],
                          help="Extra glob pattern(s) for other raw audio pools, e.g. '/work/u1501463/my_corpus/**/*.wav'.")
     parser.add_argument("--num-samples", type=int, default=200)
+    parser.add_argument("--repetition", type=int, default=1, help="Repeat the whole sample set this many times (for debugging).")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--dedupe-by-audio", action="store_true")
     parser.add_argument("--min-tools", type=int, default=None, help="Default: tool_config.json's min_tools.")
@@ -305,6 +307,8 @@ def main() -> None:
 
     sampled = sample_items(items, args.num_samples, args.seed, args.dedupe_by_audio)
     print(f"Sampled {len(sampled)}/{len(items)} item(s)", file=sys.stderr)
+    sampled = sampled * args.repetition
+    print(f"After repetition={args.repetition}, {len(sampled)} total item(s)", file=sys.stderr)
 
     args.output_dir = args.output_dir.expanduser().resolve()
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -314,7 +318,7 @@ def main() -> None:
 
     rng = random.Random(args.seed)
     records: List[Dict[str, Any]] = []
-    for idx, item in enumerate(sampled, start=1):
+    for idx, item in tqdm(enumerate(sampled, start=1), total=len(sampled)):
         for attempt in range(args.max_attempts_per_sample):
             try:
                 record = build_one_sample(

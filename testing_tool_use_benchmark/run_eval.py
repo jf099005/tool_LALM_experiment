@@ -39,9 +39,8 @@ if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from audio_metrics import compare_audio  # noqa: E402
-from tools.predicted_executor import ToolExecutionError, UnknownToolError, execute_predicted_tool_call  # noqa: E402
-
-AUDIO_TOKEN = "<audio>"
+from interface.executor import ToolExecutionError, UnknownToolError, extract_audio_outputs, run_tool_call  # noqa: E402
+from interface.protocol import AUDIO_TOKEN, parse_turn  # noqa: E402
 
 # The SFT training data ends every chain with an explicit {"done": true} turn
 # (see build_dataset.to_swift_sample), so a fine-tuned model is run with no
@@ -69,29 +68,6 @@ def render_initial_prompt(entry: Dict[str, Any]) -> str:
     text = entry["question"].replace(entry["source_audio"], f"<audio_0>{AUDIO_TOKEN}", 1)
     text = text.replace(entry["target_audio"], f"<audio_1>{AUDIO_TOKEN}", 1)
     return text
-
-
-def parse_tool_call(raw_text: str) -> Optional[Dict[str, Any]]:
-    """Parse one predicted assistant turn as a JSON object.
-
-    Returns the parsed dict as-is -- callers distinguish a tool call
-    (`tool_name` present) from an explicit stop signal (`done` present) from
-    garbage (neither key present). Returns None if the turn isn't even valid
-    JSON.
-    """
-    text = raw_text.strip()
-    if text.startswith("```"):
-        text = text.strip("`")
-        if text.lower().startswith("json"):
-            text = text[4:]
-        text = text.strip()
-    try:
-        obj = json.loads(text)
-    except json.JSONDecodeError:
-        return None
-    if not isinstance(obj, dict):
-        return None
-    return obj
 
 
 def run_sample(
@@ -129,7 +105,7 @@ def run_sample(
         accumulated_text += raw_text + '\n'
         messages.append({"role": "assistant", "content": raw_text})
 
-        call = parse_tool_call(raw_text)
+        call = parse_turn(raw_text)
         if call is None:
             stop_reason = "unparseable_output"
             break
@@ -148,12 +124,11 @@ def run_sample(
             break
         seen_calls.add(call_signature)
 
-        out_path = sample_dir / f"pred_step{step_idx}_{tool_name}.wav"
+        exec_parameters = dict(parameters)
+        exec_parameters["output_path"] = str(sample_dir / f"pred_step{step_idx}_{tool_name}.wav")
         step_record: Dict[str, Any] = {"step": step_idx, "tool_name": tool_name, "parameters": parameters}
         try:
-            new_audio = execute_predicted_tool_call(tool_name, parameters, current_audio, out_path)
-            step_record["success"] = True
-            current_audio = new_audio
+            result = run_tool_call(tool_name, exec_parameters, current_audio, sample_dir, step_idx)
         except (UnknownToolError, ToolExecutionError) as exc:
             step_record["success"] = False
             step_record["error"] = str(exc)
@@ -161,10 +136,22 @@ def run_sample(
             stop_reason = "tool_execution_failed"
             break
 
+        step_record["success"] = True
         predicted_steps.append(step_record)
+
         output_audio_id = call.get("output_audio_id") or f"audio_{step_idx + 1}"
-        messages.append({"role": "tool", "content": f"Output of step {step_idx}: <{output_audio_id}>{AUDIO_TOKEN}"})
-        audios.append(str(current_audio))
+        audio_outputs = extract_audio_outputs(result)
+        if not audio_outputs:
+            # Text-only tools (e.g. asr) produce no new audio -- feed the transcript
+            # back as plain text and leave current_audio (and the audio list) alone.
+            text = result.get("transcript") or result.get("message") or json.dumps(result)
+            messages.append({"role": "tool", "content": f"Output of step {step_idx} ({tool_name}): {text}"})
+        else:
+            current_audio = Path(
+                audio_outputs.get("target") or audio_outputs.get("") or next(iter(audio_outputs.values()))
+            )
+            audios.append(str(current_audio))
+            messages.append({"role": "tool", "content": f"Output of step {step_idx}: <{output_audio_id}>{AUDIO_TOKEN}"})
     else:
         stop_reason = "max_steps_reached"
 
@@ -191,6 +178,9 @@ def run_sample(
 
     audio_metrics = compare_audio(str(current_audio), audio_b)
 
+    baseline_metrics = compare_audio(audio_a, audio_b)
+
+
     return {
         "id": sample_id,
         "num_gt_steps": len(gt_calls),
@@ -213,6 +203,7 @@ def run_sample(
         "used_all_gt_tools": (len(gt_tools_missed) == 0) if gt_tool_set else None,
         "final_audio_path": str(current_audio),
         "audio_metrics": audio_metrics,
+        "baseline_metrics": baseline_metrics,
         "LLM_output": accumulated_text,
     }
 
@@ -232,10 +223,12 @@ def aggregate(results: List[Dict[str, Any]]) -> Dict[str, Any]:
 
     by_num_steps: Dict[int, Dict[str, Any]] = {}
     for r in results:
-        bucket = by_num_steps.setdefault(r["num_gt_steps"], {"n": 0, "f1_sum": 0.0, "closeness_sum": 0.0})
+        bucket = by_num_steps.setdefault(r["num_gt_steps"], {"n": 0, "f1_sum": 0.0, "closeness_sum": 0.0, "closeness_diff": 0.0})
         bucket["n"] += 1
         bucket["f1_sum"] += r["tool_name_f1"]
         bucket["closeness_sum"] += r["audio_metrics"]["closeness_score"]
+        bucket['closeness_diff'] += r["audio_metrics"]["closeness_score"] - r["baseline_metrics"]["closeness_score"]
+
     breakdown = {
         k: {
             "n": v["n"],
@@ -260,6 +253,11 @@ def aggregate(results: List[Dict[str, Any]]) -> Dict[str, Any]:
         "mean_audio_log_mel_cosine": avg(lambda r: r["audio_metrics"]["log_mel_cosine"]),
         "mean_audio_mfcc_cosine": avg(lambda r: r["audio_metrics"]["mfcc_cosine"]),
         "mean_audio_closeness_score": avg(lambda r: r["audio_metrics"]["closeness_score"]),
+
+        "mean_audio_log_mel_cosine_diff": avg(lambda r: r["audio_metrics"]["log_mel_cosine"] - r["baseline_metrics"]["log_mel_cosine"]),
+        "mean_audio_mfcc_cosine_diff": avg(lambda r: r["audio_metrics"]["mfcc_cosine"] - r["baseline_metrics"]["mfcc_cosine"]),
+        "mean_audio_closeness_diff": avg(lambda r: r["audio_metrics"]["closeness_score"] - r["baseline_metrics"]["closeness_score"]),
+
         "mean_duration_ratio": avg(lambda r: r["audio_metrics"]["duration_ratio"]),
         "stop_reason_counts": dict(Counter(r["stop_reason"] for r in results)),
         "breakdown_by_num_gt_steps": breakdown,
@@ -325,7 +323,7 @@ def main() -> None:
     args.work_dir.mkdir(parents=True, exist_ok=True)
 
     if args.backend == "swift":
-        from model_engine import SwiftEngine  # imported here so --help works without swift installed
+        from interface.engine import SwiftEngine  # imported here so --help works without swift installed
 
         engine = SwiftEngine(
             model=args.model,
@@ -335,7 +333,7 @@ def main() -> None:
             model_type=args.model_type,
         )
     else:
-        from model_engine import VLLMEngine  # imported here so --help works without vllm installed
+        from interface.engine import VLLMEngine  # imported here so --help works without vllm installed
 
         engine = VLLMEngine(
             model=args.model,

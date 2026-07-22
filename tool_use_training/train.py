@@ -2,7 +2,7 @@
 of shelling out to the `swift sft` CLI.
 
 Must run under the `ms-swift` conda env (same requirement as
-tool_use_benchmark/model_engine.py).
+interface/engine.py's SwiftEngine).
 """
 
 from __future__ import annotations

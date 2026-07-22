@@ -1,8 +1,8 @@
-stage1_dir=/work/u1501463/tool_use_stage1/
+stage1_dir=/work/u1501463/stage1_RL/
 # stage1_dir=./exp/
 python build_dataset.py \
     --sources audioset \
-    --num-samples 20000   \
+    --num-samples 5000   \
     --min-tools 1 \
     --max-tools 1   \
     --seed 0   \

@@ -1,8 +1,9 @@
 """GRPO reward functions for training a tool-using LALM (ms-swift backbone).
 
 The policy is prompted with a source/target audio pair plus a tool catalogue
-(see `gen_tool_usage_QA/build_dataset.py`) and must emit a pure tool-call JSON
-trace of the form::
+(see `build_rl_dataset.py`, which converts the raw
+`gen_1st_stage_data/build_dataset.py` samples into this single-turn shape)
+and must emit a pure tool-call JSON trace of the form::
 
     {"tool_calls": [{"tool_name": "...", "parameters": {...}}, ...]}
 
@@ -10,6 +11,12 @@ that reproduces the target audio from the source. Ground truth for each
 sample is the exact same structure (the `answer` field of the synthetic
 dataset), passed to the reward functions as the `solution` column -- either
 as a JSON string or an already-parsed dict/list, both are accepted.
+
+Note this is a single-shot approximation: the model emits the whole chain at
+once without ever seeing a real intermediate tool-execution result, unlike
+the multi-turn dialogue `gen_1st_stage_data/build_dataset.py` renders for
+SFT. Real multi-turn tool-use RL (rollout driving `interface/agent.py`'s
+real tool executor turn by turn) is future work.
 
 Rewards are exposed as `swift.rewards.orm.ORM` subclasses (matching the GRPO
 plugin convention: `class MyReward(ORM): def __call__(self, completions,

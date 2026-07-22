@@ -65,12 +65,43 @@ DEFAULT_AUDIOSET_DIR = Path("/work/u1501463/audioset_20k/20k/train")
 DEFAULT_VCTK_DIR = Path("/work/u1501463/VCTK/wav48_silence_trimmed")
 
 
-def collect_source_files(sources: List[str], limit: int | None = None) -> List[Path]:
+def load_excluded_stems(exclude_path: Optional[Path]) -> set[str]:
+    """Collect the source-audio stems used by a previously generated dataset.
+
+    `source_audio` in a dataset JSON is either the original file untouched
+    (audioset, already .wav) copied as `A_<name>.wav`, or a from-scratch WAV
+    conversion of the original (vctk, from .flac) that keeps the original
+    stem. Stripping the `A_` prefix when present lets both cases match back
+    to the raw file's stem in `collect_source_files`.
+    """
+    if exclude_path is None:
+        return set()
+    with open(exclude_path, "r", encoding="utf-8") as handle:
+        data = json.load(handle)
+    stems: set[str] = set()
+    for entry in data:
+        source_audio = entry.get("source_audio")
+        if not source_audio:
+            continue
+        stem = Path(source_audio).stem
+        stems.add(stem)
+        if stem.startswith("A_"):
+            stems.add(stem[len("A_"):])
+    return stems
+
+
+def collect_source_files(
+    sources: List[str],
+    limit: int | None = None,
+    excluded_stems: set[str] | None = None,
+) -> List[Path]:
     files: List[Path] = []
     if "audioset" in sources:
         files.extend(sorted(DEFAULT_AUDIOSET_DIR.glob("*.wav")))
     if "vctk" in sources:
         files.extend(sorted(DEFAULT_VCTK_DIR.glob("*/*.flac")))
+    if excluded_stems:
+        files = [f for f in files if f.stem not in excluded_stems]
     if limit:
         files = files[:limit]
     return files
@@ -273,7 +304,7 @@ def main() -> None:
     parser.add_argument(
         "--sources",
         nargs="+",
-        choices=["audioset", "vctk"],
+        choices=["audioset", "vctk"], 
         default=["audioset"],
         help="Which source datasets to draw audio A from.",
     )
@@ -288,6 +319,16 @@ def main() -> None:
         type=Path,
         default=Path(__file__).resolve().parent / "tool_usage_qa.json",
         help="Path to write the resulting JSON dataset.",
+    )
+    parser.add_argument(
+        "--exclude",
+        type=str,
+        default=None,
+        help=(
+            "Path to an existing dataset JSON (e.g. tool_usage_qa.json) whose "
+            "source audio files must not be drawn from when generating new "
+            "samples. Pass 'None' or omit to disable."
+        ),
     )
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--max-attempts-per-sample", type=int, default=5)
@@ -325,7 +366,14 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    source_files = collect_source_files(args.sources)
+    exclude_path = None
+    if args.exclude and args.exclude.lower() != "none":
+        exclude_path = Path(args.exclude)
+    excluded_stems = load_excluded_stems(exclude_path)
+    if excluded_stems:
+        print(f"Excluding {len(excluded_stems)} source audio stem(s) from {exclude_path}", file=sys.stderr)
+
+    source_files = collect_source_files(args.sources, excluded_stems=excluded_stems)
     if not source_files:
         raise SystemExit(f"No source audio files found for sources={args.sources}")
 

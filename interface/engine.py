@@ -1,10 +1,9 @@
 """Model backends for the tool-calling interface.
 
 Both backends expose the same `generate_turn(messages, audios) -> str`
-interface `agent.ToolCallingAgent` drives -- the same shape
-`testing_tool_use_benchmark/model_engine.py` uses for its benchmark. Kept as
-its own copy here (rather than imported from that folder) so `interface/` has
-no dependency on the benchmark/eval harness and can be used standalone.
+interface `agent.ToolCallingAgent` drives. `testing_tool_use_benchmark/run_eval.py`
+imports these same classes directly for its benchmark rather than keeping its
+own copy, so the two never drift apart.
 
 - `SwiftEngine` -- ms-swift's `TransformersEngine`. Handles both a fine-tuned
   LoRA checkpoint (pass `adapter_dir`) *and* a raw official model id/path
