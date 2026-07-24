@@ -33,6 +33,28 @@ class Tool(ABC):
         return schema.get("required", [])
 
     @classmethod
+    def produces_audio(cls) -> bool:
+        """Whether this tool's result is a new audio (True for every tool except
+        ASR, whose result is text-only). Lets callers that must stay audio-to-audio
+        only -- e.g. `interface.protocol.audio_to_audio_tool_names()` -- filter the
+        catalogue without hardcoding tool names.
+        """
+        return True
+
+    @classmethod
+    def requires_output_path(cls) -> bool:
+        """Whether callers must supply a separate `output_path` argument to `execute()`.
+
+        True for tools with one unambiguous output file (denoise, the normalize
+        family, pitch/time, voice enhance, super-resolution) -- `output_path` isn't
+        a schema-validated parameter for these, it's a required second argument the
+        caller (the harness, not the model) must always provide. False for tools
+        whose output is auto-derived or non-file (clipping, source separation,
+        extract/remove target, ASR), which keep the original `execute(parameters)`.
+        """
+        return False
+
+    @classmethod
     def validate_parameters(cls, parameters: Dict[str, Any]) -> None:
         schema = cls.parameter_schema()
         required = schema.get("required", [])
@@ -95,16 +117,28 @@ class Tool(ABC):
         Tools that can share expensive setup across a batch (e.g. one shared model
         load) override this; this default just means every `Tool` subclass works
         with `tools/tool_batch_execute.py` without requiring a bespoke override.
+
+        Each item may carry an `output_path` key alongside its tool parameters --
+        for tools where `requires_output_path()` is True, that key is required, is
+        popped out before schema validation, and is passed to `execute()` as a
+        separate argument rather than as a validated parameter.
         """
         if not isinstance(batch_parameters, list):
             raise ToolValidationError("Batch parameters must be a list of parameter dictionaries.")
 
         results: List[Dict[str, Any]] = []
-        for parameters in batch_parameters:
-            if not isinstance(parameters, dict):
+        for item in batch_parameters:
+            if not isinstance(item, dict):
                 raise ToolValidationError("Each batch item must be a parameter dictionary.")
+            parameters = dict(item)
             try:
-                results.append(cls.execute(parameters))
+                if cls.requires_output_path():
+                    output_path = parameters.pop("output_path", None)
+                    if not output_path:
+                        raise ToolValidationError("Missing required 'output_path' for this batch item.")
+                    results.append(cls.execute(parameters, output_path))
+                else:
+                    results.append(cls.execute(parameters))
             except Exception as exc:
                 results.append({
                     "audio_path": parameters.get("audio_path"),

@@ -55,8 +55,9 @@ def main() -> None:
     for tool_class, params in tools:
         tool_name = tool_class.name()
         print(f"\nRunning {tool_name}...")
+        output_path = source_wav.parent / f"{source_wav.stem}_{tool_name}_test.wav"
         try:
-            result = tool_class.execute(params)
+            result = tool_class.execute(params, str(output_path))
         except Exception as exc:
             print(f"{tool_name} failed: {exc}")
             raise

@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# --dataset below must be regenerated (build_rl_dataset.py) whenever
+# gen_1st_stage_data's raw JSON changes -- e.g. after moving the tool
+# catalogue into the system prompt:
+#   python build_rl_dataset.py \
+#       --input /work/u1501463/stage1_RL/tool_usage_qa_audioset.json \
+#       --output /work/u1501463/stage1_RL/train_rl_singleturn.jsonl \
+#       --system-prompt-model-dir /work/u1501463/model_qwen_25 \
+#       --system-prompt-model-type qwen2_5_omni
+
 swift rlhf \
     --rlhf_type grpo \
     --model /work/u1501463/model_qwen_25 \

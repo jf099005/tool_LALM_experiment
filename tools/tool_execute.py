@@ -139,6 +139,11 @@ def main() -> None:
         default="tool_results.json",
         help="Path to write the tool result JSON.",
     )
+    parser.add_argument(
+        "--output-path",
+        default=None,
+        help="Path to write the tool's output audio. Required for tools where requires_output_path() is True.",
+    )
 
     args = parser.parse_args()
     coefficients = parse_coefficients(args.coefficients) if args.coefficients is not None else None
@@ -147,7 +152,12 @@ def main() -> None:
     tool_cls = get_tool_class(args.tool_name)
 
     try:
-        result = tool_cls.execute(parameters)
+        if tool_cls.requires_output_path():
+            if not args.output_path:
+                raise ValueError(f"'{args.tool_name}' requires --output-path.")
+            result = tool_cls.execute(parameters, args.output_path)
+        else:
+            result = tool_cls.execute(parameters)
     except Exception as exc:
         result = {
             "tool_name": args.tool_name,

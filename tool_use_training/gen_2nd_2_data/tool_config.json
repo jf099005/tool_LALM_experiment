@@ -113,40 +113,6 @@
       "params": {
         "coef": {"kind": "choice", "values": [0.9, 0.95, 0.97, 0.99]}
       }
-    },
-
-    "remove_target": {
-      "enabled": false,
-      "weight": 0.5,
-      "env": "/home/u1501463/miniconda3/envs/sam_audio/bin/python",
-      "params": {
-        "target_description": {"kind": "choice", "values": ["vocals", "background sound", "background music", "noise"]}
-      }
-    },
-
-    "extract_target": {
-      "enabled": false,
-      "weight": 0.3,
-      "env": "/home/u1501463/miniconda3/envs/sam_audio/bin/python",
-      "params": {
-        "target_description": {"kind": "choice", "values": ["vocals", "background sound", "background music", "noise"]}
-      }
-    },
-
-    "human_voice_enhance": {
-      "enabled": false,
-      "weight": 0.3,
-      "env": "/home/u1501463/miniconda3/envs/deepfilternet/bin/python",
-      "params": {}
-    },
-
-    "super_resolution": {
-      "enabled": false,
-      "weight": 0.2,
-      "env": "/home/u1501463/miniconda3/envs/audiosr/bin/python",
-      "params": {
-        "model_name": {"kind": "choice", "values": ["basic", "speech"]}
-      }
     }
   }
 }

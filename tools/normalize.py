@@ -16,6 +16,10 @@ except ImportError:  # pragma: no cover
 
 
 class NormalizeToolBase(Tool):
+    @classmethod
+    def requires_output_path(cls) -> bool:
+        return True
+
     @staticmethod
     def _load_wav_segment(path: Path, begin_seconds: float, end_seconds: float) -> tuple[np.ndarray, int]:
         with wave.open(str(path), "rb") as wav_file:
@@ -75,13 +79,6 @@ class NormalizeToolBase(Tool):
         if path.suffix.lower() != ".wav":
             raise ToolValidationError("This normalization tool supports only WAV audio files.")
 
-    @classmethod
-    def _build_output_path(cls, audio_path: Path, suffix: str, audio_begin: str, audio_end: str) -> Path:
-        return (
-            audio_path.parent
-            / f"{audio_path.stem}_{suffix}_{audio_begin.replace(':', '-')}_{audio_end.replace(':', '-')}.wav"
-        )
-
     @staticmethod
     def _save_wav(path: Path, wav: np.ndarray, sample_rate: int) -> None:
         peak = np.max(np.abs(wav))
@@ -120,13 +117,12 @@ class AmplitudeNormalizeTool(NormalizeToolBase):
                 "audio_end": {"type": "string", "format": "HH:MM:SS.mmm"},
                 "target_level": {"type": "number"},
                 "method": {"type": "string", "enum": ["peak", "rms"]},
-                "output_path": {"type": "string"},
             },
             "required": ["audio_path", "audio_begin", "audio_end"],
         }
 
     @classmethod
-    def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(cls, parameters: Dict[str, Any], output_path: str) -> Dict[str, Any]:
         cls.validate_parameters(parameters)
 
         audio_path = parameters["audio_path"]
@@ -134,7 +130,6 @@ class AmplitudeNormalizeTool(NormalizeToolBase):
         audio_end = parameters["audio_end"]
         target_level = float(parameters.get("target_level", 0.9))
         method = parameters.get("method", "peak")
-        output_path = parameters.get("output_path")
 
         audio_path = Path(audio_path)
         if not audio_path.exists():
@@ -149,11 +144,7 @@ class AmplitudeNormalizeTool(NormalizeToolBase):
         audio, sr = cls._load_wav_segment(audio_path, begin_seconds, end_seconds)
         normalized = cls._normalize(audio, target_level=target_level, method=method)
 
-        if output_path is None:
-            output_path = cls._build_output_path(audio_path, cls.name(), audio_begin, audio_end)
-        else:
-            output_path = Path(output_path)
-
+        output_path = Path(output_path)
         cls._save_wav(output_path, normalized, sr)
 
         return {
@@ -201,20 +192,18 @@ class LoudnessNormalizeTool(NormalizeToolBase):
                 "audio_begin": {"type": "string", "format": "HH:MM:SS.mmm"},
                 "audio_end": {"type": "string", "format": "HH:MM:SS.mmm"},
                 "target_lufs": {"type": "number"},
-                "output_path": {"type": "string"},
             },
             "required": ["audio_path", "audio_begin", "audio_end"],
         }
 
     @classmethod
-    def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(cls, parameters: Dict[str, Any], output_path: str) -> Dict[str, Any]:
         cls.validate_parameters(parameters)
 
         audio_path = parameters["audio_path"]
         audio_begin = parameters["audio_begin"]
         audio_end = parameters["audio_end"]
         target_lufs = float(parameters.get("target_lufs", -23.0))
-        output_path = parameters.get("output_path")
 
         audio_path = Path(audio_path)
         if not audio_path.exists():
@@ -229,11 +218,7 @@ class LoudnessNormalizeTool(NormalizeToolBase):
         audio, sr = cls._load_wav_segment(audio_path, begin_seconds, end_seconds)
         normalized = cls._loudness_normalize(audio, sr, target_lufs=target_lufs)
 
-        if output_path is None:
-            output_path = cls._build_output_path(audio_path, cls.name(), audio_begin, audio_end)
-        else:
-            output_path = Path(output_path)
-
+        output_path = Path(output_path)
         cls._save_wav(output_path, normalized, sr)
 
         return {
@@ -286,19 +271,17 @@ class DCOffsetRemovalTool(NormalizeToolBase):
                 "audio_path": {"type": "string"},
                 "audio_begin": {"type": "string", "format": "HH:MM:SS.mmm"},
                 "audio_end": {"type": "string", "format": "HH:MM:SS.mmm"},
-                "output_path": {"type": "string"},
             },
             "required": ["audio_path", "audio_begin", "audio_end"],
         }
 
     @classmethod
-    def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(cls, parameters: Dict[str, Any], output_path: str) -> Dict[str, Any]:
         cls.validate_parameters(parameters)
 
         audio_path = parameters["audio_path"]
         audio_begin = parameters["audio_begin"]
         audio_end = parameters["audio_end"]
-        output_path = parameters.get("output_path")
 
         audio_path = Path(audio_path)
         if not audio_path.exists():
@@ -313,11 +296,7 @@ class DCOffsetRemovalTool(NormalizeToolBase):
         audio, sr = cls._load_wav_segment(audio_path, begin_seconds, end_seconds)
         normalized = cls._remove_dc_offset(audio)
 
-        if output_path is None:
-            output_path = cls._build_output_path(audio_path, cls.name(), audio_begin, audio_end)
-        else:
-            output_path = Path(output_path)
-
+        output_path = Path(output_path)
         cls._save_wav(output_path, normalized, sr)
 
         return {
@@ -355,13 +334,12 @@ class SpectralNormalizeTool(NormalizeToolBase):
                 "audio_begin": {"type": "string", "format": "HH:MM:SS.mmm"},
                 "audio_end": {"type": "string", "format": "HH:MM:SS.mmm"},
                 "strength": {"type": "number"},
-                "output_path": {"type": "string"},
             },
             "required": ["audio_path", "audio_begin", "audio_end"],
         }
 
     @classmethod
-    def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(cls, parameters: Dict[str, Any], output_path: str) -> Dict[str, Any]:
         cls.validate_parameters(parameters)
 
         if librosa is None:
@@ -373,7 +351,6 @@ class SpectralNormalizeTool(NormalizeToolBase):
         audio_begin = parameters["audio_begin"]
         audio_end = parameters["audio_end"]
         strength = float(parameters.get("strength", 0.5))
-        output_path = parameters.get("output_path")
 
         audio_path = Path(audio_path)
         if not audio_path.exists():
@@ -388,11 +365,7 @@ class SpectralNormalizeTool(NormalizeToolBase):
         audio, sr = cls._load_wav_segment(audio_path, begin_seconds, end_seconds)
         normalized = cls._spectral_normalize(audio, sr, strength=strength)
 
-        if output_path is None:
-            output_path = cls._build_output_path(audio_path, cls.name(), audio_begin, audio_end)
-        else:
-            output_path = Path(output_path)
-
+        output_path = Path(output_path)
         cls._save_wav(output_path, normalized, sr)
 
         return {
@@ -451,13 +424,12 @@ class TrimSilenceTool(NormalizeToolBase):
                 "threshold_db": {"type": "number"},
                 "frame_length": {"type": "integer"},
                 "hop_length": {"type": "integer"},
-                "output_path": {"type": "string"},
             },
             "required": ["audio_path", "audio_begin", "audio_end"],
         }
 
     @classmethod
-    def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(cls, parameters: Dict[str, Any], output_path: str) -> Dict[str, Any]:
         cls.validate_parameters(parameters)
 
         if librosa is None:
@@ -471,7 +443,6 @@ class TrimSilenceTool(NormalizeToolBase):
         threshold_db = float(parameters.get("threshold_db", 40.0))
         frame_length = int(parameters.get("frame_length", 2048))
         hop_length = int(parameters.get("hop_length", 512))
-        output_path = parameters.get("output_path")
 
         audio_path = Path(audio_path)
         if not audio_path.exists():
@@ -491,11 +462,7 @@ class TrimSilenceTool(NormalizeToolBase):
             hop_length=hop_length,
         )
 
-        if output_path is None:
-            output_path = cls._build_output_path(audio_path, cls.name(), audio_begin, audio_end)
-        else:
-            output_path = Path(output_path)
-
+        output_path = Path(output_path)
         cls._save_wav(output_path, trimmed, sr)
 
         return {
@@ -532,20 +499,18 @@ class PreEmphasisTool(NormalizeToolBase):
                 "audio_begin": {"type": "string", "format": "HH:MM:SS.mmm"},
                 "audio_end": {"type": "string", "format": "HH:MM:SS.mmm"},
                 "coef": {"type": "number"},
-                "output_path": {"type": "string"},
             },
             "required": ["audio_path", "audio_begin", "audio_end"],
         }
 
     @classmethod
-    def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(cls, parameters: Dict[str, Any], output_path: str) -> Dict[str, Any]:
         cls.validate_parameters(parameters)
 
         audio_path = parameters["audio_path"]
         audio_begin = parameters["audio_begin"]
         audio_end = parameters["audio_end"]
         coef = float(parameters.get("coef", 0.97))
-        output_path = parameters.get("output_path")
 
         audio_path = Path(audio_path)
         if not audio_path.exists():
@@ -560,11 +525,7 @@ class PreEmphasisTool(NormalizeToolBase):
         audio, sr = cls._load_wav_segment(audio_path, begin_seconds, end_seconds)
         emphasized = cls._pre_emphasis(audio, coef=coef)
 
-        if output_path is None:
-            output_path = cls._build_output_path(audio_path, cls.name(), audio_begin, audio_end)
-        else:
-            output_path = Path(output_path)
-
+        output_path = Path(output_path)
         cls._save_wav(output_path, emphasized, sr)
 
         return {

@@ -1,0 +1,13 @@
+{
+  "question": "In which of the following time intervals, does the maximum amplitude occur?",
+  "choice": [
+    "A. [0, 5]",
+    "B. [5, 14]",
+    "C. [14, 20]",
+    "D. [20, 30]"
+  ],
+  "answer": "D. [20, 30]",
+  "id": "train_audio_01592",
+  "audio_url": "../../local_audio_path/train/audio_01592.wav",
+  "question_type": "both"
+}

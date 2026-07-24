@@ -40,13 +40,30 @@ if str(Path(__file__).resolve().parent) not in sys.path:
 
 from audio_metrics import compare_audio  # noqa: E402
 from interface.executor import ToolExecutionError, UnknownToolError, extract_audio_outputs, run_tool_call  # noqa: E402
-from interface.protocol import AUDIO_TOKEN, parse_turn  # noqa: E402
+from interface.protocol import (  # noqa: E402
+    AUDIO_TOKEN,
+    audio_to_audio_tool_names,
+    parse_turn,
+    render_tool_result_message,
+)
+from official_system_prompt import compose_system_prompt, load_official_system_prompt  # noqa: E402
 
 # The SFT training data ends every chain with an explicit {"done": true} turn
-# (see build_dataset.to_swift_sample), so a fine-tuned model is run with no
-# system prompt, same as training -- it already learned the stop signal. A
-# zero-shot/official model has never seen that JSON convention, so it needs to
-# be told the protocol explicitly, including the same stop signal.
+# (see build_dataset.to_swift_sample), so it already learned the stop signal
+# without needing the protocol spelled out in English. A fine-tuned model is
+# therefore run with the same system prompt training used: the target model's
+# own official default greeting + the tool catalogue (see
+# `official_system_prompt.py`) -- NOT this protocol prompt. A zero-shot/
+# official model has never seen the JSON convention at all, so it needs the
+# protocol spelled out explicitly (this prompt), with the tool catalogue
+# appended the same way.
+#
+# Benchmark entries built before the tool catalogue moved into the system
+# prompt have no "tools_block" field and already carry the catalogue inline
+# in `entry["question"]` -- `resolve_system_prompt` below detects that and
+# falls back to the old behavior (no system prompt for a fine-tuned model,
+# this prompt alone with nothing appended for zero-shot) so old
+# benchmark.json / old checkpoints keep evaluating exactly as before.
 DEFAULT_PROTOCOL_SYSTEM_PROMPT = (
     "You are given a source audio (audio_0) and a target audio (audio_1), plus a list "
     "of audio-editing tools. Infer the chain of tool calls that transforms audio_0 into "
@@ -68,6 +85,32 @@ def render_initial_prompt(entry: Dict[str, Any]) -> str:
     text = entry["question"].replace(entry["source_audio"], f"<audio_0>{AUDIO_TOKEN}", 1)
     text = text.replace(entry["target_audio"], f"<audio_1>{AUDIO_TOKEN}", 1)
     return text
+
+
+def resolve_system_prompt(entry: Dict[str, Any], args: argparse.Namespace) -> Optional[str]:
+    """Reconstruct the exact system prompt training used for this entry.
+
+    Keyed off whether `entry` has a `tools_block` (new-format raw dataset,
+    tool catalogue lives in the system turn) or not (old-format, catalogue
+    already inline in `entry["question"]`) so old benchmark files keep
+    evaluating exactly as they did before this moved into the system prompt.
+    """
+    if args.no_system_prompt:
+        return None
+    tools_block = entry.get("tools_block")
+    if args.base_system_prompt is not None:
+        return compose_system_prompt(tools_block, base_system_prompt=args.base_system_prompt) if tools_block \
+            else args.base_system_prompt
+    if tools_block:
+        if args.adapter_dir:
+            # Fine-tuned: match the SFT system prompt -- the base model's own
+            # official default + tools, same as gen_1st_stage_data/build_dataset.py.
+            base = load_official_system_prompt(args.system_prompt_model_dir or args.model, args.system_prompt_model_type)
+        else:
+            base = DEFAULT_PROTOCOL_SYSTEM_PROMPT
+        return compose_system_prompt(tools_block, base_system_prompt=base)
+    # Old-format entry: preserve pre-existing behavior exactly.
+    return None if args.adapter_dir else DEFAULT_PROTOCOL_SYSTEM_PROMPT
 
 
 def run_sample(
@@ -117,6 +160,9 @@ def run_sample(
         if not tool_name:
             stop_reason = "unparseable_output"
             break
+        if tool_name not in audio_to_audio_tool_names():
+            stop_reason = "disallowed_tool"
+            break
         parameters = call.get("parameters", {}) if isinstance(call.get("parameters"), dict) else {}
         call_signature = (tool_name, json.dumps(parameters, sort_keys=True))
         if call_signature in seen_calls:
@@ -125,7 +171,6 @@ def run_sample(
         seen_calls.add(call_signature)
 
         exec_parameters = dict(parameters)
-        exec_parameters["output_path"] = str(sample_dir / f"pred_step{step_idx}_{tool_name}.wav")
         step_record: Dict[str, Any] = {"step": step_idx, "tool_name": tool_name, "parameters": parameters}
         try:
             result = run_tool_call(tool_name, exec_parameters, current_audio, sample_dir, step_idx)
@@ -142,16 +187,18 @@ def run_sample(
         output_audio_id = call.get("output_audio_id") or f"audio_{step_idx + 1}"
         audio_outputs = extract_audio_outputs(result)
         if not audio_outputs:
-            # Text-only tools (e.g. asr) produce no new audio -- feed the transcript
-            # back as plain text and leave current_audio (and the audio list) alone.
+            # Disallowed above, but a tool could still legitimately return no audio
+            # for other reasons -- feed back whatever text it gave and leave
+            # current_audio (and the audio list) alone.
             text = result.get("transcript") or result.get("message") or json.dumps(result)
-            messages.append({"role": "tool", "content": f"Output of step {step_idx} ({tool_name}): {text}"})
+            tool_message = render_tool_result_message(step_idx, tool_name, [], text=text)
         else:
             current_audio = Path(
                 audio_outputs.get("target") or audio_outputs.get("") or next(iter(audio_outputs.values()))
             )
             audios.append(str(current_audio))
-            messages.append({"role": "tool", "content": f"Output of step {step_idx}: <{output_audio_id}>{AUDIO_TOKEN}"})
+            tool_message = render_tool_result_message(step_idx, tool_name, [f"<{output_audio_id}>{AUDIO_TOKEN}"])
+        messages.append({"role": "tool", "content": tool_message})
     else:
         stop_reason = "max_steps_reached"
 
@@ -290,15 +337,29 @@ def main() -> None:
     parser.add_argument("--max-model-len", type=int, default=20000, help="vLLM backend only.")
     parser.add_argument("--max-num-seqs", type=int, default=8, help="vLLM backend only.")
     parser.add_argument(
-        "--system-prompt", type=str, default=None,
-        help="Override the system prompt. Default: none when --adapter-dir is set (matches the SFT data, which "
-        "had no system turn); the built-in zero-shot tool-calling protocol prompt otherwise.",
+        "--base-system-prompt", type=str, default=None,
+        help="Override the system prompt's base greeting. The tool catalogue is appended after it when the "
+        "benchmark entry has a 'tools_block' (new-format dataset); for an old-format entry (catalogue already "
+        "inline in entry['question']) this is used verbatim with nothing appended. Default: auto-detected from "
+        "--system-prompt-model-dir when --adapter-dir is set (matches SFT training); the built-in zero-shot "
+        "tool-calling protocol prompt otherwise -- see resolve_system_prompt.",
+    )
+    parser.add_argument(
+        "--system-prompt-model-dir", type=str, default=None,
+        help="Path to the model directory to auto-detect the official default system message from (only used "
+        "for --adapter-dir runs against new-format benchmark entries). Defaults to --model.",
+    )
+    parser.add_argument(
+        "--system-prompt-model-type", type=str, default=None,
+        help="Fallback key into official_system_prompt.KNOWN_DEFAULT_SYSTEM_PROMPTS. Defaults to --model-type, "
+        "then 'qwen2_5_omni'.",
     )
     parser.add_argument(
         "--no-system-prompt", action="store_true",
-        help="Force no system prompt even for a zero-shot/official-model run.",
+        help="Force no system prompt regardless of benchmark format or --adapter-dir.",
     )
     args = parser.parse_args()
+    args.system_prompt_model_type = args.system_prompt_model_type or args.model_type or "qwen2_5_omni"
 
     output_file = args.output_file
     output_file = Path(output_file) if isinstance(output_file, str) else output_file
@@ -307,13 +368,6 @@ def main() -> None:
     
     if args.backend == "vllm" and args.adapter_dir:
         raise SystemExit("--adapter-dir requires --backend swift; the vLLM backend only runs raw official weights.")
-
-    if args.system_prompt is not None:
-        system_prompt = args.system_prompt
-    elif args.no_system_prompt or args.adapter_dir:
-        system_prompt = None
-    else:
-        system_prompt = DEFAULT_PROTOCOL_SYSTEM_PROMPT
 
     with args.benchmark_file.open("r", encoding="utf-8") as f:
         benchmark = json.load(f)
@@ -347,6 +401,7 @@ def main() -> None:
     results = []
     for idx, entry in enumerate(benchmark, start=1):
         print(f"[{idx}/{len(benchmark)}] {entry['id']}", file=sys.stderr)
+        system_prompt = resolve_system_prompt(entry, args)
         result = run_sample(engine, entry, args.work_dir, args.max_extra_steps, args.hard_step_cap, system_prompt)
         results.append(result)
         with args.output_file.open("w", encoding="utf-8") as f:

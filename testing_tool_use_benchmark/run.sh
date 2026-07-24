@@ -1,5 +1,5 @@
 model_path=/work/u1501463/model_qwen_25
-ckpt_iter=1000
+ckpt_iter=5000
 adapter_path=../tool_use_training/stage1_training/v5-20260719-005455/checkpoint-$ckpt_iter
 python run_eval.py \
     --benchmark-file benchmark.json \

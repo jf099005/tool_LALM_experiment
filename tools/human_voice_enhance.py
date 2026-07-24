@@ -43,18 +43,21 @@ class HumanVoiceEnhanceTool(Tool):
         )
 
     @classmethod
+    def requires_output_path(cls) -> bool:
+        return True
+
+    @classmethod
     def parameter_schema(cls) -> Dict[str, Any]:
         return {
             "type": "object",
             "properties": {
                 "audio_path": {"type": "string"},
-                "output_path": {"type": "string"},
             },
             "required": ["audio_path"],
         }
 
     @classmethod
-    def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(cls, parameters: Dict[str, Any], output_path: str) -> Dict[str, Any]:
         cls.validate_parameters(parameters)
 
         if not _DEEPFILTER_AVAILABLE:
@@ -62,7 +65,7 @@ class HumanVoiceEnhanceTool(Tool):
                 "DeepFilterNet is not installed. Install it with: pip install deepfilternet"
             )
 
-        return cls._enhance_single(parameters, cls._get_model())
+        return cls._enhance_single(parameters, output_path, cls._get_model())
 
     @classmethod
     def execute_batch(cls, batch_parameters: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -77,11 +80,15 @@ class HumanVoiceEnhanceTool(Tool):
         model_tuple = cls._get_model()
 
         results: List[Dict[str, Any]] = []
-        for parameters in tqdm(batch_parameters):
-            if not isinstance(parameters, dict):
+        for item in tqdm(batch_parameters):
+            if not isinstance(item, dict):
                 raise ToolValidationError("Each batch item must be a parameter dictionary.")
+            parameters = dict(item)
+            output_path = parameters.pop("output_path", None)
             try:
-                results.append(cls._enhance_single(parameters, model_tuple))
+                if not output_path:
+                    raise ToolValidationError("Missing required 'output_path' for this batch item.")
+                results.append(cls._enhance_single(parameters, output_path, model_tuple))
             except ToolValidationError as exc:
                 results.append({
                     "audio_path": parameters.get("audio_path"),
@@ -93,10 +100,9 @@ class HumanVoiceEnhanceTool(Tool):
         return results
 
     @classmethod
-    def _enhance_single(cls, parameters: Dict[str, Any], model_tuple) -> Dict[str, Any]:
+    def _enhance_single(cls, parameters: Dict[str, Any], output_path: str, model_tuple) -> Dict[str, Any]:
         audio_path = Path(parameters["audio_path"])
         atten_lim_db = parameters.get("atten_lim_db")
-        output_path = parameters.get("output_path")
 
         if not audio_path.exists():
             raise ToolValidationError(f"Audio file not found: {audio_path}")
@@ -122,11 +128,7 @@ class HumanVoiceEnhanceTool(Tool):
 
         audio_out = np.clip(enhanced.squeeze(0).numpy(), -1.0, 1.0)
 
-        if output_path is None:
-            output_path = audio_path.parent / f"{audio_path.stem}_deepfilter.wav"
-        else:
-            output_path = Path(output_path)
-
+        output_path = Path(output_path)
         cls._save_wav(output_path, audio_out, sample_rate)
 
         return {

@@ -9,10 +9,10 @@
     ],
     "answer": "A. Functional and well-maintained",
     "id": "dev_audio_0001587",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001587/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_0001587/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1586.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001587/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_0001587/original.wav"
   },
   {
     "question": "What sound indicates a mechanical operation in progress?",
@@ -24,10 +24,10 @@
     ],
     "answer": "B. Motor hum",
     "id": "dev_audio_01513",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01513/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01513/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_783.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01513/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01513/original.wav"
   },
   {
     "question": "Is it hazardous to have the audio play as a background in hospital indoors?",
@@ -38,10 +38,10 @@
     ],
     "answer": "C. True",
     "id": "dev_audio_00287",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00287/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00287/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_542.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00287/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00287/original.wav"
   },
   {
     "question": "Why might the loud cheers be present during the performance?",
@@ -53,10 +53,10 @@
     ],
     "answer": "B. The singer is performing a popular song",
     "id": "dev_audio_01610",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01610/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01610/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1095.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01610/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01610/original.wav"
   },
   {
     "question": "Count the number of times the door knocking happens.",
@@ -68,10 +68,10 @@
     ],
     "answer": "C. 15",
     "id": "dev_audio_01290",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01290/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01290/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1339.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01290/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01290/original.wav"
   },
   {
     "question": "What is the total number of times the Glass breaking happens?",
@@ -83,10 +83,10 @@
     ],
     "answer": "C. Three",
     "id": "dev_audio_01307",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01307/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01307/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1374.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01307/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01307/original.wav"
   },
   {
     "question": "Which sound occurs last in the audio clip?",
@@ -98,10 +98,10 @@
     ],
     "answer": "A. Keyboard",
     "id": "fold2-a-0099",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0099/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-a-0099/original.wav",
     "question_type": "sound detection",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/fold2-a-0099.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0099/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-a-0099/original.wav"
   },
   {
     "question": "What is the duration of the speech sound?",
@@ -113,10 +113,10 @@
     ],
     "answer": "B. 2.5s",
     "id": "fold2-a-0086",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0086/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-a-0086/original.wav",
     "question_type": "sound detection",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/fold2-a-0086.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0086/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-a-0086/original.wav"
   },
   {
     "question": "What element in the audio accompanies the emotional voice?",
@@ -128,10 +128,10 @@
     ],
     "answer": "D. Rhythmic electronic beats",
     "id": "dev_audio_00891",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00891/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00891/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_77.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00891/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00891/original.wav"
   },
   {
     "question": "Is it hazardous to have the audio play as a background in public address?",
@@ -142,10 +142,10 @@
     ],
     "answer": "B. True",
     "id": "dev_audio_00173",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00173/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00173/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_554.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00173/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00173/original.wav"
   },
   {
     "question": "Is it not hazardous to have the audio play as a background in public address?",
@@ -156,10 +156,10 @@
     ],
     "answer": "C. False",
     "id": "dev_audio_00186",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00186/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00186/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_334.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00186/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00186/original.wav"
   },
   {
     "question": "What is the duration of the fire sound in the audio clip?",
@@ -171,10 +171,10 @@
     ],
     "answer": "A. 10.0 seconds",
     "id": "fold2-c-0035",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-c-0035/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-c-0035/original.wav",
     "question_type": "sound detection",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/fold2-c-0035.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-c-0035/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-c-0035/original.wav"
   },
   {
     "question": "Count the number of times the Hand clapping happens.",
@@ -186,10 +186,10 @@
     ],
     "answer": "C. Three",
     "id": "dev_audio_01279",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01279/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01279/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1318.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01279/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01279/original.wav"
   },
   {
     "question": "What is the duration of the fire sound in the audio clip?",
@@ -201,10 +201,10 @@
     ],
     "answer": "B. 10.0s",
     "id": "fold2-c-0071",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-c-0071/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-c-0071/original.wav",
     "question_type": "sound detection",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/fold2-c-0071.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-c-0071/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-c-0071/original.wav"
   },
   {
     "question": "Is it not hazardous to have the audio play as a background in ceremonies?",
@@ -215,10 +215,10 @@
     ],
     "answer": "B. False",
     "id": "dev_audio_00134",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00134/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00134/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_351.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00134/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00134/original.wav"
   },
   {
     "question": "What could be the reason for the constant background noise and ticking sounds?",
@@ -230,10 +230,10 @@
     ],
     "answer": "D. The woman is in a room during a storm",
     "id": "dev_audio_00107",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00107/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00107/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_609.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00107/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00107/original.wav"
   },
   {
     "question": "Is it hazardous to have the audio play as a background in ceremonies?",
@@ -244,10 +244,10 @@
     ],
     "answer": "C. True",
     "id": "dev_audio_00194",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00194/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00194/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_431.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00194/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00194/original.wav"
   },
   {
     "question": "Is it not hazardous to have the audio play as a background in hospital indoors?",
@@ -258,10 +258,10 @@
     ],
     "answer": "C. False",
     "id": "dev_audio_00295",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00295/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00295/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_503.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00295/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00295/original.wav"
   },
   {
     "question": "When does the breathing sound occur in the audio?",
@@ -272,10 +272,10 @@
     ],
     "answer": "C. The middle",
     "id": "dev_audio_00937",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00937/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00937/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1157.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00937/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00937/original.wav"
   },
   {
     "question": "In the audio, what musical element is subtly present in the background?",
@@ -287,10 +287,10 @@
     ],
     "answer": "D. Soft instrumental piano music",
     "id": "dev_audio_00755",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00755/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00755/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_93.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00755/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00755/original.wav"
   },
   {
     "question": "What type of vocal expression is prominent in the audio?",
@@ -302,10 +302,10 @@
     ],
     "answer": "D. Fearful urging",
     "id": "dev_audio_01518",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01518/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01518/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_261.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01518/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01518/original.wav"
   },
   {
     "question": "In the audio, what emotion is primarily conveyed?",
@@ -317,10 +317,10 @@
     ],
     "answer": "C. Disgust",
     "id": "dev_audio_00835",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00835/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00835/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_852.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00835/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00835/original.wav"
   },
   {
     "question": "Is it not hazardous to have the audio play as a background in public address?",
@@ -331,10 +331,10 @@
     ],
     "answer": "C. False",
     "id": "dev_audio_00319",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00319/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00319/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_553.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00319/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00319/original.wav"
   },
   {
     "question": "What sound is likely prominent in the audio besides the woman's voice?",
@@ -346,10 +346,10 @@
     ],
     "answer": "B. Tool clicks",
     "id": "dev_audio_00594",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00594/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00594/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_797.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00594/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00594/original.wav"
   },
   {
     "question": "What is the duration of the cupboard sound?",
@@ -361,10 +361,10 @@
     ],
     "answer": "A. 1.0s",
     "id": "fold2-a-0096",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0096/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-a-0096/original.wav",
     "question_type": "sound detection",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/fold2-a-0096.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0096/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-a-0096/original.wav"
   },
   {
     "question": "What is the individual's typing speed?",
@@ -376,10 +376,10 @@
     ],
     "answer": "C. High and consistent",
     "id": "dev_audio_0001571",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001571/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_0001571/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1570.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001571/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_0001571/original.wav"
   },
   {
     "question": "Based on the given audio, what caused the sense of surprise?",
@@ -391,10 +391,10 @@
     ],
     "answer": "C. Fewer members needed",
     "id": "dev_audio_01686",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01686/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01686/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_924.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01686/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01686/original.wav"
   },
   {
     "question": "In what setting might this audio be typically used?",
@@ -406,10 +406,10 @@
     ],
     "answer": "D. Cooking show",
     "id": "dev_audio_01377",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01377/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01377/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1114.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01377/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01377/original.wav"
   },
   {
     "question": "What is the start time of the laughter sound?",
@@ -421,10 +421,10 @@
     ],
     "answer": "B. 2.1s",
     "id": "fold2-b-0093",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-b-0093/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-b-0093/original.wav",
     "question_type": "sound detection",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/fold2-b-0093.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-b-0093/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-b-0093/original.wav"
   },
   {
     "question": "Based on the audio description, what is the most likely environment for the sounds?",
@@ -436,10 +436,10 @@
     ],
     "answer": "D. A quiet room",
     "id": "dev_audio_00425",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00425/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00425/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1020.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00425/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00425/original.wav"
   },
   {
     "question": "What is the likely setting based on the speech?",
@@ -451,10 +451,10 @@
     ],
     "answer": "A. Small, enclosed room",
     "id": "dev_audio_0001512",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001512/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_0001512/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1511.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001512/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_0001512/original.wav"
   },
   {
     "question": "How many times does the duck quacking occur in the audio?",
@@ -466,10 +466,10 @@
     ],
     "answer": "C. Three",
     "id": "dev_audio_01308",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01308/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01308/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1375.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01308/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01308/original.wav"
   },
   {
     "question": "In which of the following time intervals, does the maximum amplitude occur?",
@@ -481,10 +481,10 @@
     ],
     "answer": "D. [0, 19]",
     "id": "dev_audio_00327",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00327/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00327/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_386.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00327/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00327/original.wav"
   },
   {
     "question": "Is it hazardous to have the audio play as a background in hospital indoors?",
@@ -495,10 +495,10 @@
     ],
     "answer": "B. False",
     "id": "dev_audio_00072",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00072/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00072/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_340.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00072/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00072/original.wav"
   },
   {
     "question": "In which of the following time intervals, does the maximum amplitude occur?",
@@ -510,10 +510,10 @@
     ],
     "answer": "C. [26, 30]",
     "id": "dev_audio_00254",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00254/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00254/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_321.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00254/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00254/original.wav"
   },
   {
     "question": "What might the increase in wind noise indicate?",
@@ -525,10 +525,10 @@
     ],
     "answer": "A. Boat moving into open water",
     "id": "dev_audio_0001459",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001459/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_0001459/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1458.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001459/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_0001459/original.wav"
   },
   {
     "question": "What is the first sound you hear in this audio?",
@@ -540,10 +540,10 @@
     ],
     "answer": "C. Gunshot",
     "id": "dev_audio_01264",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01264/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01264/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1288.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01264/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01264/original.wav"
   },
   {
     "question": "What is the active sound that occurs in the audio clip?",
@@ -555,10 +555,10 @@
     ],
     "answer": "B. Piano",
     "id": "fold2-c-0072",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-c-0072/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-c-0072/original.wav",
     "question_type": "audio tagging",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/fold2-c-0072.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-c-0072/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-c-0072/original.wav"
   },
   {
     "question": "What might be the reason for the engine noise in the background while the man speaks?",
@@ -570,10 +570,10 @@
     ],
     "answer": "C. He is at a racing event",
     "id": "dev_audio_00546",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00546/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00546/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1107.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_00546/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_00546/original.wav"
   },
   {
     "question": "At what start time does the knock sound begin?",
@@ -585,10 +585,10 @@
     ],
     "answer": "C. 4.6s",
     "id": "fold2-a-0207",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0207/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-a-0207/original.wav",
     "question_type": "sound detection",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/fold2-a-0207.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0207/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-a-0207/original.wav"
   },
   {
     "question": "Can you hear anything else during the knock sound?",
@@ -600,10 +600,10 @@
     ],
     "answer": "B. Keys jangling",
     "id": "fold2-a-0249",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0249/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-a-0249/original.wav",
     "question_type": "sound detection",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/fold2-a-0249.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/fold2-a-0249/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/fold2-a-0249/original.wav"
   },
   {
     "question": "Why did the crowd cheer?",
@@ -615,10 +615,10 @@
     ],
     "answer": "A. A success or victory",
     "id": "dev_audio_0001409",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001409/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_0001409/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1408.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_0001409/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_0001409/original.wav"
   },
   {
     "question": "What is the first sound you hear in this audio?",
@@ -630,10 +630,10 @@
     ],
     "answer": "D. Heartbeat",
     "id": "dev_audio_01291",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01291/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01291/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1342.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01291/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01291/original.wav"
   },
   {
     "question": "Which event happens the most times in this audio?",
@@ -645,10 +645,10 @@
     ],
     "answer": "C. Air conditioning humming",
     "id": "dev_audio_01297",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01297/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01297/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_1354.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01297/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01297/original.wav"
   },
   {
     "question": "Which instrumental component is prominent during the emotional vocal delivery?",
@@ -660,9 +660,9 @@
     ],
     "answer": "B. Groovy bass",
     "id": "dev_audio_01498",
-    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01498/original.wav",
+    "audio_url": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01498/original.wav",
     "question_type": "both",
     "_json_path": "/work/u1501463/2025_DCASE_AudioQA_Official/dcase_2025_question_path/dev/dev_aqa_109.json",
-    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_stage_data/exp/original/dev_audio_01498/original.wav"
+    "audio_path": "/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/original/dev_audio_01498/original.wav"
   }
 ]

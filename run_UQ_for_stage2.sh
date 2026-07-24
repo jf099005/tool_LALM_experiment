@@ -15,7 +15,8 @@ uq_semantic_entropy=false              # H_sem via NLI entailment clustering (lo
 uq_p_true=true                         # P(True) self-verification (one extra generation per item)
 # -----------------------------------------------------------------------------
 
-result_path=/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/results
+result_path=/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/eval_result
+mkdir -p ${result_path}
 
 to_flag() {
     # $1 = flag base name (e.g. uq_p_true), $2 = true/false
@@ -26,17 +27,17 @@ to_flag() {
     fi
 }
 
-disturbed_path=tool_use_training/gen_2nd_stage_data/exp/disturbed/disturbed_subset.json
-recovered_path=tool_use_training/gen_2nd_stage_data/exp/recovered/recovered_subset.json
+original_path=tool_use_training/gen_2nd_2_data/exp/original_subset.json
+tool_applied_path=tool_use_training/gen_2nd_2_data/exp/tool_applied_subset.json
 
-echo "Running uncertainty quantification on disturbed subset..."
+echo "Running uncertainty quantification on original subset..."
 
-# python qwen25_with_tool_chain_evaluation.py \
-#     --subset_path ${disturbed_path} \
-#     --compute_uncertainty \
-#     --output_path ${result_path}/disturbed_uq_results.json \
-#     --uq_num_samples ${uq_num_samples} \
-#     --uq_sample_temperature ${uq_sample_temperature} \
+python qwen25_with_tool_chain_evaluation.py \
+    --subset_path ${original_path} \
+    --compute_uncertainty \
+    --output_path ${result_path}/disturbed_uq_results.json \
+    --uq_num_samples ${uq_num_samples} \
+    --uq_sample_temperature ${uq_sample_temperature} \
 #     # --load_tool_chain_results \
 #     # --overwrite_original_audio \
 #     # --output_path predictions/qwen25/Dcase_${exp_name}_overwrite_uq.json \
@@ -51,9 +52,9 @@ echo "Running uncertainty quantification on disturbed subset..."
 echo "Running uncertainty quantification on recovered subset..."
 
 python qwen25_with_tool_chain_evaluation.py \
-    --subset_path ${recovered_path} \
+    --subset_path ${tool_applied_path} \
     --compute_uncertainty \
-    --output_path ${result_path}/recovered_uq_results.json \
+    --output_path ${result_path}/tool_applied_uq_results.json \
     --uq_num_samples ${uq_num_samples} \
     --uq_sample_temperature ${uq_sample_temperature} \
     # --load_tool_chain_results \

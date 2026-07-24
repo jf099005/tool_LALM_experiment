@@ -65,14 +65,17 @@ def run_tool_call(
     params = dict(parameters or {})
     params.pop("audio_id", None)
     params["audio_path"] = str(input_audio_path)
-
-    schema_props = cls.parameter_schema().get("properties", {})
-    if "output_path" in schema_props and not params.get("output_path"):
-        output_dir.mkdir(parents=True, exist_ok=True)
-        params["output_path"] = str(output_dir / f"step{step_index}_{tool_name}.wav")
+    # `output_path` isn't a documented tool parameter -- the harness always decides
+    # it, never the model -- so drop anything the model may have put here before
+    # validating, regardless of whether this tool even needs one.
+    params.pop("output_path", None)
 
     try:
         cls.validate_parameters(params)
+        if cls.requires_output_path():
+            output_dir.mkdir(parents=True, exist_ok=True)
+            output_path = str(output_dir / f"step{step_index}_{tool_name}.wav")
+            return cls.execute(params, output_path)
         return cls.execute(params)
     except ToolValidationError as exc:
         raise ToolExecutionError(f"{tool_name} validation failed: {exc}") from exc

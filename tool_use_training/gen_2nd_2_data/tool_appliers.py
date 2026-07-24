@@ -237,25 +237,22 @@ def _apply_clipping(tool_cfg, audio_path: Path, output_path: Path, rng: random.R
 
 def _apply_denoise(tool_cfg, audio_path: Path, output_path: Path, rng: random.Random, duration: float):
     drawn = draw_params(tool_cfg, rng)
-    params: Dict[str, Any] = {"audio_path": str(audio_path), **drawn, "output_path": str(output_path)}
-    result = DenoiseTool.execute(params)
-    params.pop("output_path")
+    params: Dict[str, Any] = {"audio_path": str(audio_path), **drawn}
+    result = DenoiseTool.execute(params, str(output_path))
     return params, Path(result["output_path"])
 
 
 def _apply_pitch_shift(tool_cfg, audio_path: Path, output_path: Path, rng: random.Random, duration: float):
     drawn = draw_params(tool_cfg, rng)
-    params = {"audio_path": str(audio_path), **drawn, "output_path": str(output_path)}
-    result = PitchShiftTool.execute(params)
-    params.pop("output_path")
+    params = {"audio_path": str(audio_path), **drawn}
+    result = PitchShiftTool.execute(params, str(output_path))
     return params, Path(result["output_path"])
 
 
 def _apply_time_stretch(tool_cfg, audio_path: Path, output_path: Path, rng: random.Random, duration: float):
     drawn = draw_params(tool_cfg, rng)
-    params = {"audio_path": str(audio_path), **drawn, "output_path": str(output_path)}
-    result = TimeStretchTool.execute(params)
-    params.pop("output_path")
+    params = {"audio_path": str(audio_path), **drawn}
+    result = TimeStretchTool.execute(params, str(output_path))
     return params, Path(result["output_path"])
 
 
@@ -268,13 +265,17 @@ def _make_full_segment_applier(tool_cls):
             "audio_begin": begin,
             "audio_end": end,
             **drawn,
-            "output_path": str(output_path),
         }
-        result = tool_cls.execute(params)
-        params.pop("output_path")
+        result = tool_cls.execute(params, str(output_path))
         return params, Path(result["output_path"])
 
     return _apply
+
+
+# Heavy tools dispatched via `_run_tool_subprocess` where the real tool requires an
+# explicit `output_path` (see tools/abstract_tool.Tool.requires_output_path) --
+# `remove_target`/`extract_target` don't need one and are omitted here.
+_HEAVY_TOOLS_REQUIRING_OUTPUT_PATH = {"human_voice_enhance", "super_resolution"}
 
 
 def _make_heavy_applier(tool_name: str):
@@ -282,7 +283,10 @@ def _make_heavy_applier(tool_name: str):
         drawn = draw_params(tool_cfg, rng)
         env_python = tool_cfg["env"]
         params = {"audio_path": str(audio_path), **drawn}
+        if tool_name in _HEAVY_TOOLS_REQUIRING_OUTPUT_PATH:
+            params["output_path"] = str(output_path)
         result = _run_tool_subprocess(tool_name, env_python, params)
+        params.pop("output_path", None)
         final_path = _finalize(Path(result["output_path"]), output_path)
         return params, final_path
 

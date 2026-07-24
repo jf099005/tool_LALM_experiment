@@ -42,6 +42,10 @@ class ASRTool(Tool):
         return "asr"
 
     @classmethod
+    def produces_audio(cls) -> bool:
+        return False
+
+    @classmethod
     def description(cls) -> str:
         return (
             "Transcribe speech from a WAV audio segment into text. "

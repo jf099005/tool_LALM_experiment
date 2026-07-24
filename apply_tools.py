@@ -23,6 +23,15 @@ repo_root = Path('.').resolve()
 sys.path.insert(0, str(repo_root))
 sys.path.insert(0, str(repo_root / 'sam-audio'))
 
+# tools/-package tool names where `Tool.requires_output_path()` is True (see
+# tools/abstract_tool.py) -- output_path isn't a schema parameter for these, so the
+# harness (this script) must generate and inject one before batch dispatch.
+TOOLS_REQUIRING_OUTPUT_PATH: set[str] = {
+    "denoise", "pitch_shift", "time_stretch", "human_voice_enhance", "super_resolution",
+    "amplitude_normalize", "loudness_normalize", "remove_dc_offset", "spectral_normalize",
+    "trim_silence", "pre_emphasis",
+}
+
 TOOL_ENV: dict[str, str] = {
     'asr': '/home/u1501463/miniconda3/envs/Whisper/bin/python',
     'clipping': '/home/u1501463/miniconda3/envs/Whisper/bin/python',
@@ -188,7 +197,11 @@ def build_global_batches(schedule: list[Any], output_root: Path, restrict_tool: 
                 {'tool': tool_name, 'parameters': parameters},
             )
 
-            task_parameters.setdefault(tool_name, []).append(parameters)
+            dispatch_parameters = dict(parameters)
+            if tool_name in TOOLS_REQUIRING_OUTPUT_PATH:
+                dispatch_parameters['output_path'] = str(output_dir / f'step{step_index}_{tool_name}.wav')
+
+            task_parameters.setdefault(tool_name, []).append(dispatch_parameters)
             task_metadata.setdefault(tool_name, []).append({
                 'problem_id': problem_id,
                 'step_index': step_index,
@@ -245,9 +258,10 @@ def execute_batches(task_parameters: dict[str, list[dict[str, Any]]], task_metad
             # file_tag = f'{tool_name}_{params_suffix(parameter_list[result_index])}'
             file_tag = f'{step_index}' #{params_suffix(parameter_list[result_index])}'
             saved_paths = maybe_save_result(output_dir, file_tag, result, problems[problem_id]['problem'])
+            recorded_parameters = {k: v for k, v in parameter_list[result_index].items() if k != 'output_path'}
             problems[problem_id]['results'][step_index - 1] = {
                 'tool': tool_name,
-                'parameters': parameter_list[result_index],
+                'parameters': recorded_parameters,
                 'result': result,
                 'saved_files': [str(path) for path in saved_paths],
                 'origin': metadata['origin'],

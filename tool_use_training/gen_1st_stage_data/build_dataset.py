@@ -60,6 +60,8 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from tools import synthetic_registry as tool_registry  # noqa: E402
 from question_templates import render_question  # noqa: E402
+from official_system_prompt import compose_system_prompt  # noqa: E402
+from interface import protocol as agent_protocol  # noqa: E402
 
 DEFAULT_AUDIOSET_DIR = Path("/work/u1501463/audioset_20k/20k/train")
 DEFAULT_VCTK_DIR = Path("/work/u1501463/VCTK/wav48_silence_trimmed")
@@ -131,7 +133,9 @@ def assign_audio_ids(num_steps: int) -> tuple[List[str], List[str]]:
 def to_swift_sample(
     entry: Dict[str, Any],
     audio_token: str = "<audio>",
-    system_prompt: str | None = None,
+    base_system_prompt: str | None = None,
+    system_prompt_model_dir: str | None = None,
+    system_prompt_model_type: str | None = None,
 ) -> Dict[str, Any]:
     """Convert one dataset entry into an ms-swift SFT row.
 
@@ -145,6 +149,13 @@ def to_swift_sample(
     swapped for a tagged `audio_token` here, since the model perceives the
     audio itself, not its path.
 
+    Every row gets an explicit system turn: the target model's own official
+    default system message (auto-detected from `system_prompt_model_dir`, or
+    overridden via `base_system_prompt`) followed by the tool catalogue --
+    see `official_system_prompt.compose_system_prompt`. The tool catalogue
+    used to be repeated inline in the user question instead; it now lives
+    only in the system turn, so `question_templates.py` no longer renders it.
+
     The answer is rendered as a multi-turn agent/tool dialogue: one assistant
     turn per tool call, each followed by a "tool" turn carrying that step's
     real output audio (tagged with the id the tool call itself declared via
@@ -153,6 +164,13 @@ def to_swift_sample(
     A final explicit `{"done": true}` assistant turn closes the chain, so the
     model has a learned stop signal instead of relying on running out of
     turns.
+
+    The turn JSON/text itself is rendered via `interface.protocol`'s shared
+    helpers (`render_tool_call_json` / `render_tool_result_message` /
+    `render_done_json`), not reimplemented here -- `interface/agent.py` (live
+    inference) and `testing_tool_use_benchmark/run_eval.py` (eval) render the
+    exact same wording from the same functions, so a trained model never sees
+    an out-of-distribution turn format at inference/eval time.
     """
     audio_id_map = entry["audio_id_map"]
     audios: List[str] = []
@@ -168,17 +186,30 @@ def to_swift_sample(
     question_text = entry["question"].replace(entry["source_audio"], tag("audio_0"), 1)
     question_text = question_text.replace(entry["target_audio"], tag("audio_1"), 1)
 
-    messages = []
-    if system_prompt:
-        messages.append({"role": "system", "content": system_prompt})
-    messages.append({"role": "user", "content": question_text})
+    system_prompt = compose_system_prompt(
+        tools_block=entry["tools_block"],
+        base_system_prompt=base_system_prompt,
+        model_dir=system_prompt_model_dir,
+        model_type=system_prompt_model_type,
+    )
+    messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": question_text}]
 
     tool_calls = entry["answer"]["tool_calls"]
     for step_idx, tool_call in enumerate(tool_calls, start=1):
-        messages.append({"role": "assistant", "content": json.dumps(tool_call, ensure_ascii=False)})
+        messages.append({
+            "role": "assistant",
+            "content": agent_protocol.render_tool_call_json(
+                tool_call["tool_name"], tool_call["parameters"], tool_call["output_audio_id"]
+            ),
+        })
         output_id = tool_call["output_audio_id"]
-        messages.append({"role": "tool", "content": f"Output of step {step_idx}: {tag(output_id)}"})
-    messages.append({"role": "assistant", "content": json.dumps({"done": True})})
+        messages.append({
+            "role": "tool",
+            "content": agent_protocol.render_tool_result_message(
+                step_idx, tool_call["tool_name"], [tag(output_id)]
+            ),
+        })
+    messages.append({"role": "assistant", "content": agent_protocol.render_done_json()})
 
     return {
         "messages": messages,
@@ -240,13 +271,14 @@ def build_one_sample(
         audio_id_map[output_ids[step_index - 1]] = str(step_outputs[step_index - 1])
 
     tools_block = tool_registry.describe_available_tools()
-    question = render_question(source=str(audio_a), target=str(audio_b), tools_block=tools_block, rng=rng)
+    question = render_question(source=str(audio_a), target=str(audio_b), rng=rng)
 
     return {
         "id": sample_id,
         "source_audio": str(audio_a),
         "target_audio": str(audio_b),
         "available_tools": tool_registry.available_tool_names(),
+        "tools_block": tools_block,
         "num_steps": len(chosen_tools),
         "question": question,
         "answer": {"tool_calls": tool_calls},
@@ -359,10 +391,35 @@ def main() -> None:
         help="Placeholder token substituted for each audio path in the swift user message.",
     )
     parser.add_argument(
-        "--swift-system-prompt",
+        "--base-system-prompt",
         type=str,
         default=None,
-        help="Optional system message to prepend to every swift SFT row.",
+        help=(
+            "Explicit override for the system prompt's base greeting (the part before the "
+            "tool catalogue). If omitted, it's auto-detected from --system-prompt-model-dir "
+            "(or --system-prompt-model-type as a fallback) -- see official_system_prompt.py."
+        ),
+    )
+    parser.add_argument(
+        "--system-prompt-model-dir",
+        type=str,
+        default=None,
+        help=(
+            "Path to the target model's own directory (the one it'll actually be trained "
+            "from), used to auto-detect its official default system message from "
+            "chat_template.json/tokenizer_config.json. Swap this when training a different "
+            "model so the system prompt matches that model's own convention instead of "
+            "assuming Qwen's."
+        ),
+    )
+    parser.add_argument(
+        "--system-prompt-model-type",
+        type=str,
+        default="qwen2_5_omni",
+        help=(
+            "Fallback key into official_system_prompt.KNOWN_DEFAULT_SYSTEM_PROMPTS, used only "
+            "if --system-prompt-model-dir is omitted or its chat_template can't be parsed."
+        ),
     )
     args = parser.parse_args()
 
@@ -474,7 +531,9 @@ def main() -> None:
                 swift_sample = to_swift_sample(
                     entry,
                     audio_token=args.audio_token,
-                    system_prompt=args.swift_system_prompt,
+                    base_system_prompt=args.base_system_prompt,
+                    system_prompt_model_dir=args.system_prompt_model_dir,
+                    system_prompt_model_type=args.system_prompt_model_type,
                 )
                 handle.write(json.dumps(swift_sample, ensure_ascii=False) + "\n")
         print(f"Wrote {len(dataset)} ms-swift SFT rows to {args.swift_output_file}", file=sys.stderr)

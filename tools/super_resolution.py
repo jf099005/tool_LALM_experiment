@@ -36,6 +36,10 @@ class SuperResolutionTool(Tool):
         )
 
     @classmethod
+    def requires_output_path(cls) -> bool:
+        return True
+
+    @classmethod
     def parameter_schema(cls) -> Dict[str, Any]:
         return {
             "type": "object",
@@ -54,13 +58,12 @@ class SuperResolutionTool(Tool):
                     "type": "number",
                     "description": "Classifier-free guidance scale.",
                 },
-                "output_path": {"type": "string"},
             },
             "required": ["audio_path"],
         }
 
     @classmethod
-    def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(cls, parameters: Dict[str, Any], output_path: str) -> Dict[str, Any]:
         cls.validate_parameters(parameters)
 
         if not _AUDIOSR_AVAILABLE:
@@ -69,7 +72,7 @@ class SuperResolutionTool(Tool):
             )
 
         model_name = parameters.get("model_name", "basic")
-        return cls._enhance_single(parameters, cls._get_model(model_name))
+        return cls._enhance_single(parameters, output_path, cls._get_model(model_name))
 
     @classmethod
     def execute_batch(cls, batch_parameters: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -82,13 +85,17 @@ class SuperResolutionTool(Tool):
             )
 
         results: List[Dict[str, Any]] = []
-        for parameters in tqdm(batch_parameters):
-            if not isinstance(parameters, dict):
+        for item in tqdm(batch_parameters):
+            if not isinstance(item, dict):
                 raise ToolValidationError("Each batch item must be a parameter dictionary.")
+            parameters = dict(item)
+            output_path = parameters.pop("output_path", None)
             try:
+                if not output_path:
+                    raise ToolValidationError("Missing required 'output_path' for this batch item.")
                 cls.validate_parameters(parameters)
                 model_name = parameters.get("model_name", "basic")
-                results.append(cls._enhance_single(parameters, cls._get_model(model_name)))
+                results.append(cls._enhance_single(parameters, output_path, cls._get_model(model_name)))
             except ToolValidationError as exc:
                 results.append({
                     "audio_path": parameters.get("audio_path"),
@@ -100,7 +107,7 @@ class SuperResolutionTool(Tool):
         return results
 
     @classmethod
-    def _enhance_single(cls, parameters: Dict[str, Any], model) -> Dict[str, Any]:
+    def _enhance_single(cls, parameters: Dict[str, Any], output_path: str, model) -> Dict[str, Any]:
         audio_path = Path(parameters["audio_path"])
         if not audio_path.exists():
             raise ToolValidationError(f"Audio file not found: {audio_path}")
@@ -108,7 +115,6 @@ class SuperResolutionTool(Tool):
         model_name = parameters.get("model_name", "basic")
         ddim_steps = int(parameters.get("ddim_steps", 50))
         guidance_scale = float(parameters.get("guidance_scale", 3.5))
-        output_path = parameters.get("output_path")
 
         info = torchaudio.info(str(audio_path))
         original_duration = info.num_frames / info.sample_rate
@@ -125,11 +131,7 @@ class SuperResolutionTool(Tool):
         audio_out = cls._match_length(audio_out, target_length)
         audio_out = np.clip(audio_out, -1.0, 1.0)
 
-        if output_path is None:
-            output_path = audio_path.parent / f"{audio_path.stem}_super_resolution.wav"
-        else:
-            output_path = Path(output_path)
-
+        output_path = Path(output_path)
         cls._save_wav(output_path, audio_out, _OUTPUT_SAMPLE_RATE)
 
         return {

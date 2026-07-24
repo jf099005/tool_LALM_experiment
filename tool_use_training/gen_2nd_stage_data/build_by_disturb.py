@@ -77,6 +77,16 @@ if str(_THIS_DIR) not in sys.path:
 import disturb_recover as dr  # noqa: E402
 
 
+# tools/-package tool names where `Tool.requires_output_path()` is True (see
+# tools/abstract_tool.py) -- these dispatch through tool_batch_execute.py's own
+# conda env, so this can't just import the real Tool classes to ask them directly.
+_TOOLS_REQUIRING_OUTPUT_PATH = {
+    "denoise", "pitch_shift", "time_stretch", "human_voice_enhance", "super_resolution",
+    "amplitude_normalize", "loudness_normalize", "remove_dc_offset", "spectral_normalize",
+    "trim_silence", "pre_emphasis",
+}
+
+
 def load_qa_pairs(path: Path) -> List[Dict[str, Any]]:
     with path.open("r", encoding="utf-8") as handle:
         data = json.load(handle)
@@ -278,10 +288,19 @@ def execute_recovery_turns(
         turn_root = tool_results_dir / f"turn_{turn}"
         for tool_name, tool_items in by_tool.items():
             batch_parameters = []
+            dest_paths = []
             for it in tool_items:
                 step = it["recovery_chain"][turn - 1]
                 params = dict(step["parameters"])
                 params["audio_path"] = it["current_audio_path"]
+
+                dest_dir = tool_results_dir / it["id"]
+                dest_dir.mkdir(parents=True, exist_ok=True)
+                dest_path = dest_dir / f"turn{turn}_{tool_name}.wav"
+                dest_paths.append(dest_path)
+                if tool_name in _TOOLS_REQUIRING_OUTPUT_PATH:
+                    params["output_path"] = str(dest_path)
+
                 batch_parameters.append(params)
 
             try:
@@ -297,7 +316,7 @@ def execute_recovery_turns(
                     it["failure_reason"] = f"turn {turn} tool {tool_name}: batch failed ({exc})"
                 continue
 
-            for it, call_params, result in zip(tool_items, batch_parameters, results):
+            for it, call_params, dest_path, result in zip(tool_items, batch_parameters, dest_paths, results):
                 if result.get("status") != "success":
                     it["failed"] = True
                     it["failure_reason"] = f"turn {turn} tool {tool_name}: {result.get('message', result)}"
@@ -309,16 +328,15 @@ def execute_recovery_turns(
                     it["failure_reason"] = f"turn {turn} tool {tool_name}: no output_path in result"
                     continue
 
-                dest_dir = tool_results_dir / it["id"]
-                dest_dir.mkdir(parents=True, exist_ok=True)
-                dest_path = dest_dir / f"turn{turn}_{tool_name}{Path(produced_path).suffix}"
-                shutil.copy(produced_path, dest_path)
+                produced_path = Path(produced_path)
+                if produced_path != dest_path:
+                    shutil.copy(produced_path, dest_path)
 
                 it["current_audio_path"] = str(dest_path)
                 it.setdefault("turn_results", []).append({
                     "turn": turn,
                     "tool": tool_name,
-                    "parameters": {k: v for k, v in call_params.items() if k != "audio_path"},
+                    "parameters": {k: v for k, v in call_params.items() if k not in ("audio_path", "output_path")},
                     "output_path": str(dest_path),
                 })
 

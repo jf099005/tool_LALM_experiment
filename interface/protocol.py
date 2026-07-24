@@ -37,17 +37,31 @@ def audio_tag(audio_id: str) -> str:
     return f"<{audio_id}>{AUDIO_TOKEN}"
 
 
+def audio_to_audio_tool_names() -> List[str]:
+    """Every tool in `tools.TOOL_NAME_TO_CLASS` whose result is a new audio.
+
+    The agent's default tool set: audio-to-text tools (currently only `asr`) and
+    any other non-audio-output tool are excluded, since the agent only ever needs
+    to hand the model's next turn a new `<audio_id><audio>` tag to keep chaining
+    calls on. Single source of truth for this restriction -- both
+    `build_system_prompt`'s default catalogue and `agent.ToolCallingAgent`'s
+    call-time allowlist derive from this, so a tool can't be advertised without
+    also being callable (or vice versa).
+    """
+    return [name for name, cls in TOOL_NAME_TO_CLASS.items() if cls.produces_audio()]
+
+
 def build_system_prompt(tool_names: Optional[List[str]] = None) -> str:
     """Render the tool-calling protocol + tool catalogue as a system prompt.
 
     `tool_names` restricts the catalogue (and, implicitly, what the model is
     told is available) to a subset -- e.g. only what's actually importable in
-    the current environment. Defaults to every tool in `tools.TOOL_NAME_TO_CLASS`.
+    the current environment. Defaults to `audio_to_audio_tool_names()` (every
+    tool except text-only ones like `asr`), not literally every registered tool.
     """
     if tool_names is None:
-        classes = None
-    else:
-        classes = [TOOL_NAME_TO_CLASS[name] for name in tool_names]
+        tool_names = audio_to_audio_tool_names()
+    classes = [TOOL_NAME_TO_CLASS[name] for name in tool_names]
     tools_block = generate_tool_descriptions(classes)
 
     return (
@@ -61,11 +75,9 @@ def build_system_prompt(tool_names: Optional[List[str]] = None) -> str:
         "an `output_audio_id` you declared in an earlier turn. If omitted, it defaults to "
         "whichever audio your previous turn most recently produced (or the sole input audio, "
         "on your first turn). After each tool call you will be shown its real result -- a new "
-        "audio, and/or text such as a transcript -- tagged with the id you gave it, before your "
-        "next turn. Always give each call a fresh output id, distinct from every id used so far. "
-        "Some tools (e.g. asr) do not produce a new audio; their result is text only, fed back as "
-        "plain text instead of an audio tag. Once the task is fully complete, respond with "
-        '{"done": true} instead of another tool call.\n\n'
+        "audio -- tagged with the id you gave it, before your next turn. Always give each call "
+        "a fresh output id, distinct from every id used so far. Once the task is fully "
+        'complete, respond with {"done": true} instead of another tool call.\n\n'
         f"Available tools:\n{tools_block}"
     )
 
@@ -73,6 +85,42 @@ def build_system_prompt(tool_names: Optional[List[str]] = None) -> str:
 def render_user_prompt(instruction: str, audio_ids: List[str]) -> str:
     tags = "\n".join(f"{audio_id}: {audio_tag(audio_id)}" for audio_id in audio_ids)
     return f"{instruction}\n\nInput audio:\n{tags}"
+
+
+def render_tool_call_json(tool_name: str, parameters: Dict[str, Any], output_audio_id: str) -> str:
+    """Render one assistant turn's tool-call JSON -- the exact shape `parse_turn`
+    expects back. Used by ground-truth authoring (`gen_1st_stage_data/build_dataset.py`),
+    not by the live agent (there, this text comes from the model itself)."""
+    return json.dumps(
+        {"tool_name": tool_name, "parameters": parameters, "output_audio_id": output_audio_id},
+        ensure_ascii=False,
+    )
+
+
+def render_done_json() -> str:
+    """Render the closing `{"done": true}` assistant turn."""
+    return json.dumps({"done": True})
+
+
+def render_tool_result_message(
+    step_index: int, tool_name: str, audio_tags: List[str], text: Optional[str] = None
+) -> str:
+    """Render the "tool" turn shown after executing one call.
+
+    Single source of truth for this wording -- `gen_1st_stage_data/build_dataset.py`
+    bakes it verbatim into SFT training data, so `agent.py` (live inference) and
+    `testing_tool_use_benchmark/run_eval.py` (eval) must render it identically or
+    a trained model sees an out-of-distribution tool turn at inference time.
+
+    Takes already-rendered tag strings (not raw audio ids) so callers stay free to
+    use their own token spelling -- `build_dataset.py`'s `to_swift_sample` has a
+    configurable `audio_token` override that a hardcoded call to `audio_tag()` here
+    would silently ignore. `audio_tags` empty means a text-only result (e.g. a
+    transcript); non-empty means one tag per produced audio, in order.
+    """
+    if audio_tags:
+        return f"Output of step {step_index}: " + " ".join(audio_tags)
+    return f"Output of step {step_index} ({tool_name}): {text}"
 
 
 def parse_turn(raw_text: str) -> Optional[Dict[str, Any]]:

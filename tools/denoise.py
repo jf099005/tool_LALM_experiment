@@ -31,9 +31,13 @@ class DenoiseTool(Tool):
     def description(cls) -> str:
         return (
             "Apply noise reduction or echo cancellation to a WAV audio file using the chosen "
-            "algorithm. Requires audio_path and algorithm; optional noise_factor, "
-            "sensitivity, and output_path control processing and output destination."
+            "algorithm. Requires audio_path and algorithm; optional noise_factor and "
+            "sensitivity control processing."
         )
+
+    @classmethod
+    def requires_output_path(cls) -> bool:
+        return True
 
     @classmethod
     def parameter_schema(cls) -> Dict[str, Any]:
@@ -56,20 +60,18 @@ class DenoiseTool(Tool):
                 "sensitivity": {
                     "type": "number",
                 },
-                "output_path": {"type": "string"},
             },
             "required": ["audio_path", "algorithm"],
         }
 
     @classmethod
-    def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(cls, parameters: Dict[str, Any], output_path: str) -> Dict[str, Any]:
         cls.validate_parameters(parameters)
 
         audio_path = parameters["audio_path"]
         algorithm = parameters["algorithm"]
         noise_factor = float(parameters.get("noise_factor", 2.0))
         sensitivity = float(parameters.get("sensitivity", 0.5))
-        output_path = parameters.get("output_path")
 
         audio_path = Path(audio_path)
         if not audio_path.exists():
@@ -98,14 +100,7 @@ class DenoiseTool(Tool):
 
         processed = np.clip(processed, -1.0, 1.0)
 
-        if output_path is None:
-            output_path = (
-                audio_path.parent
-                / f"{audio_path.stem}_{algorithm}.wav"
-            )
-        else:
-            output_path = Path(output_path)
-
+        output_path = Path(output_path)
         cls._save_wav(output_path, processed, sample_rate)
 
         return {
@@ -123,12 +118,16 @@ class DenoiseTool(Tool):
 
         results: List[Dict[str, Any]] = []
 
-        for parameters in tqdm(batch_parameters):
-            if not isinstance(parameters, dict):
+        for item in tqdm(batch_parameters):
+            if not isinstance(item, dict):
                 raise ToolValidationError("Each batch item must be a parameter dictionary.")
 
+            parameters = dict(item)
+            output_path = parameters.pop("output_path", None)
             try:
-                results.append(cls.execute(parameters))
+                if not output_path:
+                    raise ToolValidationError("Missing required 'output_path' for this batch item.")
+                results.append(cls.execute(parameters, output_path))
             except ToolValidationError as exc:
                 results.append(
                     {

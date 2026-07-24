@@ -1,0 +1,152 @@
+{
+  "_comment": "Controls which tools build_dataset.py may draw from and each tool's parameter ranges. `weight` is a relative sampling probability among enabled tools (not required to sum to 1). Each param spec's `kind` is one of: choice (uniform pick from `values`), uniform (rng.uniform(min, max), optionally rounded via `round`), randint (rng.randint(min, max)), fixed (always `value`). A param can carry `only_if: {\"param\": <name>, \"values\": [...]}` to only be drawn when an earlier-drawn param (same tool, dict order) matched one of those values -- e.g. denoise's `noise_factor` only applies when `algorithm` came out as `spectral_subtraction`. `clipping`'s `clip_fraction` and every full-segment tool's audio_begin/audio_end are computed by build_dataset.py from the clip's real duration, not drawn from here. Heavy ML tools (remove_target/extract_target/human_voice_enhance/super_resolution) are disabled by default since they need their own conda env (`env`, mirroring gen_2nd_stage_data/disturb_recover.py's TOOL_ENV) -- flip `enabled` once that env is available on this machine.",
+
+  "min_tools": 1,
+  "max_tools": 1,
+
+  "tools": {
+    "clipping": {
+      "enabled": true,
+      "weight": 1.0,
+      "params": {
+        "clip_fraction": {
+          "kind": "uniform",
+          "min": 0.4,
+          "max": 0.9,
+          "round": 2,
+          "description": "Fraction of the clip's duration to keep, cut from the start (audio_begin=0)."
+        }
+      }
+    },
+
+    "denoise": {
+      "enabled": true,
+      "weight": 1.0,
+      "params": {
+        "algorithm": {
+          "kind": "choice",
+          "values": ["spectral_subtraction", "wiener", "echo_cancellation", "adaptive"]
+        },
+        "noise_factor": {
+          "kind": "uniform",
+          "min": 1.0,
+          "max": 3.0,
+          "round": 2,
+          "only_if": {"param": "algorithm", "values": ["spectral_subtraction"]}
+        },
+        "sensitivity": {
+          "kind": "uniform",
+          "min": 0.2,
+          "max": 0.8,
+          "round": 2,
+          "only_if": {"param": "algorithm", "values": ["adaptive"]}
+        }
+      }
+    },
+
+    "pitch_shift": {
+      "enabled": true,
+      "weight": 1.0,
+      "params": {
+        "n_steps": {
+          "kind": "choice",
+          "values": [-6, -5, -4, -3, 3, 4, 5, 6],
+          "description": "Semitones to shift; kept away from 0 so the edit is audible."
+        }
+      }
+    },
+
+    "time_stretch": {
+      "enabled": true,
+      "weight": 1.0,
+      "params": {
+        "rate": {
+          "kind": "choice",
+          "values": [0.7, 0.8, 0.9, 1.1, 1.25, 1.5],
+          "description": "Stretch factor; >1 speeds up, <1 slows down."
+        }
+      }
+    },
+
+    "trim_silence": {
+      "enabled": true,
+      "weight": 0.7,
+      "params": {
+        "threshold_db": {"kind": "choice", "values": [20, 25, 30, 35, 40, 45]}
+      }
+    },
+
+    "amplitude_normalize": {
+      "enabled": true,
+      "weight": 0.7,
+      "params": {
+        "target_level": {"kind": "uniform", "min": 0.6, "max": 0.95, "round": 2},
+        "method": {"kind": "choice", "values": ["peak", "rms"]}
+      }
+    },
+
+    "loudness_normalize": {
+      "enabled": true,
+      "weight": 0.7,
+      "params": {
+        "target_lufs": {"kind": "choice", "values": [-23.0, -20.0, -18.0, -16.0, -14.0]}
+      }
+    },
+
+    "remove_dc_offset": {
+      "enabled": true,
+      "weight": 0.3,
+      "params": {}
+    },
+
+    "spectral_normalize": {
+      "enabled": true,
+      "weight": 0.5,
+      "params": {
+        "strength": {"kind": "uniform", "min": 0.3, "max": 0.8, "round": 2}
+      }
+    },
+
+    "pre_emphasis": {
+      "enabled": true,
+      "weight": 0.5,
+      "params": {
+        "coef": {"kind": "choice", "values": [0.9, 0.95, 0.97, 0.99]}
+      }
+    },
+
+    "remove_target": {
+      "enabled": false,
+      "weight": 0.5,
+      "env": "/home/u1501463/miniconda3/envs/sam_audio/bin/python",
+      "params": {
+        "target_description": {"kind": "choice", "values": ["vocals", "background sound", "background music", "noise"]}
+      }
+    },
+
+    "extract_target": {
+      "enabled": false,
+      "weight": 0.3,
+      "env": "/home/u1501463/miniconda3/envs/sam_audio/bin/python",
+      "params": {
+        "target_description": {"kind": "choice", "values": ["vocals", "background sound", "background music", "noise"]}
+      }
+    },
+
+    "human_voice_enhance": {
+      "enabled": false,
+      "weight": 0.3,
+      "env": "/home/u1501463/miniconda3/envs/deepfilternet/bin/python",
+      "params": {}
+    },
+
+    "super_resolution": {
+      "enabled": false,
+      "weight": 0.2,
+      "env": "/home/u1501463/miniconda3/envs/audiosr/bin/python",
+      "params": {
+        "model_name": {"kind": "choice", "values": ["basic", "speech"]}
+      }
+    }
+  }
+}

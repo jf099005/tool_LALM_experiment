@@ -84,10 +84,15 @@ class ToolCallingAgent:
         tool_names: Optional[List[str]] = None,
     ):
         self.engine = engine
+        # Resolved once and enforced at call time (see `run()`) regardless of
+        # `system_prompt` -- so a tool that isn't supposed to be available (e.g.
+        # asr, or anything else excluded via `tool_names`) stays disabled even if
+        # a custom `system_prompt` happens to still mention it.
+        self.tool_names = protocol.audio_to_audio_tool_names() if tool_names is None else list(tool_names)
         # An explicit `system_prompt=""` (falsy but not None) means "no system
         # turn at all" -- e.g. to match a fine-tuned checkpoint whose SFT data
         # never had one. Only a bare default (None) triggers auto-building one.
-        self.system_prompt = protocol.build_system_prompt(tool_names) if system_prompt is None else system_prompt
+        self.system_prompt = protocol.build_system_prompt(self.tool_names) if system_prompt is None else system_prompt
 
     def run(
         self,
@@ -179,6 +184,12 @@ class ToolCallingAgent:
                 stop_reason = "unparseable_output"
                 break
 
+            if tool_name not in self.tool_names:
+                step.error = f"tool '{tool_name}' is not available"
+                steps.append(step)
+                stop_reason = "disallowed_tool"
+                break
+
             call_signature = (tool_name, json.dumps(parameters, sort_keys=True))
             if call_signature in seen_calls:
                 step.error = "repeated_call"
@@ -217,17 +228,16 @@ class ToolCallingAgent:
 
             if not audio_outputs:
                 text = result.get("transcript") or result.get("message") or json.dumps(result)
-                tool_message = f"Output of step {step_index} ({tool_name}): {text}"
+                tool_message = protocol.render_tool_result_message(step_index, tool_name, [], text=text)
             else:
-                tags = []
                 for stem, path in audio_outputs.items():
                     audio_id = output_audio_id if stem in ("", "target") else f"{output_audio_id}_{stem}"
                     audio_id_map[audio_id] = str(path)
                     audios.append(str(path))
                     step.produced_audio_ids.append(audio_id)
-                    tags.append(f"{audio_id}: {protocol.audio_tag(audio_id)}")
                 last_audio_id = step.produced_audio_ids[0]
-                tool_message = f"Output of step {step_index}: " + " ".join(tags)
+                tags = [protocol.audio_tag(audio_id) for audio_id in step.produced_audio_ids]
+                tool_message = protocol.render_tool_result_message(step_index, tool_name, tags)
 
             steps.append(step)
             messages.append({"role": "tool", "content": tool_message})

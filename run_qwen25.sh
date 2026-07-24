@@ -9,9 +9,9 @@ exp_name=speed_12
 export PYTHONNOUSERSITE=1
 PYTHON=~/miniconda3/envs/qwen3_omni/bin/python
 
-$PYTHON qwen25_with_tool_chain_evaluation.py\
-    --load_tool_chain_results \
+$PYTHON qwen25_batch_evaluation.py\
     --subset_path ./dcase_subset.json \
     --output_path predictions/qwen25/Dcase_${exp_name}_overwrite.json \
-    --tool_results_path ./apply_tool_results_MMAU_${exp_name}/tool_outputs \
+    --batch_size 4
+    # --tool_results_path ./apply_tool_results_MMAU_${exp_name}/tool_outputs \
     # --tensor_parallel_size 4 \

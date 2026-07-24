@@ -71,6 +71,10 @@ class PitchShiftTool(Tool):
         )
 
     @classmethod
+    def requires_output_path(cls) -> bool:
+        return True
+
+    @classmethod
     def parameter_schema(cls) -> Dict[str, Any]:
         return {
             "type": "object",
@@ -84,13 +88,12 @@ class PitchShiftTool(Tool):
                     "type": "integer",
                     "description": "Number of steps per octave (default 12).",
                 },
-                "output_path": {"type": "string"},
             },
             "required": ["audio_path", "n_steps"],
         }
 
     @classmethod
-    def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(cls, parameters: Dict[str, Any], output_path: str) -> Dict[str, Any]:
         cls.validate_parameters(parameters)
 
         if librosa is None:
@@ -101,7 +104,6 @@ class PitchShiftTool(Tool):
         audio_path = parameters["audio_path"]
         n_steps = float(parameters["n_steps"])
         bins_per_octave = int(parameters.get("bins_per_octave", 12))
-        output_path = parameters.get("output_path")
 
         audio_path = Path(audio_path)
         if not audio_path.exists():
@@ -112,11 +114,7 @@ class PitchShiftTool(Tool):
             y=audio, sr=sr, n_steps=n_steps, bins_per_octave=bins_per_octave
         )
 
-        if output_path is None:
-            output_path = audio_path.parent / f"{audio_path.stem}_{cls.name()}.wav"
-        else:
-            output_path = Path(output_path)
-
+        output_path = Path(output_path)
         _save_wav(output_path, shifted, sr)
 
         return {
@@ -134,11 +132,15 @@ class PitchShiftTool(Tool):
             raise ToolValidationError("Batch parameters must be a list of parameter dictionaries.")
 
         results: List[Dict[str, Any]] = []
-        for parameters in tqdm(batch_parameters):
-            if not isinstance(parameters, dict):
+        for item in tqdm(batch_parameters):
+            if not isinstance(item, dict):
                 raise ToolValidationError("Each batch item must be a parameter dictionary.")
+            parameters = dict(item)
+            output_path = parameters.pop("output_path", None)
             try:
-                results.append(cls.execute(parameters))
+                if not output_path:
+                    raise ToolValidationError("Missing required 'output_path' for this batch item.")
+                results.append(cls.execute(parameters, output_path))
             except Exception as exc:
                 results.append({
                     "audio_path": parameters.get("audio_path"),
@@ -164,6 +166,10 @@ class TimeStretchTool(Tool):
         )
 
     @classmethod
+    def requires_output_path(cls) -> bool:
+        return True
+
+    @classmethod
     def parameter_schema(cls) -> Dict[str, Any]:
         return {
             "type": "object",
@@ -173,13 +179,12 @@ class TimeStretchTool(Tool):
                     "type": "number",
                     "description": "Stretch factor. Values > 1 speed up (shorten); values < 1 slow down (lengthen).",
                 },
-                "output_path": {"type": "string"},
             },
             "required": ["audio_path", "rate"],
         }
 
     @classmethod
-    def execute(cls, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(cls, parameters: Dict[str, Any], output_path: str) -> Dict[str, Any]:
         cls.validate_parameters(parameters)
 
         if librosa is None:
@@ -189,7 +194,6 @@ class TimeStretchTool(Tool):
 
         audio_path = parameters["audio_path"]
         rate = float(parameters["rate"])
-        output_path = parameters.get("output_path")
 
         if rate <= 0:
             raise ToolValidationError("rate must be greater than 0.")
@@ -201,11 +205,7 @@ class TimeStretchTool(Tool):
         audio, sr = _load_audio(audio_path)
         stretched = librosa.effects.time_stretch(y=audio, rate=rate)
 
-        if output_path is None:
-            output_path = audio_path.parent / f"{audio_path.stem}_{cls.name()}.wav"
-        else:
-            output_path = Path(output_path)
-
+        output_path = Path(output_path)
         _save_wav(output_path, stretched, sr)
 
         return {
@@ -222,11 +222,15 @@ class TimeStretchTool(Tool):
             raise ToolValidationError("Batch parameters must be a list of parameter dictionaries.")
 
         results: List[Dict[str, Any]] = []
-        for parameters in tqdm(batch_parameters):
-            if not isinstance(parameters, dict):
+        for item in tqdm(batch_parameters):
+            if not isinstance(item, dict):
                 raise ToolValidationError("Each batch item must be a parameter dictionary.")
+            parameters = dict(item)
+            output_path = parameters.pop("output_path", None)
             try:
-                results.append(cls.execute(parameters))
+                if not output_path:
+                    raise ToolValidationError("Missing required 'output_path' for this batch item.")
+                results.append(cls.execute(parameters, output_path))
             except Exception as exc:
                 results.append({
                     "audio_path": parameters.get("audio_path"),

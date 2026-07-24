@@ -245,52 +245,44 @@ def _apply_denoise(audio_path: Path, output_path: Path, rng: random.Random, dura
         params["noise_factor"] = round(rng.uniform(1.0, 3.0), 2)
     elif algorithm == "adaptive":
         params["sensitivity"] = round(rng.uniform(0.2, 0.8), 2)
-    params["output_path"] = str(output_path)
-    result = DenoiseTool.execute(params)
-    params.pop("output_path")
+    result = DenoiseTool.execute(params, str(output_path))
     return params, Path(result["output_path"])
 
 
-@register("amplitude_normalize", AmplitudeNormalizeTool.description())
-def _apply_amplitude_normalize(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-    params = {
-        "audio_path": str(audio_path),
-        "audio_begin": format_timestamp(0.0),
-        "audio_end": format_timestamp(duration),
-        "target_level": round(rng.uniform(0.6, 0.95), 2),
-        "method": rng.choice(["peak", "rms"]),
-        "output_path": str(output_path),
-    }
-    result = AmplitudeNormalizeTool.execute(params)
-    params.pop("output_path")
-    return params, Path(result["output_path"])
+# @register("amplitude_normalize", AmplitudeNormalizeTool.description())
+# def _apply_amplitude_normalize(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+#     params = {
+#         "audio_path": str(audio_path),
+#         "audio_begin": format_timestamp(0.0),
+#         "audio_end": format_timestamp(duration),
+#         "target_level": round(rng.uniform(0.6, 0.95), 2),
+#         "method": rng.choice(["peak", "rms"]),
+#     }
+#     result = AmplitudeNormalizeTool.execute(params, str(output_path))
+#     return params, Path(result["output_path"])
 
 
-@register("loudness_normalize", LoudnessNormalizeTool.description())
-def _apply_loudness_normalize(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-    params = {
-        "audio_path": str(audio_path),
-        "audio_begin": format_timestamp(0.0),
-        "audio_end": format_timestamp(duration),
-        "target_lufs": rng.choice([-23.0, -20.0, -18.0, -16.0, -14.0]),
-        "output_path": str(output_path),
-    }
-    result = LoudnessNormalizeTool.execute(params)
-    params.pop("output_path")
-    return params, Path(result["output_path"])
+# @register("loudness_normalize", LoudnessNormalizeTool.description())
+# def _apply_loudness_normalize(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+#     params = {
+#         "audio_path": str(audio_path),
+#         "audio_begin": format_timestamp(0.0),
+#         "audio_end": format_timestamp(duration),
+#         "target_lufs": rng.choice([-23.0, -20.0, -18.0, -16.0, -14.0]),
+#     }
+#     result = LoudnessNormalizeTool.execute(params, str(output_path))
+#     return params, Path(result["output_path"])
 
 
-@register("remove_dc_offset", DCOffsetRemovalTool.description())
-def _apply_remove_dc_offset(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-    params = {
-        "audio_path": str(audio_path),
-        "audio_begin": format_timestamp(0.0),
-        "audio_end": format_timestamp(duration),
-        "output_path": str(output_path),
-    }
-    result = DCOffsetRemovalTool.execute(params)
-    params.pop("output_path")
-    return params, Path(result["output_path"])
+# @register("remove_dc_offset", DCOffsetRemovalTool.description())
+# def _apply_remove_dc_offset(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+#     params = {
+#         "audio_path": str(audio_path),
+#         "audio_begin": format_timestamp(0.0),
+#         "audio_end": format_timestamp(duration),
+#     }
+#     result = DCOffsetRemovalTool.execute(params, str(output_path))
+#     return params, Path(result["output_path"])
 
 
 @register("pre_emphasis", PreEmphasisTool.description())
@@ -300,26 +292,22 @@ def _apply_pre_emphasis(audio_path: Path, output_path: Path, rng: random.Random,
         "audio_begin": format_timestamp(0.0),
         "audio_end": format_timestamp(duration),
         "coef": rng.choice([0.9, 0.95, 0.97, 0.99]),
-        "output_path": str(output_path),
     }
-    result = PreEmphasisTool.execute(params)
-    params.pop("output_path")
+    result = PreEmphasisTool.execute(params, str(output_path))
     return params, Path(result["output_path"])
 
 
 if _HAS_LIBROSA:
-    @register("spectral_normalize", SpectralNormalizeTool.description())
-    def _apply_spectral_normalize(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-        params = {
-            "audio_path": str(audio_path),
-            "audio_begin": format_timestamp(0.0),
-            "audio_end": format_timestamp(duration),
-            "strength": round(rng.uniform(0.3, 0.8), 2),
-            "output_path": str(output_path),
-        }
-        result = SpectralNormalizeTool.execute(params)
-        params.pop("output_path")
-        return params, Path(result["output_path"])
+    # @register("spectral_normalize", SpectralNormalizeTool.description())
+    # def _apply_spectral_normalize(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+    #     params = {
+    #         "audio_path": str(audio_path),
+    #         "audio_begin": format_timestamp(0.0),
+    #         "audio_end": format_timestamp(duration),
+    #         "strength": round(rng.uniform(0.3, 0.8), 2),
+    #     }
+    #     result = SpectralNormalizeTool.execute(params, str(output_path))
+    #     return params, Path(result["output_path"])
 
     @register("trim_silence", TrimSilenceTool.description())
     def _apply_trim_silence(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
@@ -328,10 +316,8 @@ if _HAS_LIBROSA:
             "audio_begin": format_timestamp(0.0),
             "audio_end": format_timestamp(duration),
             "threshold_db": rng.choice([25, 30, 35, 40, 45]),
-            "output_path": str(output_path),
         }
-        result = TrimSilenceTool.execute(params)
-        params.pop("output_path")
+        result = TrimSilenceTool.execute(params, str(output_path))
         return params, Path(result["output_path"])
 
 
@@ -345,10 +331,8 @@ def _apply_pitch_shift(audio_path: Path, output_path: Path, rng: random.Random, 
     params = {
         "audio_path": str(audio_path),
         "n_steps": rng.choice(PITCH_SHIFT_STEPS),
-        "output_path": str(output_path),
     }
-    result = PitchShiftTool.execute(params)
-    params.pop("output_path")
+    result = PitchShiftTool.execute(params, str(output_path))
     return params, Path(result["output_path"])
 
 
@@ -357,10 +341,8 @@ def _apply_time_stretch(audio_path: Path, output_path: Path, rng: random.Random,
     params = {
         "audio_path": str(audio_path),
         "rate": rng.choice(TIME_STRETCH_RATES),
-        "output_path": str(output_path),
     }
-    result = TimeStretchTool.execute(params)
-    params.pop("output_path")
+    result = TimeStretchTool.execute(params, str(output_path))
     return params, Path(result["output_path"])
 
 

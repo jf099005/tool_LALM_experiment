@@ -80,7 +80,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--validation-subdir",
-        default="dcase_2025_question_path/dev",
+        default="dcase_2025_question_path/train",
         help="Relative directory containing validation JSON files.",
     )
     parser.add_argument(
