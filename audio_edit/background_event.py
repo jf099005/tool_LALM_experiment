@@ -60,7 +60,7 @@ DEFAULT_AUDIO_DIR = Path(os.environ.get("AUDIOSET_AUDIO_DIR", "/work/u1501463/au
 DEFAULT_LABEL = "Dog"
 # DESED/Scaper synthetic soundscapes typically place foreground events a few
 # dB above the background so they are clearly audible without being jarring;
-# tools/synthetic_registry.py (this repo's dataset synthesizer) samples the same range.
+# tools/tools_registry.py (this repo's dataset synthesizer) samples the same range.
 DEFAULT_SNR_DB = 5.0
 DEFAULT_FADE_MS = 10.0
 

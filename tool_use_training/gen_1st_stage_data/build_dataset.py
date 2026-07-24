@@ -19,8 +19,9 @@ by the explicit trailing `{"done": true}` turn, not by an id choice.
 Usage:
     python build_dataset.py --num-samples 200 --output-dir /work/u1501463/gen_tool_usage_QA
 
-See tools/synthetic_registry.py for which tools are active -- it depends on what's
-importable in the current interpreter (run under the project's `ms-swift` env
+See tools/tools_registry.py -- the project-wide toolset definition -- for which
+tools are active; it depends on what's importable in the current interpreter
+(run under the project's `ms-swift` env
 for librosa/soundfile-backed tools, or `deepfilternet`/`audiosr`/`sam_audio`
 to unlock those specific heavy tools).
 """
@@ -58,7 +59,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from tools import synthetic_registry as tool_registry  # noqa: E402
+from tools import tools_registry as tool_registry  # noqa: E402
 from question_templates import render_question  # noqa: E402
 from official_system_prompt import compose_system_prompt  # noqa: E402
 from interface import protocol as agent_protocol  # noqa: E402
@@ -136,6 +137,7 @@ def to_swift_sample(
     base_system_prompt: str | None = None,
     system_prompt_model_dir: str | None = None,
     system_prompt_model_type: str | None = None,
+    tool_call_format: str = "qwen",
 ) -> Dict[str, Any]:
     """Convert one dataset entry into an ms-swift SFT row.
 
@@ -161,16 +163,19 @@ def to_swift_sample(
     real output audio (tagged with the id the tool call itself declared via
     `output_audio_id`) for the next call to reference -- this is the same
     turn structure `tool_use_benchmark/run_eval.py` drives at inference time.
-    A final explicit `{"done": true}` assistant turn closes the chain, so the
-    model has a learned stop signal instead of relying on running out of
-    turns.
+    A final assistant turn with no tool call closes the chain, so the model
+    has a learned stop signal instead of relying on running out of turns.
 
-    The turn JSON/text itself is rendered via `interface.protocol`'s shared
-    helpers (`render_tool_call_json` / `render_tool_result_message` /
-    `render_done_json`), not reimplemented here -- `interface/agent.py` (live
+    The turn text itself is rendered via `interface.protocol`'s shared
+    helpers (`render_tool_call` / `render_tool_result_message` /
+    `render_done`), not reimplemented here -- `interface/agent.py` (live
     inference) and `testing_tool_use_benchmark/run_eval.py` (eval) render the
     exact same wording from the same functions, so a trained model never sees
-    an out-of-distribution turn format at inference/eval time.
+    an out-of-distribution turn format at inference/eval time. `tool_call_format`
+    selects the wire convention (see `tool_call_formats.py`) -- must match
+    whatever `tool_registry.describe_available_tools` used to build
+    `entry["tools_block"]`, since the system prompt's tool catalogue and the
+    answer's tool-call turns must agree on one convention.
     """
     audio_id_map = entry["audio_id_map"]
     audios: List[str] = []
@@ -198,8 +203,9 @@ def to_swift_sample(
     for step_idx, tool_call in enumerate(tool_calls, start=1):
         messages.append({
             "role": "assistant",
-            "content": agent_protocol.render_tool_call_json(
-                tool_call["tool_name"], tool_call["parameters"], tool_call["output_audio_id"]
+            "content": agent_protocol.render_tool_call(
+                tool_call["tool_name"], tool_call["parameters"], tool_call["output_audio_id"],
+                tool_call_format=tool_call_format,
             ),
         })
         output_id = tool_call["output_audio_id"]
@@ -209,7 +215,10 @@ def to_swift_sample(
                 step_idx, tool_call["tool_name"], [tag(output_id)]
             ),
         })
-    messages.append({"role": "assistant", "content": agent_protocol.render_done_json()})
+    messages.append({
+        "role": "assistant",
+        "content": agent_protocol.render_done(tool_call_format=tool_call_format),
+    })
 
     return {
         "messages": messages,
@@ -225,6 +234,7 @@ def build_one_sample(
     min_tools: int,
     max_tools: int,
     rng: random.Random,
+    tool_call_format: str = "qwen",
 ) -> Dict[str, Any]:
     sample_dir = work_dir / sample_id
     sample_dir.mkdir(parents=True, exist_ok=True)
@@ -270,7 +280,7 @@ def build_one_sample(
         # output *is* the target) -- two ids for one file, not a conflict.
         audio_id_map[output_ids[step_index - 1]] = str(step_outputs[step_index - 1])
 
-    tools_block = tool_registry.describe_available_tools()
+    tools_block = tool_registry.describe_available_tools(tool_call_format=tool_call_format)
     question = render_question(source=str(audio_a), target=str(audio_b), rng=rng)
 
     return {
@@ -296,6 +306,7 @@ def _build_sample_task(
     min_tools: int,
     max_tools: int,
     max_attempts: int,
+    tool_call_format: str = "qwen",
 ) -> Optional[Dict[str, Any]]:
     """Run in a worker process: build one sample, retrying with fresh draws.
 
@@ -318,6 +329,7 @@ def _build_sample_task(
                 min_tools=min_tools,
                 max_tools=max_tools,
                 rng=rng,
+                tool_call_format=tool_call_format,
             )
         except Exception:
             print(f"Attempt {attempt + 1} failed for {sample_id} ({source_file}):", file=sys.stderr)
@@ -421,6 +433,20 @@ def main() -> None:
             "if --system-prompt-model-dir is omitted or its chat_template can't be parsed."
         ),
     )
+    parser.add_argument(
+        "--tool-call-format",
+        type=str,
+        default="qwen",
+        choices=["qwen", "legacy"],
+        help=(
+            "Wire convention for the tool catalogue (system prompt) and each tool-call turn "
+            "(see tool_call_formats.py) -- 'qwen' is Qwen2.5/Qwen3's own official Hermes-style "
+            "<tool_call>/<tools> convention; 'legacy' is this project's original flat-JSON "
+            "convention, kept for a future non-Qwen target model. Both the raw dataset JSON's "
+            "'tools_block' and every --swift-output-file turn are generated with this same "
+            "format, so re-generate both together when changing it."
+        ),
+    )
     args = parser.parse_args()
 
     exclude_path = None
@@ -459,6 +485,7 @@ def main() -> None:
                 min_tools=args.min_tools,
                 max_tools=args.max_tools,
                 max_attempts=args.max_attempts_per_sample,
+                tool_call_format=args.tool_call_format,
             )
             next_index += 1
             if entry is not None:
@@ -487,6 +514,7 @@ def main() -> None:
                     args.min_tools,
                     args.max_tools,
                     args.max_attempts_per_sample,
+                    args.tool_call_format,
                 )
                 pending[future] = next_index
                 next_index += 1
@@ -513,6 +541,7 @@ def main() -> None:
                             args.min_tools,
                             args.max_tools,
                             args.max_attempts_per_sample,
+                            args.tool_call_format,
                         )
                         pending[replacement] = next_index
                         next_index += 1
@@ -534,6 +563,7 @@ def main() -> None:
                     base_system_prompt=args.base_system_prompt,
                     system_prompt_model_dir=args.system_prompt_model_dir,
                     system_prompt_model_type=args.system_prompt_model_type,
+                    tool_call_format=args.tool_call_format,
                 )
                 handle.write(json.dumps(swift_sample, ensure_ascii=False) + "\n")
         print(f"Wrote {len(dataset)} ms-swift SFT rows to {args.swift_output_file}", file=sys.stderr)

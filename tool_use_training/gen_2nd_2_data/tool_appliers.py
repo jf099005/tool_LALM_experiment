@@ -3,7 +3,7 @@ disturbance ops -- see build_dataset.py's module docstring for how this differs 
 gen_2nd_stage_data's disturb -> recover strategy).
 
 Each tool gets one applier function of the shape used throughout this repo's dataset
-generators (`tools/synthetic_registry.py`, `gen_2nd_stage_data/disturb_recover.py`):
+generators (`tools/tools_registry.py`, `gen_2nd_stage_data/disturb_recover.py`):
 
     params, output_path = APPLIERS[name](tool_cfg, audio_path, output_path, rng, duration)
 
@@ -18,7 +18,7 @@ Light tools (clipping/denoise/pitch_shift/time_stretch/the normalize family) run
 -- this module needs the same librosa/soundfile/scipy env `gen_2nd_stage_data`'s scripts
 require. Heavy ML tools (remove_target/extract_target/human_voice_enhance/super_resolution)
 are dispatched one call at a time via `tools/tool_batch_execute.py` in that tool's own conda
-env (`tool_cfg["env"]`), same split as `synthetic_registry._run_tool_subprocess` -- unlike
+env (`tool_cfg["env"]`), same split as `tools_registry._run_tool_subprocess` -- unlike
 `build_by_disturb.py`'s recovery-chain execution, calls here are not batched across samples,
 since this strategy applies one independent tool per sample rather than a shared multi-turn
 chain (heavy tools are disabled by default in tool_config.json for exactly this reason: turn
@@ -55,7 +55,7 @@ from tools.pitch_time import PitchShiftTool, TimeStretchTool  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
-# Shared helpers (duplicated, rather than imported, from tools/synthetic_registry.py
+# Shared helpers (duplicated, rather than imported, from tools/tools_registry.py
 # and gen_2nd_stage_data/disturb_recover.py -- kept local so this stage's directory
 # stays self-contained, matching how those two already duplicate the same helpers
 # rather than cross-importing).
@@ -188,7 +188,7 @@ def draw_params(tool_cfg: Dict[str, Any], rng: random.Random) -> Dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
-# Heavy-tool subprocess dispatch (mirrors synthetic_registry._run_tool_subprocess).
+# Heavy-tool subprocess dispatch (mirrors tools_registry._run_tool_subprocess).
 # ---------------------------------------------------------------------------
 
 def _run_tool_subprocess(tool_name: str, env_python: str, params: Dict[str, Any]) -> Dict[str, Any]:

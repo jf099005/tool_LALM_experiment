@@ -55,6 +55,68 @@ class Tool(ABC):
         return False
 
     @classmethod
+    def to_function_schema(cls) -> Dict[str, Any]:
+        """Build this tool's model-facing function-calling schema (OpenAI/Qwen
+        function-schema shape: `{"type": "function", "function": {...}}`).
+
+        Swaps the harness-internal `audio_path` (the model never sees or
+        produces a literal path) for the model-facing `audio_id` -- an id
+        naming an already-seen audio, optional since it defaults to whatever
+        the model's previous turn produced (see `interface.protocol`) -- and,
+        for every tool that produces a new audio, adds `output_audio_id`: a
+        fresh id the model must choose to name that call's result. Neither
+        key is part of `parameter_schema()` (the *execution*-time schema
+        `execute()`/`validate_parameters()` check against) since
+        `interface.executor.run_tool_call` resolves and strips them before a
+        real call -- they're purely a chaining convention layered on top by
+        the agent protocol, not a real parameter of the underlying tool.
+
+        `description()` itself is left untouched (it's shared with the
+        path-based DCASE/MCQ prompt pipeline in `prompts/`/`audio_edit/editor.py`,
+        which really does invoke tools with a literal `audio_path`) -- but
+        several tools' `description()` text still says "Requires audio_path"
+        (written before the audio_id-based agent protocol existed and never
+        updated), which would otherwise contradict the `audio_id` property
+        this method just built. Substituted for the model-facing view only.
+        """
+        schema = cls.parameter_schema()
+        properties = {k: v for k, v in schema.get("properties", {}).items() if k != "audio_path"}
+        required = [r for r in schema.get("required", []) if r != "audio_path"]
+        description = cls.description().replace("audio_path", "audio_id")
+
+        properties["audio_id"] = {
+            "type": "string",
+            "description": (
+                "Id of an audio you've already seen (an input audio, or an output_audio_id "
+                "you declared in an earlier turn). If omitted, defaults to whichever audio "
+                "your previous turn most recently produced (or the sole input audio, on your "
+                "first turn)."
+            ),
+        }
+        if cls.produces_audio():
+            properties["output_audio_id"] = {
+                "type": "string",
+                "description": (
+                    "A fresh id, distinct from every id used so far, to name this call's "
+                    "output audio."
+                ),
+            }
+            required = required + ["output_audio_id"]
+
+        return {
+            "type": "function",
+            "function": {
+                "name": cls.name(),
+                "description": description,
+                "parameters": {
+                    "type": "object",
+                    "properties": properties,
+                    "required": required,
+                },
+            },
+        }
+
+    @classmethod
     def validate_parameters(cls, parameters: Dict[str, Any]) -> None:
         schema = cls.parameter_schema()
         required = schema.get("required", [])

@@ -48,15 +48,18 @@ from interface.protocol import (  # noqa: E402
 )
 from official_system_prompt import compose_system_prompt, load_official_system_prompt  # noqa: E402
 
-# The SFT training data ends every chain with an explicit {"done": true} turn
-# (see build_dataset.to_swift_sample), so it already learned the stop signal
+# The SFT training data ends every chain with an explicit stop turn (see
+# build_dataset.to_swift_sample), so it already learned the stop signal
 # without needing the protocol spelled out in English. A fine-tuned model is
 # therefore run with the same system prompt training used: the target model's
 # own official default greeting + the tool catalogue (see
 # `official_system_prompt.py`) -- NOT this protocol prompt. A zero-shot/
-# official model has never seen the JSON convention at all, so it needs the
-# protocol spelled out explicitly (this prompt), with the tool catalogue
-# appended the same way.
+# official model has never seen this project's `audio_id`/`output_audio_id`
+# chaining convention (it's specific to this task, not part of any model's
+# own tool-calling training), so it needs that spelled out explicitly (this
+# prompt), with the tool catalogue appended the same way -- the `<tool_call>`
+# wire format itself needs no explanation for a Qwen model, since that's
+# Qwen's own official convention (see `tool_call_formats.py`).
 #
 # Benchmark entries built before the tool catalogue moved into the system
 # prompt have no "tools_block" field and already carry the catalogue inline
@@ -68,15 +71,12 @@ DEFAULT_PROTOCOL_SYSTEM_PROMPT = (
     "You are given a source audio (audio_0) and a target audio (audio_1), plus a list "
     "of audio-editing tools. Infer the chain of tool calls that transforms audio_0 into "
     "audio_1.\n\n"
-    "Respond with exactly one JSON object per turn and nothing else:\n"
-    '  {"tool_name": "<tool name>", "parameters": {"audio_id": "<id of the audio to read>", '
-    '<other tool arguments>}, "output_audio_id": "<a new id for this call\'s output>"}\n\n'
-    "`audio_id` must refer to audio_0, audio_1, or an output_audio_id you declared in an "
-    "earlier turn. After each tool call you will be shown the real audio result, tagged "
-    "with the output_audio_id you gave it, before your next turn -- always give each call's "
-    'output a fresh id (never reuse audio_1, even for the call you believe finishes the '
-    'chain). Once the chain is complete, respond with {"done": true} instead of another '
-    "tool call."
+    "Every call's `audio_id` argument must refer to audio_0, audio_1, or an "
+    "`output_audio_id` you declared in an earlier turn. Every audio-producing tool also "
+    "takes an `output_audio_id` argument: a fresh id you choose (never reuse audio_1, even "
+    "for the call you believe finishes the chain). After each tool call you will be shown "
+    "the real audio result, tagged with the output_audio_id you gave it, before your next "
+    "turn. Once the chain is complete, stop calling tools and reply normally instead."
 )
 
 
@@ -120,6 +120,7 @@ def run_sample(
     max_extra_steps: int,
     hard_step_cap: int,
     system_prompt: Optional[str] = None,
+    tool_call_format: str = "qwen",
 ) -> Dict[str, Any]:
     sample_id = entry["id"]
     sample_dir = work_dir / sample_id
@@ -148,7 +149,7 @@ def run_sample(
         accumulated_text += raw_text + '\n'
         messages.append({"role": "assistant", "content": raw_text})
 
-        call = parse_turn(raw_text)
+        call = parse_turn(raw_text, tool_call_format=tool_call_format)
         if call is None:
             stop_reason = "unparseable_output"
             break
@@ -184,7 +185,7 @@ def run_sample(
         step_record["success"] = True
         predicted_steps.append(step_record)
 
-        output_audio_id = call.get("output_audio_id") or f"audio_{step_idx + 1}"
+        output_audio_id = parameters.get("output_audio_id") or f"audio_{step_idx + 1}"
         audio_outputs = extract_audio_outputs(result)
         if not audio_outputs:
             # Disallowed above, but a tool could still legitimately return no audio
@@ -358,6 +359,11 @@ def main() -> None:
         "--no-system-prompt", action="store_true",
         help="Force no system prompt regardless of benchmark format or --adapter-dir.",
     )
+    parser.add_argument(
+        "--tool-call-format", type=str, default="qwen", choices=["qwen", "legacy"],
+        help="Wire convention to parse the model's tool-call turns with (see tool_call_formats.py). "
+        "Must match whatever the benchmark's 'tools_block' was generated with.",
+    )
     args = parser.parse_args()
     args.system_prompt_model_type = args.system_prompt_model_type or args.model_type or "qwen2_5_omni"
 
@@ -402,7 +408,10 @@ def main() -> None:
     for idx, entry in enumerate(benchmark, start=1):
         print(f"[{idx}/{len(benchmark)}] {entry['id']}", file=sys.stderr)
         system_prompt = resolve_system_prompt(entry, args)
-        result = run_sample(engine, entry, args.work_dir, args.max_extra_steps, args.hard_step_cap, system_prompt)
+        result = run_sample(
+            engine, entry, args.work_dir, args.max_extra_steps, args.hard_step_cap, system_prompt,
+            tool_call_format=args.tool_call_format,
+        )
         results.append(result)
         with args.output_file.open("w", encoding="utf-8") as f:
             json.dump({"results": results, "summary": aggregate(results)}, f, indent=2)

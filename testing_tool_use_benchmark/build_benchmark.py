@@ -35,7 +35,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from tool_use_training.gen_1st_stage_data.build_dataset import build_one_sample, collect_source_files  # noqa: E402
-from tools import synthetic_registry as tool_registry  # noqa: E402
+from tools import tools_registry as tool_registry  # noqa: E402
 
 
 def main() -> None:

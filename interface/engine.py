@@ -58,6 +58,19 @@ class VLLMEngine:
     (`<|im_start|>{role}\\n{content}<|im_end|>\\n`), substituting each
     `AUDIO_TOKEN` occurrence for vLLM's `<|audio_bos|><|AUDIO|><|audio_eos|>`
     sentinel, in the same order audios were appended to the conversation.
+
+    This is the one path in the project with no templating layer of its own
+    underneath it (unlike `SwiftEngine`, whose ms-swift `Template` machinery
+    already wraps a `role: "tool"` message's content in
+    `<tool_response>...</tool_response>` at encode time -- see
+    `tool_call_formats.py`'s module docstring), so `_render_prompt` does that
+    wrapping itself, merging consecutive tool turns into one `user` block --
+    matching Qwen's own official chat template convention (verified against
+    the Qwen3-Omni chat_template.json snapshot) for a raw, un-fine-tuned
+    checkpoint that expects exactly that convention. Hardcoded to Qwen's
+    ChatML/ `<tool_response>` syntax throughout, same as the rest of this
+    class -- a future non-Qwen zero-shot vLLM backend would need its own
+    renderer, not a `tool_call_format` switch here.
     """
 
     _AUDIO_SENTINEL = "<|audio_bos|><|AUDIO|><|audio_eos|>"
@@ -95,9 +108,24 @@ class VLLMEngine:
 
     def _render_prompt(self, messages: List[Dict[str, Any]]) -> str:
         parts = []
-        for msg in messages:
+        i, n = 0, len(messages)
+        while i < n:
+            msg = messages[i]
+            if msg["role"] == "tool":
+                # Qwen's official chat template merges one or more consecutive
+                # `tool` turns into a single `user` block, each wrapped in
+                # <tool_response></tool_response> -- it never emits a literal
+                # `<|im_start|>tool` turn.
+                parts.append("<|im_start|>user\n")
+                while i < n and messages[i]["role"] == "tool":
+                    content = messages[i]["content"].replace(AUDIO_TOKEN, self._AUDIO_SENTINEL)
+                    parts.append(f"<tool_response>\n{content}\n</tool_response>\n")
+                    i += 1
+                parts.append("<|im_end|>\n")
+                continue
             content = msg["content"].replace(AUDIO_TOKEN, self._AUDIO_SENTINEL)
             parts.append(f"<|im_start|>{msg['role']}\n{content}<|im_end|>\n")
+            i += 1
         parts.append("<|im_start|>assistant\n")
         return "".join(parts)
 

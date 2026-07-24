@@ -1,17 +1,19 @@
 """Execute one model-predicted tool call against real audio.
 
-Deliberately goes straight to `tools.TOOL_NAME_TO_CLASS` -- the real `Tool`
-subclasses under `tools/` -- rather than `tools/synthetic_registry.py`. That
-registry exists only to *synthesize* ground-truth training samples (it
-invents random parameters and is deliberately limited to whatever's
-importable in the ms-swift env used for data generation); it isn't meant to
-replay an arbitrary parameter dict a model produced, and gates on its own
-active-tool set rather than the full one defined in `tools/`. Both
-`agent.ToolCallingAgent` and `testing_tool_use_benchmark/run_eval.py` drive
-predicted tool calls through this same module -- generalized to run any tool
-in `tools.TOOL_NAME_TO_CLASS`, including ones synthetic_registry never
-registers, like `asr` and `source_separation` -- and to tolerate tools whose
-result carries no new audio at all (`asr`) or more than one (`source_separation`).
+Looks the tool class up in `tools.TOOL_NAME_TO_CLASS` (needed for the actual
+`execute()`/`validate_parameters()` implementation) but only *allows* a call
+whose `tool_name` is in `tools.tools_registry`'s curated, project-wide
+toolset -- the same one `interface/protocol.py` advertises to the model and
+`tool_use_training/gen_1st_stage_data/build_dataset.py` trains on. A tool
+class can exist under `tools/` (e.g. `asr`, `source_separation`, or any of
+the heavy ML tools) without being part of this project's registered toolset;
+this module refuses to execute those rather than silently running a call the
+model was never taught to make. Both `agent.ToolCallingAgent` and
+`testing_tool_use_benchmark/run_eval.py` drive predicted tool calls through
+this same module, and both already restrict what they'll even attempt to
+call to the same registered set (see `protocol.audio_to_audio_tool_names`),
+so this is a belt-and-suspenders check against a hallucinated tool name
+slipping through.
 """
 
 from __future__ import annotations
@@ -25,11 +27,12 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from tools import TOOL_NAME_TO_CLASS  # noqa: E402
+from tools import tools_registry  # noqa: E402
 from tools.abstract_tool import ToolValidationError  # noqa: E402
 
 
 class UnknownToolError(ValueError):
-    """Raised when the model names a tool that isn't in `tools.TOOL_NAME_TO_CLASS`."""
+    """Raised when `tool_name` isn't part of `tools.tools_registry`'s registered toolset."""
 
 
 class ToolExecutionError(RuntimeError):
@@ -50,20 +53,27 @@ def run_tool_call(
     prior audio -- the underlying tool implementations don't understand it,
     so it's dropped here and replaced with `input_audio_path`, the real file
     the caller (`agent.ToolCallingAgent`) already resolved that id to.
+    `parameters["output_audio_id"]` (the fresh id the model chose to name
+    this call's own result -- see `tools.abstract_tool.Tool.to_function_schema`)
+    is dropped the same way: it's consumed by the caller after this returns,
+    never by the tool implementation itself.
 
-    Raises `UnknownToolError` if `tool_name` isn't a real tool, or
-    `ToolExecutionError` wrapping any validation/runtime failure -- callers
-    should catch these per step rather than letting one bad call abort the
-    whole chain.
+    Raises `UnknownToolError` if `tool_name` isn't in `tools_registry`'s
+    registered toolset (whether or not it's a real `Tool` subclass under
+    `tools/`), or `ToolExecutionError` wrapping any validation/runtime
+    failure -- callers should catch these per step rather than letting one
+    bad call abort the whole chain.
     """
-    if tool_name not in TOOL_NAME_TO_CLASS:
+    registered_names = tools_registry.available_tool_names()
+    if tool_name not in registered_names:
         raise UnknownToolError(
-            f"'{tool_name}' is not an available tool (have: {sorted(TOOL_NAME_TO_CLASS)})"
+            f"'{tool_name}' is not a registered tool (have: {sorted(registered_names)})"
         )
 
     cls = TOOL_NAME_TO_CLASS[tool_name]
     params = dict(parameters or {})
     params.pop("audio_id", None)
+    params.pop("output_audio_id", None)
     params["audio_path"] = str(input_audio_path)
     # `output_path` isn't a documented tool parameter -- the harness always decides
     # it, never the model -- so drop anything the model may have put here before

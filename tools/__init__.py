@@ -64,6 +64,19 @@ def generate_tool_descriptions(tool_classes: List[Type[Tool]] | None = None) -> 
     return "\n".join(lines).strip()
 
 
+def tool_function_schemas(tool_classes: List[Type[Tool]] | None = None) -> List[Dict[str, object]]:
+    """Model-facing function-calling schemas for each tool (see `Tool.to_function_schema`).
+
+    Sibling of `generate_tool_descriptions` -- that one renders a hand-written
+    prose catalogue (used by the DCASE/MCQ prompt pipeline in `prompts/` and
+    `audio_edit/editor.py`); this returns structured schemas for callers that
+    render their own wire convention on top (see `tool_call_formats.py`,
+    consumed by `interface.protocol.build_system_prompt`).
+    """
+    tool_classes = tool_classes or TOOL_CLASSES
+    return [tool_cls.to_function_schema() for tool_cls in tool_classes]
+
+
 __all__ = [
     "Tool",
     "ToolValidationError",
@@ -71,4 +84,5 @@ __all__ = [
     "TOOL_CLASSES",
     "TOOL_NAME_TO_CLASS",
     "generate_tool_descriptions",
+    "tool_function_schemas",
 ]

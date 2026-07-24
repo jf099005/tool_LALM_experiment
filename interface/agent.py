@@ -217,8 +217,8 @@ class ToolCallingAgent:
             step.success = True
             step.result = result
 
-            if call.get("output_audio_id"):
-                output_audio_id = call["output_audio_id"]
+            if parameters.get("output_audio_id"):
+                output_audio_id = parameters["output_audio_id"]
             else:
                 while f"audio_{next_fresh_id}" in audio_id_map:
                     next_fresh_id += 1
