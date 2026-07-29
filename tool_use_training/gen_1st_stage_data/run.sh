@@ -1,4 +1,4 @@
-# stage1_dir=/work/u1501463/stage1_RL/
+# stage1_dir=/work/u1501463/stage1/
 stage1_dir=./exp/
 
 # Base model this data is being generated for -- used to auto-detect its own
