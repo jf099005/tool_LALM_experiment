@@ -217,13 +217,14 @@ class ToolCallingAgent:
             step.success = True
             step.result = result
 
-            if parameters.get("output_audio_id"):
-                output_audio_id = parameters["output_audio_id"]
-            else:
-                while f"audio_{next_fresh_id}" in audio_id_map:
-                    next_fresh_id += 1
-                output_audio_id = f"audio_{next_fresh_id}"
+            # The model never names its own call's output (see
+            # `protocol.build_system_prompt`'s protocol explanation) -- the
+            # harness always mints a fresh id here, regardless of anything
+            # the model may have put in `parameters`.
+            while f"audio_{next_fresh_id}" in audio_id_map:
                 next_fresh_id += 1
+            output_audio_id = f"audio_{next_fresh_id}"
+            next_fresh_id += 1
             audio_outputs = extract_audio_outputs(result)
 
             if not audio_outputs:

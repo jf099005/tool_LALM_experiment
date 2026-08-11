@@ -10,11 +10,25 @@ Each audio involved is given a unique audio_id (audio_0 = A, audio_1 = B, then
 audio_2, audio_3, ... for every tool-call output, final step included, in the
 order they're produced) -- see `audio_id_map` on each entry. Tool calls
 reference their input audio by `parameters["audio_id"]` rather than a literal
-path, and declare an `output_audio_id` for their own output -- an id that
-doesn't exist yet at call time. The final step's output id is a fresh one too
-(never audio_1): a model can't know in advance that a call's output will
-exactly equal the pre-revealed target, so the chain's end is signalled purely
-by the explicit trailing `{"done": true}` turn, not by an id choice.
+path; the *output* id for each step is assigned by this script (standing in
+for the harness -- see `assign_audio_ids`), never by the model -- the model's
+`answer["tool_calls"][i]["parameters"]` never contains `output_audio_id`, and
+`to_swift_sample` does not render one into the assistant turn it teaches the
+model to produce (see `interface/protocol.py::build_system_prompt`'s protocol
+explanation for the live-agent side of the same convention). The final step's
+output id is a fresh one too (never audio_1): a model can't know in advance
+that a call's output will exactly equal the pre-revealed target, so the
+chain's end is signalled purely by the explicit trailing `{"done": true}`
+turn, not by an id choice.
+
+Each step's ground-truth answer also carries a `cot` field: one randomly
+chosen chain-of-thought sentence (from `cot_templates.py`, several per tool)
+that verbalizes the reasoning from "compare the current audio to the target"
+to "therefore call this tool with these parameters" before the tool call
+itself. Whether `to_swift_sample` actually renders it into the assistant turn
+is controlled by `to_swift_sample`'s `use_cot` flag (`--use-cot` on the CLI)
+-- the raw dataset JSON always carries the field regardless, so a later run
+can turn CoT rendering on/off without regenerating the underlying samples.
 
 Usage:
     python build_dataset.py --num-samples 200 --output-dir /work/u1501463/gen_tool_usage_QA
@@ -61,6 +75,7 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from tools import tools_registry as tool_registry  # noqa: E402
 from question_templates import render_question  # noqa: E402
+from cot_templates import render_cot  # noqa: E402
 from official_system_prompt import compose_system_prompt  # noqa: E402
 from interface import protocol as agent_protocol  # noqa: E402
 
@@ -71,7 +86,15 @@ DEFAULT_VCTK_DIR = Path("/work/u1501463/VCTK/wav48_silence_trimmed")
 def load_excluded_stems(exclude_path: Optional[Path]) -> set[str]:
     """Collect the source-audio stems used by a previously generated dataset.
 
-    `source_audio` in a dataset JSON is either the original file untouched
+    Accepts either format this script can produce:
+    - `--output-file` (raw dataset JSON): a JSON array of entries, each with
+      a `source_audio` path.
+    - `--swift-output-file` (ms-swift SFT rows, `.jsonl`, see `to_swift_sample`):
+      one JSON object per line, whose `audios[0]` is audio_0 -- i.e. the
+      source audio A -- since `to_swift_sample` always registers audio_0
+      before audio_1 in `audios`.
+
+    `source_audio`/`audios[0]` is either the original file untouched
     (audioset, already .wav) copied as `A_<name>.wav`, or a from-scratch WAV
     conversion of the original (vctk, from .flac) that keeps the original
     stem. Stripping the `A_` prefix when present lets both cases match back
@@ -79,17 +102,32 @@ def load_excluded_stems(exclude_path: Optional[Path]) -> set[str]:
     """
     if exclude_path is None:
         return set()
-    with open(exclude_path, "r", encoding="utf-8") as handle:
-        data = json.load(handle)
+
     stems: set[str] = set()
-    for entry in data:
-        source_audio = entry.get("source_audio")
+
+    def register(source_audio: Optional[str]) -> None:
         if not source_audio:
-            continue
+            return
         stem = Path(source_audio).stem
         stems.add(stem)
         if stem.startswith("A_"):
             stems.add(stem[len("A_"):])
+
+    if exclude_path.suffix == ".jsonl":
+        with open(exclude_path, "r", encoding="utf-8") as handle:
+            for line in handle:
+                line = line.strip()
+                if not line:
+                    continue
+                row = json.loads(line)
+                audios = row.get("audios") or []
+                register(audios[0] if audios else None)
+    else:
+        with open(exclude_path, "r", encoding="utf-8") as handle:
+            data = json.load(handle)
+        for entry in data:
+            register(entry.get("source_audio"))
+
     return stems
 
 
@@ -113,6 +151,14 @@ def collect_source_files(
 def assign_audio_ids(num_steps: int) -> tuple[List[str], List[str]]:
     """Compute (input_id, output_id) per step for a chain of `num_steps` tool calls.
 
+    This is this script's stand-in for the harness's id-assignment role (see
+    `interface.agent.ToolCallingAgent.run()`, which mints ids the same way at
+    live-inference time): the model never chooses its own `output_audio_id`,
+    so these ids are decided here, up front, purely for bookkeeping (naming
+    step-output files, building `audio_id_map`, tagging the "tool" turn in
+    `to_swift_sample`) -- they are never fed to the model as something it must
+    reproduce.
+
     Ids mirror the order audios are introduced to the model: audio_0 is the
     source, audio_1 is the target. Every step's output -- including the final
     one -- mints a fresh id (audio_2, audio_3, ...) that doesn't exist until
@@ -133,23 +179,24 @@ def assign_audio_ids(num_steps: int) -> tuple[List[str], List[str]]:
 
 def to_swift_sample(
     entry: Dict[str, Any],
-    audio_token: str = "<audio>",
     base_system_prompt: str | None = None,
     system_prompt_model_dir: str | None = None,
     system_prompt_model_type: str | None = None,
     tool_call_format: str = "qwen",
+    use_cot: bool = False,
 ) -> Dict[str, Any]:
     """Convert one dataset entry into an ms-swift SFT row.
 
     ms-swift's multimodal custom-dataset format expects a `messages` list plus a
-    parallel `audios` list; each `audio_token` occurrence in the user content is
+    parallel `audios` list; each `AUDIO_TOKEN` occurrence in the user content is
     bound, in order, to the corresponding path in `audios`. Every occurrence is
     tagged with the audio_id it represents (e.g. `<audio_0><audio>`) so the
     model has an explicit handle to refer back to that audio by id in a later
-    tool call, instead of relying on positional ordering alone. The literal
-    source/target paths embedded in the human-readable `question` text are
-    swapped for a tagged `audio_token` here, since the model perceives the
-    audio itself, not its path.
+    tool call, instead of relying on positional ordering alone. `entry["question"]`
+    already carries those tags (see `build_one_sample`, which renders them via
+    `interface.protocol.audio_tag` up front) -- this function just reads it
+    verbatim, it does not search-and-replace a literal path with a tag after
+    the fact.
 
     Every row gets an explicit system turn: the target model's own official
     default system message (auto-detected from `system_prompt_model_dir`, or
@@ -160,11 +207,20 @@ def to_swift_sample(
 
     The answer is rendered as a multi-turn agent/tool dialogue: one assistant
     turn per tool call, each followed by a "tool" turn carrying that step's
-    real output audio (tagged with the id the tool call itself declared via
-    `output_audio_id`) for the next call to reference -- this is the same
+    real output audio -- tagged with the id `build_one_sample`/`assign_audio_ids`
+    picked for it, standing in for the harness (see `interface.agent.ToolCallingAgent.run()`),
+    never the model itself -- for the next call to reference. This is the same
     turn structure `tool_use_benchmark/run_eval.py` drives at inference time.
     A final assistant turn with no tool call closes the chain, so the model
     has a learned stop signal instead of relying on running out of turns.
+
+    `use_cot` (off by default) prepends one line of chain-of-thought text --
+    `tool_call["cot"]`, one of several templates `build_one_sample` randomly
+    picked per step via `cot_templates.render_cot` -- before the `<tool_call>`
+    block in each assistant turn, e.g. "Comparing the current audio to the
+    target, ... Apply time_stretch with rate=1.2.\n<tool_call>...</tool_call>".
+    The raw dataset JSON always carries `cot` regardless of this flag, so
+    turning it on/off doesn't require regenerating `entry`.
 
     The turn text itself is rendered via `interface.protocol`'s shared
     helpers (`render_tool_call` / `render_tool_result_message` /
@@ -178,18 +234,19 @@ def to_swift_sample(
     answer's tool-call turns must agree on one convention.
     """
     audio_id_map = entry["audio_id_map"]
-    audios: List[str] = []
+    # audio_0/audio_1 are already tagged inline in entry["question"]; register
+    # their paths here (in the same order they're referenced) so `audios`
+    # lines up with the `AUDIO_TOKEN` occurrences ms-swift will bind against.
+    audios: List[str] = [audio_id_map["audio_0"], audio_id_map["audio_1"]]
+    question_text = entry["question"]
 
     def tag(audio_id: str) -> str:
-        # ms-swift binds each `audio_token` occurrence in the text, in order, to
+        # ms-swift binds each `AUDIO_TOKEN` occurrence in the text, in order, to
         # one entry in `audios` -- it does not dedupe by audio_id. So every
         # occurrence must append a path, even if the same id were ever tagged
         # more than once.
         audios.append(audio_id_map[audio_id])
-        return f"<{audio_id}>{audio_token}"
-
-    question_text = entry["question"].replace(entry["source_audio"], tag("audio_0"), 1)
-    question_text = question_text.replace(entry["target_audio"], tag("audio_1"), 1)
+        return agent_protocol.audio_tag(audio_id)
 
     system_prompt = compose_system_prompt(
         tools_block=entry["tools_block"],
@@ -201,13 +258,13 @@ def to_swift_sample(
 
     tool_calls = entry["answer"]["tool_calls"]
     for step_idx, tool_call in enumerate(tool_calls, start=1):
-        messages.append({
-            "role": "assistant",
-            "content": agent_protocol.render_tool_call(
-                tool_call["tool_name"], tool_call["parameters"], tool_call["output_audio_id"],
-                tool_call_format=tool_call_format,
-            ),
-        })
+        call_text = agent_protocol.render_tool_call(
+            tool_call["tool_name"], tool_call["parameters"],
+            tool_call_format=tool_call_format,
+        )
+        if use_cot and tool_call.get("cot"):
+            call_text = f"{tool_call['cot']}\n{call_text}"
+        messages.append({"role": "assistant", "content": call_text})
         output_id = tool_call["output_audio_id"]
         messages.append({
             "role": "tool",
@@ -266,6 +323,7 @@ def build_one_sample(
             "tool_name": name,
             "parameters": params,
             "output_audio_id": output_ids[step_index - 1],
+            "cot": render_cot(name, params, rng),
         })
         step_outputs.append(current_path)
 
@@ -281,7 +339,9 @@ def build_one_sample(
         audio_id_map[output_ids[step_index - 1]] = str(step_outputs[step_index - 1])
 
     tools_block = tool_registry.describe_available_tools(tool_call_format=tool_call_format)
-    question = render_question(source=str(audio_a), target=str(audio_b), rng=rng)
+    question = render_question(
+        source=agent_protocol.audio_tag("audio_0"), target=agent_protocol.audio_tag("audio_1"), rng=rng
+    )
 
     return {
         "id": sample_id,
@@ -369,9 +429,10 @@ def main() -> None:
         type=str,
         default=None,
         help=(
-            "Path to an existing dataset JSON (e.g. tool_usage_qa.json) whose "
-            "source audio files must not be drawn from when generating new "
-            "samples. Pass 'None' or omit to disable."
+            "Path to an existing dataset JSON (e.g. tool_usage_qa.json) or "
+            "ms-swift SFT JSONL (e.g. train.jsonl, see --swift-output-file) "
+            "whose source audio files must not be drawn from when generating "
+            "new samples. Pass 'None' or omit to disable."
         ),
     )
     parser.add_argument("--seed", type=int, default=0)
@@ -395,12 +456,6 @@ def main() -> None:
             "Optional path to also write an ms-swift SFT-ready JSONL file "
             "(messages + audios, audio_token in place of literal paths)."
         ),
-    )
-    parser.add_argument(
-        "--audio-token",
-        type=str,
-        default="<audio>",
-        help="Placeholder token substituted for each audio path in the swift user message.",
     )
     parser.add_argument(
         "--base-system-prompt",
@@ -445,6 +500,17 @@ def main() -> None:
             "convention, kept for a future non-Qwen target model. Both the raw dataset JSON's "
             "'tools_block' and every --swift-output-file turn are generated with this same "
             "format, so re-generate both together when changing it."
+        ),
+    )
+    parser.add_argument(
+        "--use-cot",
+        action="store_true",
+        help=(
+            "Prepend a randomly-chosen chain-of-thought sentence (see cot_templates.py) before "
+            "each tool call's <tool_call> block in --swift-output-file. Off by default -- the "
+            "raw dataset JSON's answer['tool_calls'][i]['cot'] is always populated regardless "
+            "of this flag, so re-running with a different --use-cot value doesn't require "
+            "regenerating the underlying samples, only re-deriving --swift-output-file."
         ),
     )
     args = parser.parse_args()
@@ -559,11 +625,11 @@ def main() -> None:
             for entry in dataset:
                 swift_sample = to_swift_sample(
                     entry,
-                    audio_token=args.audio_token,
                     base_system_prompt=args.base_system_prompt,
                     system_prompt_model_dir=args.system_prompt_model_dir,
                     system_prompt_model_type=args.system_prompt_model_type,
                     tool_call_format=args.tool_call_format,
+                    use_cot=args.use_cot,
                 )
                 handle.write(json.dumps(swift_sample, ensure_ascii=False) + "\n")
         print(f"Wrote {len(dataset)} ms-swift SFT rows to {args.swift_output_file}", file=sys.stderr)

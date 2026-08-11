@@ -62,14 +62,18 @@ class Tool(ABC):
         Swaps the harness-internal `audio_path` (the model never sees or
         produces a literal path) for the model-facing `audio_id` -- an id
         naming an already-seen audio, optional since it defaults to whatever
-        the model's previous turn produced (see `interface.protocol`) -- and,
-        for every tool that produces a new audio, adds `output_audio_id`: a
-        fresh id the model must choose to name that call's result. Neither
-        key is part of `parameter_schema()` (the *execution*-time schema
+        the model's previous turn produced (see `interface.protocol`). This
+        is the *only* protocol-level key layered on top of `parameter_schema()`
+        -- the id naming a call's own output (`output_audio_id`) is chosen
+        entirely by the harness after the call executes (see
+        `interface.agent.ToolCallingAgent.run()` /
+        `tool_use_training/gen_1st_stage_data/build_dataset.py::assign_audio_ids`),
+        never by the model, so it is not part of this schema. `audio_id` isn't
+        part of `parameter_schema()` either (the *execution*-time schema
         `execute()`/`validate_parameters()` check against) since
-        `interface.executor.run_tool_call` resolves and strips them before a
-        real call -- they're purely a chaining convention layered on top by
-        the agent protocol, not a real parameter of the underlying tool.
+        `interface.executor.run_tool_call` resolves and strips it before a
+        real call -- it's purely a chaining convention layered on top by the
+        agent protocol, not a real parameter of the underlying tool.
 
         `description()` itself is left untouched (it's shared with the
         path-based DCASE/MCQ prompt pipeline in `prompts/`/`audio_edit/editor.py`,
@@ -87,21 +91,12 @@ class Tool(ABC):
         properties["audio_id"] = {
             "type": "string",
             "description": (
-                "Id of an audio you've already seen (an input audio, or an output_audio_id "
-                "you declared in an earlier turn). If omitted, defaults to whichever audio "
-                "your previous turn most recently produced (or the sole input audio, on your "
-                "first turn)."
+                "Id of an audio you've already seen (an input audio, or an id the harness "
+                "assigned to an earlier call's output). If omitted, defaults to whichever "
+                "audio your previous turn most recently produced (or the sole input audio, "
+                "on your first turn)."
             ),
         }
-        if cls.produces_audio():
-            properties["output_audio_id"] = {
-                "type": "string",
-                "description": (
-                    "A fresh id, distinct from every id used so far, to name this call's "
-                    "output audio."
-                ),
-            }
-            required = required + ["output_audio_id"]
 
         return {
             "type": "function",

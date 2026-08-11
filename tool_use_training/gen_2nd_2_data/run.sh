@@ -10,7 +10,6 @@
 # its own (see tool_config.json's per-tool "env").
 PY=/home/u1501463/miniconda3/envs/Whisper/bin/python
 
-exp=mmau_stage2_2
 work_dir=./exp/
 
 mkdir -p ${work_dir}
@@ -21,7 +20,7 @@ mkdir -p ${work_dir}
 # sample, and write original_subset.json / tool_applied_subset.json.
 $PY build_dataset.py \
     --tool-config ./tool_config.json \
-    --input-json ./dcase_7481.json \
+    --audiomcq compa_r \
     --num-samples 1000 \
     --repetition 2 \
     --min-tools 1 \

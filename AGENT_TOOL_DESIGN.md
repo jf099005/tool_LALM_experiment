@@ -30,8 +30,11 @@ tool_use_training/, testing_tool_use_benchmark/
     （denoise、normalize 家族、pitch/time、voice enhance、super-resolution 是；
     clipping、source separation、extract/remove target、asr 不是，輸出路徑自動推導）。
   - **`to_function_schema()`**：把 `parameter_schema()` 轉成「model 看到的」function-calling
-    schema——關鍵轉換：拿掉 `audio_path`、加上 `audio_id`（optional，語意見下方）跟
-    `output_audio_id`（僅當 `produces_audio()` 為真時，required）。**也會把
+    schema——關鍵轉換：拿掉 `audio_path`、加上 `audio_id`（optional，語意見下方）。
+    **不會**加 `output_audio_id`——一個 call 自己輸出音檔要叫什麼名字，一律由
+    harness（`interface/agent.py`）/資料生成端（`assign_audio_ids`）在 call 執行**之後**
+    決定，model 從來不需要、也不會被要求產生這個欄位（2026-08 前的版本曾經在這裡加過
+    `output_audio_id: required`,讓 model 自己命名輸出——已改掉,見 §8）。**也會把
     `description()` 裡殘留的 `audio_path` 字樣自動替換成 `audio_id`**，因為
     `description()` 這個字串同時被路徑導向的消費者（`prompts/`、`audio_edit/editor.py`）
     使用，不能直接改寫，只能在轉出 schema 的當下做替換。
@@ -62,13 +65,20 @@ tool_use_training/, testing_tool_use_benchmark/
 ### 2.1 `audio_path` vs `audio_id` —— 兩層位址空間，不要混用
 
 - `parameter_schema()`（執行期 schema）：永遠是 `audio_path`，工具實作只認得真實檔案路徑。
-- `to_function_schema()`（model 看到的 schema）：永遠是 `audio_id`（+ `output_audio_id`）。
-  `audio_id` **是 optional**——沒給時預設是「上一輪自己產生的音檔」（或第一輪唯一的
-  input audio），這是這個專案自訂的 chaining 慣例，不是任何模型的官方慣例。
-- 兩者的轉換點只有一個：`interface/executor.py::run_tool_call()`——把 `audio_id`/
-  `output_audio_id` 從 `parameters` 裡拿掉、換上真正解析出的 `audio_path`,再呼叫
-  `cls.execute()`。**新工具或新程式碼不要自己重新實作這個轉換**，一律呼叫
-  `run_tool_call()`。
+- `to_function_schema()`（model 看到的 schema）：永遠是 `audio_id`，**不含**
+  `output_audio_id`。`audio_id` **是 optional**——沒給時預設是「上一輪自己產生的音檔」
+  （或第一輪唯一的 input audio），這是這個專案自訂的 chaining 慣例，不是任何模型的
+  官方慣例。`output_audio_id`（一個 call 輸出音檔的命名)**完全不經過 model**——由
+  `interface/agent.py::ToolCallingAgent.run()`（live agent）或
+  `tool_use_training/gen_1st_stage_data/build_dataset.py::assign_audio_ids()`（訓練資料
+  生成)在 call 真正執行**之後**指派一個新 id,下一輪的「tool」turn 才把這個 id
+  連同真實輸出音檔一起展示給 model——model 只會「看到」這個 id,從不「產生」它。
+- 兩者的轉換點只有一個：`interface/executor.py::run_tool_call()`——把 `audio_id`
+  從 `parameters` 裡拿掉、換上真正解析出的 `audio_path`,再呼叫 `cls.execute()`
+  （`output_audio_id` 這個 key 理論上永遠不會出現在 model 產生的 `parameters` 裡,
+  因為 schema 沒有 advertise 它——但 `run_tool_call()` 仍然防禦性地把它 pop 掉,
+  以防某個 model 硬是自己塞了一個)。**新工具或新程式碼不要自己重新實作這個轉換**，
+  一律呼叫 `run_tool_call()`。
 
 ---
 
@@ -84,11 +94,13 @@ tool_use_training/, testing_tool_use_benchmark/
   （`{"tool_name":..., "parameters":..., "output_audio_id":...}` + `{"done": true}`）,
   保留下來是為了「以後要換一個不是 Qwen 慣例的模型」時,不用改任何呼叫端,只要加一個
   新的 `ToolCallFormat` 子類別、傳 `--tool-call-format <新名字>` 即可。
-- **`output_audio_id` 一律裝進 `arguments`/`parameters` 裡**（不是獨立欄位),因為
-  function-calling schema 本來就只有一個 `arguments` 物件可以放東西。
-  `LegacyJSONToolCallFormat` 會在 render 時把它拆回獨立欄位、parse 時再塞回去,
-  對上層調用者維持統一的 `{"tool_name":..., "parameters": {...含 output_audio_id...}}`
-  介面。
+- `output_audio_id` **不是 model 產生的 wire 內容的一部分**（model 的
+  `<tool_call>`/`arguments` 裡不會有這個 key,見 §2.1)——`tool_call_formats.py`
+  的 `render_tool_call()`/`parse_turn()` 仍然保留「如果 `arguments` 裡真的出現
+  `output_audio_id` 就把它折進/拆出 `parameters`」這段邏輯,是格式層級的通用防禦
+  （對任意 `arguments` dict 都成立,不假設 model 一定不會給),不是這個協定目前實際
+  依賴的路徑；真正的 chaining id 指派邏輯在 `interface/agent.py`/`build_dataset.py`
+  （見 §2.1)。
 - `render_tool_result_message()`（在 `interface/protocol.py`,不在這個檔案裡)
   **刻意不**把 tool 執行結果包進 `<tool_response>` 標籤——見下一節的 ms-swift 細節。
 
@@ -179,11 +191,23 @@ tool_use_training/, testing_tool_use_benchmark/
 
 | 檔案 | 角色 | 用到的共用元件 |
 |---|---|---|
-| `tool_use_training/gen_1st_stage_data/build_dataset.py` | 產生 stage-1 SFT 多輪對話資料（合成 A→B 音檔鏈) | `tools_registry`（工具清單 + 隨機參數合成)、`official_system_prompt.compose_system_prompt`、`interface.protocol.render_tool_call/render_done/render_tool_result_message` |
+| `tool_use_training/gen_1st_stage_data/build_dataset.py` | 產生 stage-1 SFT 多輪對話資料（合成 A→B 音檔鏈) | `tools_registry`（工具清單 + 隨機參數合成)、`official_system_prompt.compose_system_prompt`、`interface.protocol.render_tool_call/render_done/render_tool_result_message`、`cot_templates.render_cot`（每個 tool call 附一句隨機 CoT,`to_swift_sample(..., use_cot=...)`/`--use-cot` 控制是否真的塞進 assistant turn) |
 | `testing_tool_use_benchmark/build_benchmark.py` | 產生 held-out eval benchmark（跟 build_dataset.py 同一套合成邏輯,不同 seed) | 直接呼叫 `build_dataset.build_one_sample` + `tools_registry` |
 | `testing_tool_use_benchmark/run_eval.py` | 跑一個 checkpoint,對 benchmark 逐輪生成、真的執行、算 metric | `official_system_prompt`、`interface.protocol.parse_turn/render_tool_result_message`、`interface.executor.run_tool_call`、`interface.engine.{SwiftEngine,VLLMEngine}` |
 | `tool_use_training/tool_use_RL_{full,partial}/build_rl_dataset.py` | 產生 stage-2 GRPO 單輪資料——**不是**逐輪 `<tool_call>` 格式,而是要求模型一次輸出整條 `{"tool_calls":[...]}` | `official_system_prompt.compose_system_prompt`（system prompt 共用),但**不用** `tool_call_formats.py`——這是刻意的,見下方 §7 |
 | `tool_use_training/tool_use_RL_{full,partial}/reward.py` | GRPO reward——比對預測 vs 標準答案的 `tool_calls` 序列;`ToolAudioClosenessReward` 還會真的執行、比對音檔相似度 | 自己的 `parse_tool_call_payload()`（解析單發 JSON,含 code fence/推理文字容錯),真正執行時呼叫 `interface.executor.run_tool_call` |
+
+- **`tool_use_training/gen_1st_stage_data/cot_templates.py`**（新增)：`build_dataset.py`
+  專用、stage-1 資料生成才用得到的一層——每個 `@register` 到 `tools_registry` 的工具
+  對應數個 CoT 句型模板（`COT_TEMPLATES[tool_name]`),`render_cot(tool_name, parameters, rng)`
+  依當步驟真正抽到的參數（`rate`/`n_steps`/`algorithm`/...)隨機挑一個填好。
+  `build_one_sample()` 對每個 step 都呼叫一次,把結果存進 raw dataset JSON 的
+  `answer.tool_calls[i].cot`（**不受** `--use-cot` 影響,永遠算好存著);真正決定
+  要不要把這句話塞進 assistant turn（`<tool_call>` 前面)的是 `to_swift_sample()`
+  的 `use_cot` 參數／CLI 的 `--use-cot`。跟 `tools_registry.py` 的 `@register` appliers
+  一樣是**資料合成**專用的關注點，不影響 `interface/`/`tool_call_formats.py`——一個
+  不认识某工具的呼叫端（例如 `testing_tool_use_benchmark/run_eval.py`,見 §9)只會看到
+  `cot` 這個 raw JSON 欄位被忽略,不會壞掉。
 
 ---
 
@@ -230,8 +254,12 @@ tool_use_training/, testing_tool_use_benchmark/
   經過 ms-swift `template_backend='swift'`——也就是預設值——的路徑),那層包裝
   ms-swift 會自動做。只有 `VLLMEngine`（零樣本、無微調、無 ms-swift 的路徑)
   需要自己包。
-- **`output_audio_id` 一律放進 `parameters`/`arguments` 裡**,不要當獨立欄位——
-  這是為了讓 `tool_call_formats.py` 的 function-calling schema 保持標準形狀。
+- **`output_audio_id` 不是 model 要產生的東西**（2026-08 起)——一律由 harness/
+  資料生成端在 call 執行後指派,`to_function_schema()`/訓練資料的 assistant turn
+  都不會出現這個 key。若未來真的需要恢復「model 自己命名輸出」的舊行為,搜尋
+  `output_audio_id` 找回 §2.1/§3 提到的所有 touch point（`abstract_tool.to_function_schema`、
+  `interface/protocol.py::build_system_prompt`/`render_tool_call`、
+  `interface/agent.py::run()`、`build_dataset.py::to_swift_sample`),不要只改一處。
 - **新增 tool-calling 慣例（例如未來換一個不是 Qwen 的 model)：在
   `tool_call_formats.py` 加一個新的 `ToolCallFormat` 子類別**,不要去改
   `interface/protocol.py`/`build_dataset.py` 呼叫端的邏輯——那些地方已經設計成
@@ -252,3 +280,15 @@ tool_use_training/, testing_tool_use_benchmark/
   Qwen 訓練/推論時,先重新確認這兩點,不要假設兩者一致。
 - **這份文件本身也要維護**：改動上述任何一個檔案的職責分工時,回來更新這份文件,
   避免文件跟程式碼漂移。
+
+---
+
+## 9. 「output_audio_id 改由 harness 指派」這次只同步了 `tools/`/`interface/`/stage-1 資料生成
+
+2026-08 這次改動的範圍刻意只涵蓋 §2.1/§3/§6 提到的 `tools/abstract_tool.py`、
+`interface/protocol.py`、`interface/agent.py`、`interface/executor.py`（防禦性 pop,
+本來就沒依賴 model 給值,不用大改)、`tool_use_training/gen_1st_stage_data/`
+（`build_dataset.py` + 新增的 `cot_templates.py`)。**還沒**跟著同步的下游消費端
+——都還在用「model 自己宣告 `output_audio_id`」的舊協定文字/邏輯，會跟現在的
+`to_function_schema()`/訓練資料**不一致**——列在根目錄的 `TODO.md`，開新 task
+前先讀那份清單，不要假設整個專案已經全部切過去新協定。

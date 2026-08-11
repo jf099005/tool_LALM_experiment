@@ -3,10 +3,12 @@
 Mirrors the multi-turn convention `tool_use_training/gen_1st_stage_data/build_dataset.py`
 teaches the model during SFT (see `to_swift_sample`): one assistant turn per
 tool call, followed by a "tool" turn that shows the real output tagged with
-the id the call itself declared, and a final turn to close the chain. The
-wire convention for those turns (how a call/result/stop is spelled out as
-text) is pluggable -- see `tool_call_formats.py` -- and defaults to Qwen's own
-official Hermes-style `<tool_call>`/`<tools>` convention.
+an id the harness itself assigns (never the model -- see
+`build_system_prompt`'s protocol explanation and `agent.py::ToolCallingAgent.run()`),
+and a final turn to close the chain. The wire convention for those turns (how
+a call/result/stop is spelled out as text) is pluggable -- see
+`tool_call_formats.py` -- and defaults to Qwen's own official Hermes-style
+`<tool_call>`/`<tools>` convention.
 `testing_tool_use_benchmark/run_eval.py` imports `parse_turn`/`AUDIO_TOKEN`
 from here directly and drives the eval-time sibling of this same convention
 for its fixed source/target benchmark (its own system prompt and per-turn
@@ -92,13 +94,12 @@ def build_system_prompt(
         "You are given one or more input audios (tagged <audio_0>, <audio_1>, ...) and a "
         "task instruction. Infer the chain of tool calls needed to complete the task.\n\n"
         "Every call's `audio_id` argument names which already-seen audio to read -- one of "
-        "the input audios, or an `output_audio_id` you declared in an earlier turn. If "
+        "the input audios, or an id the harness assigned to an earlier call's output. If "
         "omitted, it defaults to whichever audio your previous turn most recently produced "
-        "(or the sole input audio, on your first turn). Every audio-producing tool also takes "
-        "an `output_audio_id` argument: a fresh id you choose, distinct from every id used so "
-        "far, to name that call's result. After each call you will be shown its real output "
-        "tagged with the id you gave it, before your next turn. Once the task is fully "
-        "complete, stop calling tools and reply normally instead."
+        "(or the sole input audio, on your first turn). You never name a call's own output -- "
+        "after each call, the harness runs it for real and shows you the result tagged with "
+        "an id it assigns itself, before your next turn. Once the task is fully complete, "
+        "stop calling tools and reply normally instead."
     )
     return f"{protocol_explanation}\n\n{tools_preamble}"
 
@@ -111,7 +112,6 @@ def render_user_prompt(instruction: str, audio_ids: List[str]) -> str:
 def render_tool_call(
     tool_name: str,
     parameters: Dict[str, Any],
-    output_audio_id: Optional[str] = None,
     tool_call_format: str = DEFAULT_TOOL_CALL_FORMAT,
 ) -> str:
     """Render one assistant turn's tool-call content in `tool_call_format`'s
@@ -119,14 +119,12 @@ def render_tool_call(
     ground-truth authoring (`gen_1st_stage_data/build_dataset.py`), not by the
     live agent (there, this text comes from the model itself).
 
-    `output_audio_id` folds into the call's arguments (there's no separate
-    channel for it in a function-calling schema) if given -- omit it for
-    tools that don't produce audio (e.g. `asr`).
+    `parameters` is exactly what the model must learn to produce -- it never
+    includes `output_audio_id`, since the harness (not the model) picks the id
+    naming a call's own output (see `build_system_prompt`'s protocol
+    explanation and `tool_use_training/gen_1st_stage_data/build_dataset.py::assign_audio_ids`).
     """
-    arguments = dict(parameters)
-    if output_audio_id is not None:
-        arguments["output_audio_id"] = output_audio_id
-    return get_tool_call_format(tool_call_format).render_tool_call(tool_name, arguments)
+    return get_tool_call_format(tool_call_format).render_tool_call(tool_name, dict(parameters))
 
 
 def render_done(tool_call_format: str = DEFAULT_TOOL_CALL_FORMAT) -> str:
@@ -167,8 +165,23 @@ def render_tool_result_message(
 def parse_turn(raw_text: str, tool_call_format: str = DEFAULT_TOOL_CALL_FORMAT) -> Optional[Dict[str, Any]]:
     """Parse one model turn using `tool_call_format`'s wire convention.
 
-    Returns `{"tool_name": ..., "parameters": {...}}` for a call
-    (`output_audio_id`, if any, folded into `parameters`), `{"done": True}`
-    if the turn signals completion, or `None` if it's unparseable garbage.
+    Returns `{"tool_name": ..., "parameters": {...}}` for a call, `{"done":
+    True}` if the turn signals completion, or `None` if it's unparseable
+    garbage. The model is never asked for `output_audio_id` (the harness
+    always assigns it, see `interface.agent.ToolCallingAgent.run()`) --
+    if a stray one shows up in `parameters` anyway (e.g. a model that
+    hallucinates one despite it not being advertised), `interface.executor.run_tool_call`
+    strips it before validation rather than this function filtering it out.
     """
     return get_tool_call_format(tool_call_format).parse_turn(raw_text)
+
+
+def diagnose_tool_call_tags(raw_text: str, tool_call_format: str = DEFAULT_TOOL_CALL_FORMAT) -> Dict[str, Any]:
+    """Tell apart "the model didn't call a tool" from "it did, but botched the
+    wrapper tokens (e.g. `<tool_call>`/`</tool_call>`)" for `raw_text` -- see
+    `ToolCallFormat.diagnose`. Used by `testing_tool_use_benchmark/run_eval.py`
+    to report on that failure mode separately from ordinary parse failures;
+    `parse_turn` above can't make this distinction itself, since a broken
+    wrapper means it never finds the JSON in the first place.
+    """
+    return get_tool_call_format(tool_call_format).diagnose(raw_text)

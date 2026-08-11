@@ -53,10 +53,12 @@ def run_tool_call(
     prior audio -- the underlying tool implementations don't understand it,
     so it's dropped here and replaced with `input_audio_path`, the real file
     the caller (`agent.ToolCallingAgent`) already resolved that id to.
-    `parameters["output_audio_id"]` (the fresh id the model chose to name
-    this call's own result -- see `tools.abstract_tool.Tool.to_function_schema`)
-    is dropped the same way: it's consumed by the caller after this returns,
-    never by the tool implementation itself.
+    The model is never asked for `output_audio_id` (the harness -- see
+    `agent.ToolCallingAgent.run()` -- always picks the id naming a call's own
+    result, after the call executes), so `parameters` shouldn't carry one; it's
+    popped here anyway as a defensive no-op in case a model emits it despite
+    not being advertised (`to_function_schema()` never lists it, so leaving it
+    in would otherwise fail `validate_parameters()` as an unexpected key).
 
     Raises `UnknownToolError` if `tool_name` isn't in `tools_registry`'s
     registered toolset (whether or not it's a real `Tool` subclass under

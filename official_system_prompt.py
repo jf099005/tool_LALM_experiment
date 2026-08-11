@@ -35,6 +35,13 @@ KNOWN_DEFAULT_SYSTEM_PROMPTS = {
     "qwen2_omni": "You are a helpful assistant.",
     "qwen2_5_vl": "You are a helpful assistant.",
     "qwen2_audio": "You are a helpful assistant.",
+    # Unlike the rest of the Qwen family, ms-swift's own template registration
+    # (`QwenTemplateMeta(MLLMTemplateType.qwen3_omni, ..., default_system=None, ...)`
+    # in swift/template/templates/qwen.py) explicitly overrides the default system
+    # message to *none* for Qwen3-Omni. Empty here (not "You are a helpful
+    # assistant.") to match that -- see `compose_system_prompt`, which still
+    # concatenates cleanly with the tool catalogue when this is "".
+    "qwen3_omni": "",
 }
 GENERIC_FALLBACK_SYSTEM_PROMPT = "You are a helpful assistant."
 

@@ -59,7 +59,6 @@ OUTPUT_INSTRUCTION = (
 
 def to_swift_rl_sample(
     entry: Dict[str, Any],
-    audio_token: str = "<audio>",
     base_system_prompt: str | None = None,
     system_prompt_model_dir: str | None = None,
     system_prompt_model_type: str | None = None,
@@ -69,7 +68,10 @@ def to_swift_rl_sample(
     Only `audio_0` (source) and `audio_1` (target) are tagged -- unlike
     `to_swift_sample`, there are no intermediate per-step audios since the
     model must emit the whole chain in one shot, without seeing any real
-    tool output mid-episode.
+    tool output mid-episode. `entry["question"]` already carries those tags
+    inline (rendered up front by `gen_1st_stage_data.build_dataset.build_one_sample`
+    via `interface.protocol.audio_tag`), so this just registers their paths
+    into `audios` in the same order -- no literal-path substitution needed.
 
     Like `to_swift_sample`, the tool catalogue lives in the system turn (the
     target model's own official default + the tool catalogue -- see
@@ -85,15 +87,9 @@ def to_swift_rl_sample(
         )
 
     audio_id_map = entry["audio_id_map"]
-    audios: List[str] = []
+    audios: List[str] = [audio_id_map["audio_0"], audio_id_map["audio_1"]]
 
-    def tag(audio_id: str) -> str:
-        audios.append(audio_id_map[audio_id])
-        return f"<{audio_id}>{audio_token}"
-
-    question_text = entry["question"].replace(entry["source_audio"], tag("audio_0"), 1)
-    question_text = question_text.replace(entry["target_audio"], tag("audio_1"), 1)
-    question_text += OUTPUT_INSTRUCTION
+    question_text = entry["question"] + OUTPUT_INSTRUCTION
 
     system_prompt = compose_system_prompt(
         tools_block=entry["tools_block"],
@@ -114,7 +110,6 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--input", type=Path, required=True, help="Raw dataset JSON (list of entries).")
     parser.add_argument("--output", type=Path, required=True, help="Output ms-swift GRPO jsonl path.")
-    parser.add_argument("--audio-token", type=str, default="<audio>")
     parser.add_argument(
         "--base-system-prompt",
         type=str,
@@ -157,7 +152,6 @@ def main() -> None:
         for entry in entries:
             row = to_swift_rl_sample(
                 entry,
-                audio_token=args.audio_token,
                 base_system_prompt=args.base_system_prompt,
                 system_prompt_model_dir=args.system_prompt_model_dir,
                 system_prompt_model_type=args.system_prompt_model_type,

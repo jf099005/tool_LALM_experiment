@@ -1,0 +1,1 @@
+scp -r u1501463@nano5.nchc.org.tw:/home/u1501463/tool_use_LALM/tool_use_training/stage1_training /home/u1501463/tool_use_LALM/tool_use_training/

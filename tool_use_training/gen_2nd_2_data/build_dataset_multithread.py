@@ -64,6 +64,7 @@ from build_dataset import (  # noqa: E402
     DEFAULT_VCTK_DIR,  # noqa: F401
     build_one_sample,
     collect_raw_audio_items,
+    load_audiomcq_items,
     load_qa_items,
     sample_items,
     to_dcase_entry,
@@ -124,8 +125,12 @@ def main() -> None:
     parser.add_argument("--tool-config", type=Path, default=Path(__file__).resolve().parent / "tool_config.json")
     parser.add_argument("--input-json", type=Path, nargs="*", default=[],
                          help="dcase_subset.json-shaped QA list(s) to sample from (e.g. a DCASE 2025 subset).")
-    parser.add_argument("--sources", nargs="*", choices=["audioset", "vctk"], default=[],
+    parser.add_argument("--sources", nargs="*",
+                         choices=["audioset", "vctk", "clotho", "audiocaps", "compa_r"], default=[],
                          help="Raw audio pools (no QA attached) to sample from.")
+    parser.add_argument("--audiomcq", nargs="*", choices=["clotho", "audiocaps", "compa_r"], default=[],
+                         help="Pull QA-attached items (real question/choices/answer) from AudioMCQ's "
+                         "per-source-dataset jsonl exports instead of the corresponding --sources pool.")
     parser.add_argument("--audio-glob", nargs="*", default=[],
                          help="Extra glob pattern(s) for other raw audio pools, e.g. '/work/u1501463/my_corpus/**/*.wav'.")
     parser.add_argument("--num-samples", type=int, default=200)
@@ -157,9 +162,13 @@ def main() -> None:
     tool_weights_list = ta.tool_weights(tool_config, tool_names)
     print(f"Available tools ({len(tool_names)}): {tool_names}", file=sys.stderr)
 
-    items = load_qa_items(args.input_json) + collect_raw_audio_items(args.sources, args.audio_glob)
+    items = (
+        load_qa_items(args.input_json)
+        + load_audiomcq_items(args.audiomcq)
+        + collect_raw_audio_items(args.sources, args.audio_glob)
+    )
     if not items:
-        raise SystemExit("No input items -- pass --input-json and/or --sources/--audio-glob.")
+        raise SystemExit("No input items -- pass --input-json, --audiomcq, and/or --sources/--audio-glob.")
 
     for item in items:
         item.setdefault("id", f"sample_{uuid.uuid4().hex[:12]}")

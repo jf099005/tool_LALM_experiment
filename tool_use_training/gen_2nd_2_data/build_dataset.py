@@ -24,10 +24,12 @@ Pipeline
 0. `tool_config.json` (or whatever `--tool-config` points at) declares the tool set.
 1. Sample n items from one or more sources: `--input-json` (dcase_subset.json-shaped QA
    lists -- this is how a "dcase 2025" corpus, or any other pre-existing QA json, feeds
-   in), and/or `--sources audioset|vctk` (raw directory pools, no QA attached) and/or
-   arbitrary `--audio-glob` patterns for "or other" datasets. Items without QA fields get
-   sensible defaults (question="", answer="N/A", ...), same convention as
-   `build_by_disturb.py`'s `to_dcase_entry`.
+   in), `--audiomcq clotho|audiocaps|compa_r` (QA-attached items pulled from AudioMCQ's
+   jsonl exports at /work/u1501463/AudioMCQ/datasets/, re-pointed at the real audio
+   location on this machine), and/or `--sources audioset|vctk|clotho|audiocaps|compa_r`
+   (raw directory pools, no QA attached) and/or arbitrary `--audio-glob` patterns for "or
+   other" datasets. Items without QA fields get sensible defaults (question="",
+   answer="N/A", ...), same convention as `build_by_disturb.py`'s `to_dcase_entry`.
 2. For each item, draw k in [min-tools, max-tools] distinct tool names (weighted by
    tool_config.json's `weight`) and their parameters, and apply them in sequence.
 3. Mirroring build_by_disturb.py's output shape: write `original/` (a WAV copy of the
@@ -82,6 +84,23 @@ import tool_appliers as ta  # noqa: E402
 
 DEFAULT_AUDIOSET_DIR = Path(os.environ.get("AUDIOSET_AUDIO_DIR", "/work/u1501463/audioset_20k/20k/train"))
 DEFAULT_VCTK_DIR = Path(os.environ.get("VCTK_AUDIO_DIR", "/work/u1501463/VCTK/wav48_silence_trimmed"))
+DEFAULT_CLOTHO_DIR = Path(os.environ.get("CLOTHO_AUDIO_DIR", "/work/u1501463/clotho/audio_files"))
+DEFAULT_AUDIOCAPS_DIR = Path(os.environ.get("AUDIOCAPS_AUDIO_DIR", "/work/u1501463/AudioCaps/audio"))
+DEFAULT_COMPA_R_DIRS = [
+    Path(os.environ.get("COMPA_R_TRAIN_AUDIO_DIR", "/work/u1501463/CompA_R/compa_r_train_audios-mp3")),
+    Path(os.environ.get("COMPA_R_TEST_AUDIO_DIR", "/work/u1501463/CompA_R/compa_r_test_audios-mp3")),
+]
+
+# AudioMCQ (/work/u1501463/AudioMCQ) ships real QA (question/choices/answer) per source
+# dataset as jsonl, but its `audio_path` values assume AudioMCQ's own HF-repo-style layout
+# (e.g. "clotho_audios/<file>.wav"), not where the audio actually sits on this machine --
+# see load_audiomcq_items's docstring for how each gets re-pointed at the real location.
+DEFAULT_AUDIOMCQ_DIR = Path(os.environ.get("AUDIOMCQ_DIR", "/work/u1501463/AudioMCQ"))
+AUDIOMCQ_JSONL_PATHS = {
+    "clotho": DEFAULT_AUDIOMCQ_DIR / "datasets" / "AudioMCQ_Clotho.jsonl",
+    "audiocaps": DEFAULT_AUDIOMCQ_DIR / "datasets" / "AudioMCQ_AudioCaps.jsonl",
+    "compa_r": DEFAULT_AUDIOMCQ_DIR / "datasets" / "AudioMCQ_CompA-R.jsonl",
+}
 
 
 # ---------------------------------------------------------------------------
@@ -105,9 +124,81 @@ def collect_raw_audio_items(sources: List[str], audio_globs: List[str]) -> List[
         files.extend(sorted(DEFAULT_AUDIOSET_DIR.glob("*.wav")))
     if "vctk" in sources:
         files.extend(sorted(DEFAULT_VCTK_DIR.glob("*/*.flac")))
+    if "clotho" in sources:
+        files.extend(sorted(DEFAULT_CLOTHO_DIR.glob("*.wav")))
+    if "audiocaps" in sources:
+        files.extend(sorted(DEFAULT_AUDIOCAPS_DIR.glob("*/*.wav")))
+    if "compa_r" in sources:
+        for root in DEFAULT_COMPA_R_DIRS:
+            files.extend(sorted(root.glob("*.mp3")))
     for pattern in audio_globs:
         files.extend(sorted(Path(p) for p in glob_module.glob(pattern, recursive=True)))
     return [{"audio_path": str(f)} for f in files]
+
+
+def _resolve_compa_r_audio(audio_path: str) -> Path | None:
+    stem = Path(audio_path).stem
+    for root in DEFAULT_COMPA_R_DIRS:
+        candidate = root / f"{stem}.mp3"
+        if candidate.exists():
+            return candidate
+    return None
+
+
+# Per source-dataset: how to turn an AudioMCQ jsonl row's `audio_path` into the file's real
+# location. clotho: strip AudioMCQ's "clotho_audios/" wrapper -- clotho's own audio_files/
+# is flat. audiocaps: AudioMCQ's own download pipeline
+# (download_audiocaps/01_download_hf_mirror.py) populates AudioMCQ/audio/audiocaps_audios/
+# using the exact same relative path already in the jsonl, so no rewrite is needed -- just
+# root it under AudioMCQ/audio (note this is a *different* audio pool, keyed by
+# youtube_id_starttime, than DEFAULT_AUDIOCAPS_DIR's official train/test/validation dump,
+# which is keyed by numeric AudioCaps row id and has no QA attached). compa_r: AudioMCQ
+# names the file <id>.wav, but the real pool stores <id>.mp3 split across train/test dirs.
+_AUDIOMCQ_RESOLVERS = {
+    "clotho": lambda audio_path: DEFAULT_CLOTHO_DIR / Path(audio_path).name,
+    "audiocaps": lambda audio_path: DEFAULT_AUDIOMCQ_DIR / "audio" / audio_path,
+    "compa_r": _resolve_compa_r_audio,
+}
+
+
+def load_audiomcq_items(names: List[str]) -> List[Dict[str, Any]]:
+    """Load QA-shaped items straight from AudioMCQ's per-source-dataset jsonl exports,
+    re-pointing each row's `audio_path` at where that audio actually lives on this machine
+    (see _AUDIOMCQ_RESOLVERS). Rows whose audio isn't on disk yet -- e.g. AudioCaps'
+    youtube-sourced pool is still mid-download via download_audiocaps/ -- are skipped.
+
+    AudioMCQ's own `id` field names the source *audio clip*, not the QA pair -- CompA_R in
+    particular has several questions sharing one clip's id -- so each row is given a fresh,
+    row-unique id here instead of reusing it verbatim. build_one_sample keys its output
+    directories off `id`, so reusing a clip id across multiple sampled QA pairs would
+    silently collide (one sample's original/tool_applied output overwriting another's)."""
+    items: List[Dict[str, Any]] = []
+    for name in names:
+        jsonl_path = AUDIOMCQ_JSONL_PATHS[name]
+        resolver = _AUDIOMCQ_RESOLVERS[name]
+        loaded = 0
+        missing = 0
+        with jsonl_path.open("r", encoding="utf-8") as handle:
+            for row_index, line in enumerate(handle):
+                line = line.strip()
+                if not line:
+                    continue
+                row = json.loads(line)
+                resolved = resolver(row["audio_path"])
+                if resolved is None or not resolved.exists():
+                    missing += 1
+                    continue
+                items.append({
+                    "id": f"audiomcq_{name}_{row_index}_{row.get('id')}",
+                    "question": row.get("question", ""),
+                    "choice": row.get("choices", []),
+                    "answer": row.get("answer", "N/A"),
+                    "question_type": row.get("question_type"),
+                    "audio_path": str(resolved),
+                })
+                loaded += 1
+        print(f"AudioMCQ[{name}]: {loaded} usable, {missing} skipped (audio not found)", file=sys.stderr)
+    return items
 
 
 def get_audio_path(item: Dict[str, Any]) -> str:
@@ -271,8 +362,12 @@ def main() -> None:
     parser.add_argument("--tool-config", type=Path, default=Path(__file__).resolve().parent / "tool_config.json")
     parser.add_argument("--input-json", type=Path, nargs="*", default=[],
                          help="dcase_subset.json-shaped QA list(s) to sample from (e.g. a DCASE 2025 subset).")
-    parser.add_argument("--sources", nargs="*", choices=["audioset", "vctk"], default=[],
+    parser.add_argument("--sources", nargs="*",
+                         choices=["audioset", "vctk", "clotho", "audiocaps", "compa_r"], default=[],
                          help="Raw audio pools (no QA attached) to sample from.")
+    parser.add_argument("--audiomcq", nargs="*", choices=["clotho", "audiocaps", "compa_r"], default=[],
+                         help="Pull QA-attached items (real question/choices/answer) from AudioMCQ's "
+                         "per-source-dataset jsonl exports instead of the corresponding --sources pool.")
     parser.add_argument("--audio-glob", nargs="*", default=[],
                          help="Extra glob pattern(s) for other raw audio pools, e.g. '/work/u1501463/my_corpus/**/*.wav'.")
     parser.add_argument("--num-samples", type=int, default=200)
@@ -298,9 +393,13 @@ def main() -> None:
     tool_weights_list = ta.tool_weights(tool_config, tool_names)
     print(f"Available tools ({len(tool_names)}): {tool_names}", file=sys.stderr)
 
-    items = load_qa_items(args.input_json) + collect_raw_audio_items(args.sources, args.audio_glob)
+    items = (
+        load_qa_items(args.input_json)
+        + load_audiomcq_items(args.audiomcq)
+        + collect_raw_audio_items(args.sources, args.audio_glob)
+    )
     if not items:
-        raise SystemExit("No input items -- pass --input-json and/or --sources/--audio-glob.")
+        raise SystemExit("No input items -- pass --input-json, --audiomcq, and/or --sources/--audio-glob.")
 
     for item in items:
         item.setdefault("id", f"sample_{uuid.uuid4().hex[:12]}")

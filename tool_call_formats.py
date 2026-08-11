@@ -66,6 +66,22 @@ class ToolCallFormat(ABC):
         unparseable garbage.
         """
 
+    def diagnose(self, raw_text: str) -> Dict[str, Any]:
+        """Tell apart "no tool call here" from "the wrapper tokens are broken
+        but the JSON underneath is fine" -- a distinction `parse_turn` can't
+        make, since a broken wrapper means it never finds the JSON at all and
+        falls through to its generic failure/`done` case.
+
+        Returns `{"tag_ok": bool, "content": Optional[dict]}`, where
+        `content` (when not `None`) is `{"tool_name": ..., "parameters":
+        {...}}` recovered from anywhere in `raw_text` regardless of wrapper
+        correctness. Formats with no wrapper-token convention to get wrong
+        (e.g. `LegacyJSONToolCallFormat`) keep the base implementation, which
+        reports `tag_ok=True` unconditionally -- there's no token-formatting
+        failure mode to flag for them.
+        """
+        return {"tag_ok": True, "content": None}
+
 
 class QwenToolCallFormat(ToolCallFormat):
     """Qwen2.5/Qwen3's official Hermes-style function-calling convention."""
@@ -112,6 +128,54 @@ class QwenToolCallFormat(ToolCallFormat):
         if not isinstance(parameters, dict):
             return None
         return {"tool_name": obj["name"], "parameters": dict(parameters)}
+
+    def diagnose(self, raw_text: str) -> Dict[str, Any]:
+        tag_ok = self._TOOL_CALL_RE.search(raw_text) is not None
+        content = None
+        if not tag_ok:
+            # Only bother recovering content when the strict tags didn't
+            # match -- when they did, `parse_turn` already has the answer.
+            content = self._extract_lenient_call(raw_text)
+        return {"tag_ok": tag_ok, "content": content}
+
+    @staticmethod
+    def _extract_lenient_call(raw_text: str) -> Optional[Dict[str, Any]]:
+        """Best-effort recovery of a `{"name": ..., "arguments": {...}}`
+        payload from anywhere in `raw_text`, tolerating a missing, truncated,
+        or typo'd `<tool_call>`/`</tool_call>` wrapper (e.g. `<\\tool_call>`).
+        Scans every balanced-brace `{...}` substring rather than a single
+        greedy regex, since the wrapper tokens/surrounding prose aren't valid
+        JSON and a naive `{.*}` match would swallow them into the candidate.
+        """
+        for candidate in QwenToolCallFormat._iter_json_objects(raw_text):
+            try:
+                obj = json.loads(candidate)
+            except json.JSONDecodeError:
+                continue
+            if not isinstance(obj, dict) or "name" not in obj:
+                continue
+            parameters = obj.get("arguments")
+            if not isinstance(parameters, dict):
+                continue
+            return {"tool_name": obj["name"], "parameters": dict(parameters)}
+        return None
+
+    @staticmethod
+    def _iter_json_objects(text: str):
+        """Yield each top-level balanced-brace `{...}` substring in `text`."""
+        start = None
+        depth = 0
+        for i, ch in enumerate(text):
+            if ch == "{":
+                if depth == 0:
+                    start = i
+                depth += 1
+            elif ch == "}":
+                if depth > 0:
+                    depth -= 1
+                    if depth == 0 and start is not None:
+                        yield text[start:i + 1]
+                        start = None
 
 
 class LegacyJSONToolCallFormat(ToolCallFormat):
