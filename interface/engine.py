@@ -72,6 +72,34 @@ def _suppress_padding_vocab_ids(engine: Any) -> None:
         engine.model.thinker.generation_config.suppress_tokens = dead_ids
 
 
+def _fix_qwen3_omni_moe_no_split_modules() -> None:
+    """`Qwen3OmniMoePreTrainedModel._no_split_modules` (transformers'
+    modeling_qwen3_omni_moe.py, as of transformers==5.12.1) lists a stale
+    class name, "Qwen3OmniMoeDecoderLayer", that doesn't exist anywhere in
+    the module -- the real decoder-layer classes are
+    "Qwen3OmniMoeThinkerTextDecoderLayer" / "Qwen3OmniMoeTalkerDecoderLayer"
+    / "Qwen3OmniMoeTalkerCodePredictorDecoderLayer", each correctly declared
+    on their own submodel's `_no_split_modules` -- but `device_map="auto"`
+    for the whole composite model is computed against this top-level (buggy)
+    list. Since it names no real class, accelerate never treats a decoder
+    layer as atomic and can split one layer's `self_attn`/`mlp` across two
+    GPUs, crashing the first `residual + hidden_states` that spans the
+    boundary. Patching the real names in before model load fixes device_map
+    placement for this model family; best-effort no-op if the class isn't
+    importable (e.g. a transformers version where this is already fixed).
+    """
+    try:
+        from transformers.models.qwen3_omni_moe.modeling_qwen3_omni_moe import Qwen3OmniMoePreTrainedModel
+    except ImportError:
+        return
+    Qwen3OmniMoePreTrainedModel._no_split_modules = [
+        "Qwen3OmniMoeThinkerTextDecoderLayer",
+        "Qwen3OmniMoeTalkerDecoderLayer",
+        "Qwen3OmniMoeTalkerCodePredictorDecoderLayer",
+        "Qwen3OmniMoeVisionBlock",
+    ]
+
+
 class SwiftEngine:
     def __init__(
         self,
@@ -91,6 +119,7 @@ class SwiftEngine:
 
         self._InferRequest = InferRequest
         adapters = [adapter_dir] if adapter_dir else None
+        _fix_qwen3_omni_moe_no_split_modules()
         # fp32 roughly doubles the footprint of the default half-precision load, so
         # a single 7B-class model no longer fits on one GPU -- `device_map="auto"`
         # (the run_eval.py default) shards the model across all visible GPUs via
@@ -110,17 +139,42 @@ class SwiftEngine:
         # it's kept out of the return value so the `-> str` contract this class shares
         # with `VLLMEngine` and `agent.ToolCallingAgent` doesn't change.
         self.last_decode_warnings: List[Dict[str, int]] = []
+        # Same as `last_decode_warnings`, but one list per sample from the most
+        # recent `generate_turns` call, in request order. See `generate_turns`.
+        self.last_decode_warnings_batch: List[List[Dict[str, int]]] = []
+
+    def generate_turns(self, batch: List[Dict[str, Any]]) -> List[str]:
+        """Batched sibling of `generate_turn`: decodes many independent
+        conversations in one `engine.infer` call instead of one call per
+        sample, so ms-swift's `TransformersEngine` can pack them into a
+        single forward pass -- the actual lever for GPU utilization on a
+        batch-capable accelerator like an H100, where one-sample-at-a-time
+        decoding leaves most of the SMs idle between tiny generate() calls.
+
+        `batch` is a list of `{"messages": [...], "audios": [...]}` dicts,
+        one per in-flight sample; returns the decoded text for each, in the
+        same order. `self.last_decode_warnings_batch` is populated in the
+        same order as a side effect (mirrors `last_decode_warnings`).
+        """
+        requests = [self._InferRequest(messages=item["messages"], audios=item["audios"]) for item in batch]
+        responses = self.engine.infer(requests, self.request_config)
+        decode_kwargs = {"skip_special_tokens": False, "spaces_between_special_tokens": False}
+        texts: List[str] = []
+        self.last_decode_warnings_batch = []
+        for response in responses:
+            choice = response.choices[0]
+            content = choice.message.content
+            warnings: List[Dict[str, int]] = []
+            if "�" in content and choice.token_ids:
+                warnings = _find_undecodable_tokens(self.engine.tokenizer, choice.token_ids, decode_kwargs)
+            texts.append(content)
+            self.last_decode_warnings_batch.append(warnings)
+        return texts
 
     def generate_turn(self, messages: List[Dict[str, Any]], audios: List[str]) -> str:
-        request = self._InferRequest(messages=messages, audios=audios)
-        response = self.engine.infer([request], self.request_config)[0]
-        choice = response.choices[0]
-        content = choice.message.content
-        self.last_decode_warnings = []
-        if "�" in content and choice.token_ids:
-            decode_kwargs = {"skip_special_tokens": False, "spaces_between_special_tokens": False}
-            self.last_decode_warnings = _find_undecodable_tokens(self.engine.tokenizer, choice.token_ids, decode_kwargs)
-        return content
+        text = self.generate_turns([{"messages": messages, "audios": audios}])[0]
+        self.last_decode_warnings = self.last_decode_warnings_batch[0]
+        return text
 
 
 class VLLMEngine:
@@ -182,6 +236,8 @@ class VLLMEngine:
         self._audio_cache: Dict[str, Any] = {}
         # See `SwiftEngine.last_decode_warnings` for what this holds and why.
         self.last_decode_warnings: List[Dict[str, int]] = []
+        # See `SwiftEngine.last_decode_warnings_batch` for what this holds and why.
+        self.last_decode_warnings_batch: List[List[Dict[str, int]]] = []
 
     def _load_audio(self, path: str, sr: int = 16000):
         if path not in self._audio_cache:
@@ -212,20 +268,37 @@ class VLLMEngine:
         parts.append("<|im_start|>assistant\n")
         return "".join(parts)
 
+    def generate_turns(self, batch: List[Dict[str, Any]]) -> List[str]:
+        """Batched sibling of `generate_turn`. vLLM already schedules whatever
+        it's given via continuous batching, but that only kicks in if more
+        than one request is in flight at once -- calling `generate_turn` once
+        per sample (as the sequential eval loop does) hands it exactly one
+        request at a time and wastes an H100's throughput. Passing the whole
+        list of in-flight samples through a single `llm.generate` call lets
+        vLLM actually batch the decode steps. Returns decoded text in the
+        same order as `batch`; see `SwiftEngine.generate_turns` for the
+        `last_decode_warnings_batch` side effect.
+        """
+        prompts = []
+        for item in batch:
+            prompt = self._render_prompt(item["messages"])
+            multi_modal_data = {"audio": [self._load_audio(p) for p in item["audios"]]}
+            prompts.append({"prompt": prompt, "multi_modal_data": multi_modal_data})
+        outputs = self.llm.generate(prompts, sampling_params=self._sampling_params, use_tqdm=False)
+        decode_kwargs = {"skip_special_tokens": False, "spaces_between_special_tokens": False}
+        texts: List[str] = []
+        self.last_decode_warnings_batch = []
+        for output in outputs:
+            completion = output.outputs[0]
+            text = completion.text.strip()
+            warnings: List[Dict[str, int]] = []
+            if "�" in text and completion.token_ids:
+                warnings = _find_undecodable_tokens(self.llm.get_tokenizer(), list(completion.token_ids), decode_kwargs)
+            texts.append(text)
+            self.last_decode_warnings_batch.append(warnings)
+        return texts
+
     def generate_turn(self, messages: List[Dict[str, Any]], audios: List[str]) -> str:
-        prompt = self._render_prompt(messages)
-        multi_modal_data = {"audio": [self._load_audio(p) for p in audios]}
-        outputs = self.llm.generate(
-            [{"prompt": prompt, "multi_modal_data": multi_modal_data}],
-            sampling_params=self._sampling_params,
-            use_tqdm=False,
-        )
-        completion = outputs[0].outputs[0]
-        text = completion.text.strip()
-        self.last_decode_warnings = []
-        if "�" in text and completion.token_ids:
-            decode_kwargs = {"skip_special_tokens": False, "spaces_between_special_tokens": False}
-            self.last_decode_warnings = _find_undecodable_tokens(
-                self.llm.get_tokenizer(), list(completion.token_ids), decode_kwargs
-            )
+        text = self.generate_turns([{"messages": messages, "audios": audios}])[0]
+        self.last_decode_warnings = self.last_decode_warnings_batch[0]
         return text

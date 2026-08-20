@@ -1,0 +1,5 @@
+Start: Tue Aug 11 21:47:45 CST 2026
+Node: hgpn03
+before conda
+run sh: `/home/u1501463/.conda/envs/swift/bin/python3.10 /home/u1501463/.conda/envs/swift/lib/python3.10/site-packages/swift/cli/rlhf.py --rlhf_type grpo --model /work/u1501463/Qwen2.5-7B-Instruct/ --adapters ../stage1_training/v5-20260808-112705/checkpoint-500/ --lora_rank 32 --lora_alpha 32 --dataset /work/u1501463/stage1_RL/train.jsonl --external_plugins reward.py --reward_funcs tool_format tool_accuracy tool_audio_closeness --reward_weights 0.2 0.5 0.3 --num_generations 4 --generation_batch_size 4 --max_length 4096`
+after conda

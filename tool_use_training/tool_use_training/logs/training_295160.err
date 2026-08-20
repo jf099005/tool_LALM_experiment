@@ -1,0 +1,624 @@
+-----------------
+loading CUDA 12.4
+-----------------
+
+[INFO:swift] Successfully registered `/home/u1501463/.conda/envs/swift/lib/python3.10/site-packages/swift/dataset/data/dataset_info.json`.
+[INFO:swift] rank: -1, local_rank: -1, world_size: 1, local_world_size: 1
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+[INFO:swift] Setting torch_dtype: torch.bfloat16
+[INFO:swift] Setting args.lazy_tokenize: False
+[INFO:swift] Setting args.gradient_accumulation_steps: 4
+[INFO:swift] Setting args.dataloader_num_workers: 1
+[INFO:swift] output_dir: /home/u1501463/tool_use_LALM/tool_use_training/stage1_training/v5-20260808-112705
+[INFO:swift] args: SftArguments(
+acc_strategy=token,
+accelerator_config={'dispatch_batches': False},
+adalora_beta1=0.85,
+adalora_beta2=0.85,
+adalora_deltaT=1,
+adalora_init_r=12,
+adalora_orth_reg_weight=0.5,
+adalora_target_r=8,
+adalora_tfinal=0,
+adalora_tinit=0,
+adam_beta1=0.9,
+adam_beta2=0.95,
+adam_epsilon=1e-08,
+adapter_act=gelu,
+adapter_length=128,
+adapters=[],
+add_non_thinking_prefix=True,
+add_version=True,
+agent_template=None,
+aligner_lr=None,
+attn_impl=None,
+auto_find_batch_size=False,
+average_tokens_across_devices=True,
+batch_eval_metrics=False,
+bf16=True,
+bf16_full_eval=False,
+bnb_4bit_compute_dtype=torch.bfloat16,
+bnb_4bit_quant_storage=None,
+bnb_4bit_quant_type=nf4,
+bnb_4bit_use_double_quant=True,
+boft_block_num=0,
+boft_block_size=4,
+boft_dropout=0.0,
+boft_n_butterfly_factor=1,
+cached_dataset=[],
+cached_val_dataset=[],
+callbacks=[],
+check_model=True,
+columns={},
+create_checkpoint_symlink=False,
+custom_dataset_info=[],
+custom_register_path=[],
+data_seed=42,
+dataloader_drop_last=False,
+dataloader_num_workers=None,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+dataset=['/work/u1501463/stage1/train.jsonl'],
+dataset_num_proc=1,
+dataset_shuffle=True,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_static_graph=None,
+ddp_timeout=18000000,
+debug=,
+deepspeed=None,
+deepspeed_autotp_size=None,
+device_groups=None,
+device_map=None,
+disable_auto_column_mapping=False,
+disable_ignore_empty_think=False,
+disable_tqdm=None,
+do_eval=False,
+do_predict=False,
+do_train=False,
+download_mode=reuse_dataset_if_exists,
+ds3_gather_for_generation=True,
+early_stop_interval=None,
+enable_channel_loss=False,
+enable_dft_loss=False,
+enable_jit_checkpoint=False,
+enable_npu_model_patch=True,
+enable_thinking=None,
+eval_accumulation_steps=None,
+eval_dataset=[],
+eval_dataset_args=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_generation_config=None,
+eval_limit=None,
+eval_metric=None,
+eval_on_start=False,
+eval_steps=100,
+eval_strategy=no,
+eval_use_evalscope=False,
+eval_use_gather_object=False,
+experts_impl=None,
+external_plugins=[],
+extra_eval_args=None,
+fourier_n_frequency=2000,
+fourier_scaling=300.0,
+fp16=False,
+fp16_full_eval=False,
+freeze_aligner=True,
+freeze_llm=False,
+freeze_parameters=[],
+freeze_parameters_ratio=0.0,
+freeze_parameters_regex=None,
+freeze_vit=True,
+fsdp=[],
+fsdp_config=None,
+full_determinism=False,
+galore_cos_threshold=0.4,
+galore_gamma_proj=2,
+galore_optim_per_parameter=False,
+galore_proj_bits=4,
+galore_proj_group_size=256,
+galore_proj_quant=False,
+galore_proj_type=std,
+galore_quantization=False,
+galore_queue_size=5,
+galore_rank=128,
+galore_scale=1.0,
+galore_target_modules=None,
+galore_update_proj_gap=50,
+galore_with_embedding=False,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gradient_accumulation_steps=None,
+gradient_checkpointing=True,
+gradient_checkpointing_kwargs=None,
+greater_is_better=False,
+group_by_length=False,
+hqq_axis=None,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=None,
+hub_revision=None,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_args_error=False,
+ignore_data_skip=False,
+include_for_metrics=[],
+include_num_input_tokens_seen=no,
+init_strategy=None,
+init_weights=True,
+interleave_prob=None,
+is_binary_loss_scale=None,
+label_names=None,
+label_smoothing_factor=0.0,
+lazy_tokenize=False,
+learning_rate=0.0001,
+length_column_name=length,
+liger_kernel_config=None,
+lisa_activated_layers=0,
+lisa_step_interval=20,
+llamapro_num_groups=None,
+llamapro_num_new_blocks=4,
+load_args=False,
+load_best_model_at_end=False,
+load_data_args=False,
+load_from_cache_file=False,
+local_rank=-1,
+local_repo_path=None,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=/home/u1501463/tool_use_LALM/tool_use_training/stage1_training/v5-20260808-112705/runs,
+logging_first_step=True,
+logging_nan_inf_filter=True,
+logging_steps=5,
+logging_strategy=steps,
+logprobs=False,
+lora_alpha=32,
+lora_bias=none,
+lora_dropout=0.05,
+lora_dtype=None,
+lora_ga_batch_size=2,
+lora_ga_direction=ArB2r,
+lora_ga_iters=2,
+lora_ga_max_length=1024,
+lora_ga_scale=stable,
+lora_ga_stable_gamma=16,
+lora_rank=32,
+lorap_lr_ratio=None,
+loss_scale=hermes,
+loss_type=None,
+lr_scheduler_kwargs=None,
+lr_scheduler_type=cosine,
+max_epochs=None,
+max_grad_norm=1.0,
+max_length=15000,
+max_memory={},
+max_model_len=None,
+max_new_tokens=64,
+max_pixels=None,
+max_shard_size=5GB,
+max_steps=-1,
+metric_for_best_model=loss,
+model=/work/u1501463/Qwen2.5-7B-Instruct,
+model_author=None,
+model_kwargs={},
+model_name=None,
+model_revision=None,
+model_type=qwen2,
+modules_to_save=[],
+neftune_noise_alpha=None,
+new_special_tokens=[],
+norm_bbox=None,
+num_beams=1,
+num_labels=None,
+num_train_epochs=3.0,
+optim=adamw_torch,
+optim_args=None,
+optim_target_modules=None,
+optimizer=None,
+output_dir=/home/u1501463/tool_use_LALM/tool_use_training/stage1_training/v5-20260808-112705,
+packing=False,
+packing_length=None,
+packing_num_proc=1,
+padding_free=False,
+padding_side=right,
+parallelism_config=None,
+per_device_eval_batch_size=1,
+per_device_train_batch_size=4,
+predict_with_generate=False,
+prediction_loss_only=False,
+preserve_thinking=None,
+problem_type=None,
+project=huggingface,
+push_to_hub=False,
+quant_bits=None,
+quant_method=None,
+ray_exp_name=None,
+reft_args=None,
+reft_intervention_type=LoreftIntervention,
+reft_layer_key=None,
+reft_layers=None,
+reft_rank=4,
+remove_unused_columns=True,
+repetition_penalty=None,
+report_to=['tensorboard'],
+response_prefix=None,
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+resume_only_model=False,
+rope_scaling=None,
+router_aux_loss_coef=0.0,
+run_name=/home/u1501463/tool_use_LALM/tool_use_training/stage1_training/v5-20260808-112705,
+safe_serialization=True,
+save_on_each_node=False,
+save_only_model=False,
+save_steps=100,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+sequence_parallel_size=1,
+shuffle_buffer_size=1000,
+skip_memory_metrics=True,
+sortish_sampler=False,
+split_dataset_ratio=0.0,
+stop_words=[],
+stopping_strategy=first_exhausted,
+stream=False,
+streaming=False,
+strict=False,
+structured_outputs_regex=None,
+swanlab_email_language=zh,
+swanlab_exp_name=None,
+swanlab_mode=cloud,
+swanlab_notification_method=None,
+swanlab_project=ms-swift,
+swanlab_receiver_email=None,
+swanlab_secret=None,
+swanlab_sender_email=None,
+swanlab_smtp_port=None,
+swanlab_smtp_server=None,
+swanlab_token=<SWANLAB_TOKEN>,
+swanlab_webhook_url=None,
+swanlab_workspace=None,
+system=None,
+target_modules=['all-linear'],
+target_parameters=None,
+target_regex=None,
+task_type=causal_lm,
+temperature=0.0,
+template=qwen2_5,
+template_backend=swift,
+tf32=None,
+top_k=None,
+top_logprobs=None,
+top_p=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_dtype=torch.bfloat16,
+torch_empty_cache_steps=None,
+trackio_bucket_id=None,
+trackio_space_id=None,
+trackio_static_space_id=None,
+train_dataloader_shuffle=True,
+train_sampling_strategy=random,
+trainable_parameters=[],
+trainable_parameters_regex=None,
+truncation_strategy=delete,
+tuner_backend=peft,
+tuner_type=lora,
+use_cache=False,
+use_chat_template=True,
+use_cpu=False,
+use_dora=False,
+use_flash_ckpt=False,
+use_galore=False,
+use_hf=False,
+use_liger_kernel=False,
+use_logits_to_keep=None,
+use_ray=False,
+use_rslora=False,
+use_swift_lora=False,
+val_dataset=[],
+val_dataset_shuffle=False,
+vera_d_initial=0.1,
+vera_dropout=0.0,
+vera_projection_prng_key=0,
+vera_rank=256,
+vit_gradient_checkpointing=False,
+vit_lr=None,
+warmup_ratio=None,
+warmup_steps=0,
+weight_decay=0.1,
+zero_hpz_partition_size=None,
+)
+[INFO:swift] Global seed set to 42
+[INFO:swift] model_kwargs: {'device_map': 'cuda:0', 'dtype': torch.bfloat16}
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:   0%|          | 1/339 [00:00<02:38,  2.14it/s]Loading weights:   4%|▍         | 14/339 [00:00<00:10, 32.01it/s]Loading weights:   8%|▊         | 26/339 [00:00<00:05, 53.50it/s]Loading weights:  11%|█         | 36/339 [00:00<00:04, 65.55it/s]Loading weights:  14%|█▎        | 46/339 [00:00<00:03, 73.85it/s]Loading weights:  18%|█▊        | 62/339 [00:00<00:02, 94.78it/s]Loading weights:  22%|██▏       | 76/339 [00:01<00:02, 92.63it/s]Loading weights:  27%|██▋       | 90/339 [00:01<00:02, 98.95it/s]Loading weights:  30%|███       | 102/339 [00:01<00:02, 103.99it/s]Loading weights:  34%|███▎      | 114/339 [00:01<00:02, 106.24it/s]Loading weights:  37%|███▋      | 126/339 [00:01<00:01, 109.41it/s]Loading weights:  42%|████▏     | 142/339 [00:01<00:01, 121.73it/s]Loading weights:  46%|████▌     | 156/339 [00:01<00:01, 125.86it/s]Loading weights:  50%|████▉     | 169/339 [00:01<00:01, 124.15it/s]Loading weights:  54%|█████▍    | 183/339 [00:02<00:01, 127.10it/s]Loading weights:  58%|█████▊    | 196/339 [00:02<00:01, 123.79it/s]Loading weights:  62%|██████▏   | 209/339 [00:02<00:01, 106.68it/s]Loading weights:  65%|██████▌   | 222/339 [00:02<00:01, 110.45it/s]Loading weights:  69%|██████▉   | 234/339 [00:02<00:00, 112.08it/s]Loading weights:  73%|███████▎  | 246/339 [00:02<00:00, 112.03it/s]Loading weights:  76%|███████▌  | 258/339 [00:02<00:00, 113.34it/s]Loading weights:  80%|████████  | 272/339 [00:02<00:00, 120.80it/s]Loading weights:  84%|████████▍ | 286/339 [00:02<00:00, 125.47it/s]Loading weights:  88%|████████▊ | 299/339 [00:03<00:00, 125.70it/s]Loading weights:  92%|█████████▏| 312/339 [00:03<00:00, 121.10it/s]Loading weights:  96%|█████████▌| 325/339 [00:03<00:00, 123.58it/s]Loading weights: 100%|██████████| 339/339 [00:03<00:00, 102.33it/s]
+[INFO:swift] model_info: ModelInfo(model_type='qwen2', model_dir='/work/u1501463/Qwen2.5-7B-Instruct', torch_dtype=torch.bfloat16, max_model_len=32768, quant_method=None, quant_bits=None, rope_scaling={'rope_theta': 1000000.0, 'rope_type': 'default'}, is_moe_model=False, is_multimodal=False, config=Qwen2Config {
+  "architectures": [
+    "Qwen2ForCausalLM"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 151643,
+  "dtype": "bfloat16",
+  "eos_token_id": 151645,
+  "hidden_act": "silu",
+  "hidden_size": 3584,
+  "initializer_range": 0.02,
+  "intermediate_size": 18944,
+  "layer_types": [
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention",
+    "full_attention"
+  ],
+  "max_position_embeddings": 32768,
+  "max_window_layers": 28,
+  "model_type": "qwen2",
+  "num_attention_heads": 28,
+  "num_hidden_layers": 28,
+  "num_key_value_heads": 4,
+  "pad_token_id": null,
+  "rms_norm_eps": 1e-06,
+  "rope_parameters": {
+    "rope_theta": 1000000.0,
+    "rope_type": "default"
+  },
+  "sliding_window": null,
+  "tie_word_embeddings": false,
+  "transformers_version": "5.12.1",
+  "use_cache": true,
+  "use_sliding_window": false,
+  "vocab_size": 152064
+}
+, task_type='causal_lm', num_labels=None)
+[INFO:swift] model.generation_config: GenerationConfig {
+  "bos_token_id": 151643,
+  "do_sample": false,
+  "eos_token_id": [
+    151645,
+    151643
+  ],
+  "length_penalty": 1.0,
+  "max_new_tokens": 64,
+  "num_beams": 1,
+  "pad_token_id": 151643,
+  "repetition_penalty": 1.05,
+  "temperature": 1.0,
+  "top_k": 50,
+  "top_p": 1.0
+}
+
+[INFO:swift] default_system: 'You are Qwen, created by Alibaba Cloud. You are a helpful assistant.'
+[INFO:swift] max_length: 15000
+[INFO:swift] response_prefix: None
+[INFO:swift] agent_template: hermes
+[INFO:swift] Start time of running main: 2026-08-08 11:27:09.735400
+[INFO:swift] swift.__version__: 4.3.1
+Map (num_proc=1): 100%|██████████| 10000/10000 [00:00<?, ? examples/s]Map (num_proc=1): 11000 examples [00:00, 8376.19 examples/s]          Map (num_proc=1): 13000 examples [00:00, 13355.53 examples/s]Map (num_proc=1): 15000 examples [00:00, 15326.24 examples/s]Map (num_proc=1): 17000 examples [00:00, 8783.70 examples/s] Map (num_proc=1): 19000 examples [00:00, 10793.70 examples/s]Map (num_proc=1): 20000 examples [00:00, 10019.13 examples/s]
+Map (num_proc=1):   0%|          | 0/10000 [00:00<?, ? examples/s]Map (num_proc=1):  10%|█         | 1000/10000 [00:05<00:51, 176.22 examples/s]Map (num_proc=1):  20%|██        | 2000/10000 [00:09<00:36, 221.25 examples/s]Map (num_proc=1):  30%|███       | 3000/10000 [00:13<00:29, 235.41 examples/s]Map (num_proc=1):  40%|████      | 4000/10000 [00:17<00:24, 247.51 examples/s]Map (num_proc=1):  50%|█████     | 5000/10000 [00:20<00:19, 255.55 examples/s]Map (num_proc=1):  60%|██████    | 6000/10000 [00:24<00:15, 259.91 examples/s]Map (num_proc=1):  70%|███████   | 7000/10000 [00:28<00:11, 262.90 examples/s]Map (num_proc=1):  80%|████████  | 8000/10000 [00:31<00:07, 264.76 examples/s]Map (num_proc=1):  90%|█████████ | 9000/10000 [00:35<00:03, 265.65 examples/s]Map (num_proc=1): 100%|██████████| 10000/10000 [00:39<00:00, 266.33 examples/s]Map (num_proc=1): 100%|██████████| 10000/10000 [00:39<00:00, 253.41 examples/s]
+[INFO:swift] train_dataset: Dataset({
+    features: ['messages', 'audios', 'lengths'],
+    num_rows: 10000
+})
+[INFO:swift] val_dataset: None
+[INFO:swift] [INPUT_IDS] [151644, 8948, 198, 2610, 525, 264, 10950, 17847, 382, 2, 13852, 271, 2610, 1231, 1618, 825, 476, 803, 5746, 311, 7789, 448, 279, 1196, 3239, 382, 2610, 525, 3897, 448, 729, 32628, 2878, 366, 15918, 1472, 15918, 29, 11874, 9492, 510, 27, 15918, 397, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 564, 5654, 497, 330, 4684, 788, 330, 28959, 264, 88330, 7699, 10238, 504, 264, 2530, 1034, 1948, 5189, 24756, 25, 8035, 25, 1220, 744, 3821, 3161, 323, 835, 48781, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 16736, 23338, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 16736, 6213, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 16736, 23338, 497, 330, 16736, 6213, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 5183, 68189, 497, 330, 4684, 788, 330, 28497, 11980, 13951, 476, 1687, 35835, 311, 264, 88330, 7699, 1034, 1667, 279, 11882, 12111, 13, 44089, 7699, 842, 323, 12111, 26, 10101, 11980, 18588, 323, 26443, 2524, 8692, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 19688, 788, 5212, 1313, 788, 330, 917, 497, 330, 9018, 788, 4383, 67082, 3461, 5228, 26425, 497, 330, 16632, 798, 497, 330, 3047, 666, 49222, 497, 330, 41562, 1341, 2137, 330, 52218, 18588, 788, 5212, 1313, 788, 330, 4082, 14345, 330, 82, 47837, 788, 5212, 1313, 788, 330, 4082, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 19688, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 53238, 22230, 497, 330, 4684, 788, 330, 24841, 279, 9649, 315, 458, 7699, 1034, 320, 54, 8093, 476, 9412, 18, 8, 553, 264, 1372, 315, 5234, 275, 3154, 2041, 10018, 1181, 8090, 11, 1667, 72346, 64, 13, 44089, 7699, 842, 323, 308, 22731, 320, 325, 1763, 3154, 26, 6785, 28635, 705, 11, 8225, 28635, 1495, 568, 497, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 77, 22731, 788, 5212, 1313, 788, 330, 4082, 497, 330, 4684, 788, 330, 2833, 315, 5234, 275, 3154, 311, 6407, 13, 43903, 2750, 6407, 705, 11, 8225, 2750, 6407, 1495, 1189, 2137, 330, 39330, 5678, 70135, 523, 788, 5212, 1313, 788, 330, 11662, 497, 330, 4684, 788, 330, 2833, 315, 7354, 817, 73932, 320, 2258, 220, 16, 17, 568, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 77, 22731, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 1726, 22504, 54149, 497, 330, 4684, 788, 330, 28497, 264, 855, 36512, 54149, 4051, 311, 264, 88330, 7699, 10238, 311, 7760, 1550, 78312, 2213, 323, 7269, 55977, 8172, 13, 44089, 7699, 842, 323, 24756, 25, 8035, 25, 1220, 744, 3821, 48781, 369, 7699, 23338, 323, 7699, 6213, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 16736, 23338, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 16736, 6213, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 64650, 788, 5212, 1313, 788, 330, 4082, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 16736, 23338, 497, 330, 16736, 6213, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 1678, 1261, 10209, 497, 330, 4684, 788, 330, 1462, 5477, 10209, 458, 7699, 1034, 320, 54, 8093, 476, 9412, 18, 8, 553, 264, 8356, 4379, 2041, 10018, 1181, 9649, 11, 1667, 72346, 64, 13, 44089, 7699, 842, 323, 4379, 320, 7698, 861, 220, 16, 24722, 705, 14, 8676, 724, 11, 4379, 366, 220, 16, 69170, 1495, 14, 4129, 724, 568, 497, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 7698, 788, 5212, 1313, 788, 330, 4082, 497, 330, 4684, 788, 330, 53898, 8168, 13, 24979, 861, 220, 16, 4628, 705, 320, 8676, 268, 1215, 2750, 366, 220, 16, 6301, 1495, 320, 4129, 268, 568, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 7698, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 10666, 643, 321, 763, 497, 330, 4684, 788, 330, 25656, 21162, 504, 279, 7167, 323, 835, 315, 264, 88330, 7699, 10238, 13, 44089, 7699, 842, 323, 24756, 25, 8035, 25, 1220, 744, 3821, 48781, 369, 7699, 23338, 323, 7699, 6213, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 16736, 23338, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 16736, 6213, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 28902, 8685, 788, 5212, 1313, 788, 330, 4082, 14345, 330, 6763, 5118, 788, 5212, 1313, 788, 330, 11662, 14345, 330, 25115, 5118, 788, 5212, 1313, 788, 330, 11662, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 16736, 23338, 497, 330, 16736, 6213, 1341, 3417, 532, 522, 15918, 1339, 2461, 1817, 729, 1618, 11, 470, 264, 2951, 1633, 448, 729, 829, 323, 5977, 2878, 220, 151657, 151658, 11874, 9492, 510, 151657, 198, 4913, 606, 788, 366, 1688, 11494, 8066, 330, 16370, 788, 366, 2116, 56080, 40432, 31296, 151658, 151645, 198, 151644, 872, 198, 9885, 264, 8500, 315, 5392, 6738, 429, 14043, 279, 2530, 14633, 311, 279, 2169, 14633, 382, 3608, 14633, 25, 366, 16736, 62, 15, 1784, 16736, 397, 6397, 14633, 25, 366, 16736, 62, 16, 1784, 16736, 29, 151645, 198, 151644, 77091, 198, 54931, 311, 2176, 26111, 11, 279, 82140, 43542, 25, 279, 2169, 11088, 1182, 10596, 1091, 279, 1482, 7699, 13, 4120, 5477, 10209, 287, 553, 264, 8168, 315, 220, 16, 13, 17, 1265, 4628, 705, 279, 1482, 7699, 311, 5285, 1105, 624, 151657, 198, 4913, 606, 788, 330, 1678, 1261, 10209, 497, 330, 16370, 788, 5212, 7698, 788, 220, 16, 13, 17, 11, 330, 16736, 842, 788, 330, 16736, 62, 15, 95642, 151658, 151645, 198, 151644, 872, 198, 27, 14172, 9655, 397, 5097, 315, 3019, 220, 16, 25, 366, 16736, 62, 17, 1784, 16736, 397, 522, 14172, 9655, 29, 151645, 198, 151644, 77091, 198, 6262, 4583, 13, 151645, 198]
+[INFO:swift] [INPUT] <|im_start|>system
+You are a helpful assistant.
+
+# Tools
+
+You may call one or more functions to assist with the user query.
+
+You are provided with function signatures within <tools></tools> XML tags:
+<tools>
+{"type": "function", "function": {"name": "clipping", "description": "Extract a WAV audio segment from a source file between specified HH:MM:SS.mmm begin and end timestamps.", "parameters": {"type": "object", "properties": {"audio_begin": {"type": "string", "format": "HH:MM:SS.mmm"}, "audio_end": {"type": "string", "format": "HH:MM:SS.mmm"}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["audio_begin", "audio_end"]}}}
+{"type": "function", "function": {"name": "denoise", "description": "Apply noise reduction or echo cancellation to a WAV audio file using the chosen algorithm. Requires audio_id and algorithm; optional noise_factor and sensitivity control processing.", "parameters": {"type": "object", "properties": {"algorithm": {"type": "string", "enum": ["spectral_subtraction", "wiener", "echo_cancellation", "adaptive"]}, "noise_factor": {"type": "number"}, "sensitivity": {"type": "number"}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["algorithm"]}}}
+{"type": "function", "function": {"name": "pitch_shift", "description": "Shift the pitch of an audio file (WAV or MP3) by a number of semitones without changing its duration, using librosa. Requires audio_id and n_steps (semitones; positive shifts up, negative shifts down).", "parameters": {"type": "object", "properties": {"n_steps": {"type": "number", "description": "Number of semitones to shift. Positive values shift up, negative values shift down."}, "bins_per_octave": {"type": "integer", "description": "Number of steps per octave (default 12)."}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["n_steps"]}}}
+{"type": "function", "function": {"name": "pre_emphasis", "description": "Apply a pre-emphasis filter to a WAV audio segment to boost high-frequency content and improve spectral balance. Requires audio_id and HH:MM:SS.mmm timestamps for audio_begin and audio_end.", "parameters": {"type": "object", "properties": {"audio_begin": {"type": "string", "format": "HH:MM:SS.mmm"}, "audio_end": {"type": "string", "format": "HH:MM:SS.mmm"}, "coef": {"type": "number"}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["audio_begin", "audio_end"]}}}
+{"type": "function", "function": {"name": "time_stretch", "description": "Time-stretch an audio file (WAV or MP3) by a fixed rate without changing its pitch, using librosa. Requires audio_id and rate (rate > 1 speeds up/shortens, rate < 1 slows down/lengthens).", "parameters": {"type": "object", "properties": {"rate": {"type": "number", "description": "Stretch factor. Values > 1 speed up (shorten); values < 1 slow down (lengthen)."}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["rate"]}}}
+{"type": "function", "function": {"name": "trim_silence", "description": "Trim silence from the beginning and end of a WAV audio segment. Requires audio_id and HH:MM:SS.mmm timestamps for audio_begin and audio_end.", "parameters": {"type": "object", "properties": {"audio_begin": {"type": "string", "format": "HH:MM:SS.mmm"}, "audio_end": {"type": "string", "format": "HH:MM:SS.mmm"}, "threshold_db": {"type": "number"}, "frame_length": {"type": "integer"}, "hop_length": {"type": "integer"}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["audio_begin", "audio_end"]}}}
+</tools>
+
+For each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:
+<tool_call>
+{"name": <function-name>, "arguments": <args-json-object>}
+</tool_call><|im_end|>
+<|im_start|>user
+Find a sequence of tool calls that maps the source recording to the target recording.
+
+Source recording: <audio_0><audio>
+Target recording: <audio_1><audio><|im_end|>
+<|im_start|>assistant
+Listening to both clips, the pacing differs: the target plays back faster than the current audio. Time-stretching by a factor of 1.2 should speed up the current audio to align them.
+<tool_call>
+{"name": "time_stretch", "arguments": {"rate": 1.2, "audio_id": "audio_0"}}
+</tool_call><|im_end|>
+<|im_start|>user
+<tool_response>
+Output of step 1: <audio_2><audio>
+</tool_response><|im_end|>
+<|im_start|>assistant
+Task complete.<|im_end|>
+
+[INFO:swift] [LABELS_IDS] [-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 54931, 311, 2176, 26111, 11, 279, 82140, 43542, 25, 279, 2169, 11088, 1182, 10596, 1091, 279, 1482, 7699, 13, 4120, 5477, 10209, 287, 553, 264, 8168, 315, 220, 16, 13, 17, 1265, 4628, 705, 279, 1482, 7699, 311, 5285, 1105, 624, 151657, 198, 4913, 606, 788, 330, 1678, 1261, 10209, 497, 330, 16370, 788, 5212, 7698, 788, 220, 16, 13, 17, 11, 330, 16736, 842, 788, 330, 16736, 62, 15, 95642, 151658, 151645, 198, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 6262, 4583, 13, 151645, 198]
+[INFO:swift] [LABELS] [-100 * 1342]Listening to both clips, the pacing differs: the target plays back faster than the current audio. Time-stretching by a factor of 1.2 should speed up the current audio to align them.
+<tool_call>
+{"name": "time_stretch", "arguments": {"rate": 1.2, "audio_id": "audio_0"}}
+</tool_call><|im_end|>
+[-100 * 29]Task complete.<|im_end|>
+
+[INFO:swift] [LOSS_SCALE] [0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 1, 1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+[INFO:swift] Dataset Token Length: 1469.898400±22.678000, min=1431.000000, max=1526.000000, size=10000
+[INFO:swift] The SftArguments will be saved in: /home/u1501463/tool_use_LALM/tool_use_training/stage1_training/v5-20260808-112705/args.json
+[INFO:swift] lora_config: LoraConfig(task_type='CAUSAL_LM', peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, peft_version='0.19.1', base_model_name_or_path='/work/u1501463/Qwen2.5-7B-Instruct', revision=None, inference_mode=False, r=32, target_modules={'o_proj', 'k_proj', 'up_proj', 'gate_proj', 'v_proj', 'down_proj', 'q_proj'}, exclude_modules=None, lora_alpha=32, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=[], init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', trainable_token_indices=None, loftq_config={}, eva_config=None, corda_config=None, lora_ga_config=None, use_dora=False, alora_invocation_tokens=None, use_qalora=False, qalora_group_size=16, layer_replication=None, runtime_config=LoraRuntimeConfig(ephemeral_gpu_offload=False), lora_bias=False, target_parameters=None, use_bdlora=None, arrow_config=None, ensure_weight_tying=False, lora_dtype=None, lorap_lr_ratio=None, lorap_emb_lr=1e-06)
+[INFO:swift] model: PeftModelForCausalLM(
+  (base_model): LoraModel(
+    (model): Qwen2ForCausalLM(
+      (model): Qwen2Model(
+        (embed_tokens): Embedding(152064, 3584)
+        (layers): ModuleList(
+          (0-27): 28 x Qwen2DecoderLayer(
+            (self_attn): Qwen2Attention(
+              (q_proj): lora.Linear(
+                (base_layer): Linear(in_features=3584, out_features=3584, bias=True)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=3584, out_features=32, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=32, out_features=3584, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (k_proj): lora.Linear(
+                (base_layer): Linear(in_features=3584, out_features=512, bias=True)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=3584, out_features=32, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=32, out_features=512, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (v_proj): lora.Linear(
+                (base_layer): Linear(in_features=3584, out_features=512, bias=True)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=3584, out_features=32, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=32, out_features=512, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (o_proj): lora.Linear(
+                (base_layer): Linear(in_features=3584, out_features=3584, bias=False)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=3584, out_features=32, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=32, out_features=3584, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+            )
+            (mlp): Qwen2MLP(
+              (gate_proj): lora.Linear(
+                (base_layer): Linear(in_features=3584, out_features=18944, bias=False)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=3584, out_features=32, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=32, out_features=18944, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (up_proj): lora.Linear(
+                (base_layer): Linear(in_features=3584, out_features=18944, bias=False)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=3584, out_features=32, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=32, out_features=18944, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (down_proj): lora.Linear(
+                (base_layer): Linear(in_features=18944, out_features=3584, bias=False)
+                (lora_dropout): ModuleDict(
+                  (default): Dropout(p=0.05, inplace=False)
+                )
+                (lora_A): ModuleDict(
+                  (default): Linear(in_features=18944, out_features=32, bias=False)
+                )
+                (lora_B): ModuleDict(
+                  (default): Linear(in_features=32, out_features=3584, bias=False)
+                )
+                (lora_embedding_A): ParameterDict()
+                (lora_embedding_B): ParameterDict()
+                (lora_magnitude_vector): ModuleDict()
+              )
+              (act_fn): SiLUActivation()
+            )
+            (input_layernorm): Qwen2RMSNorm((3584,), eps=1e-06)
+            (post_attention_layernorm): Qwen2RMSNorm((3584,), eps=1e-06)
+          )
+        )
+        (norm): Qwen2RMSNorm((3584,), eps=1e-06)
+        (rotary_emb): Qwen2RotaryEmbedding()
+      )
+      (lm_head): Linear(in_features=3584, out_features=152064, bias=False)
+    )
+  )
+)
+[INFO:swift] model_parameter_info: PeftModelForCausalLM: 7696.3569M Params (80.7404M Trainable [1.0491%]), 0.0001M Buffers.
+[RANK 0] Detected kernel version 4.18.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[INFO:swift] use_reentrant: True
+[INFO:swift] The logging file will be saved in: /home/u1501463/tool_use_LALM/tool_use_training/stage1_training/v5-20260808-112705/logging.jsonl
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None}.
+Train:   0%|          | 0/1875 [00:00<?, ?it/s][INFO:swift] use_logits_to_keep: True
+Train:   0%|          | 1/1875 [00:04<2:21:57,  4.54s/it]                                                         Train:   0%|          | 1/1875 [00:04<2:21:57,  4.54s/it]Train:   0%|          | 1/1875 [00:04<2:21:57,  4.54s/it]Train:   0%|          | 2/1875 [00:08<2:12:14,  4.24s/it]Train:   0%|          | 3/1875 [00:12<2:08:41,  4.12s/it]Train:   0%|          | 4/1875 [00:16<2:07:18,  4.08s/it]Train:   0%|          | 5/1875 [00:20<2:06:33,  4.06s/it]                                                         Train:   0%|          | 5/1875 [00:20<2:06:33,  4.06s/it]Train:   0%|          | 5/1875 [00:20<2:06:33,  4.06s/it]Train:   0%|          | 6/1875 [00:24<2:05:58,  4.04s/it]Train:   0%|          | 7/1875 [00:28<2:05:17,  4.02s/it]Train:   0%|          | 8/1875 [00:32<2:04:58,  4.02s/it]Train:   0%|          | 9/1875 [00:36<2:05:01,  4.02s/it]Train:   1%|          | 10/1875 [00:40<2:04:56,  4.02s/it]                                                          Train:   1%|          | 10/1875 [00:40<2:04:56,  4.02s/it]Train:   1%|          | 10/1875 [00:40<2:04:56,  4.02s/it]Train:   1%|          | 11/1875 [00:44<2:04:56,  4.02s/it]Train:   1%|          | 12/1875 [00:48<2:05:01,  4.03s/it]Train:   1%|          | 13/1875 [00:52<2:04:57,  4.03s/it]Train:   1%|          | 14/1875 [00:56<2:04:53,  4.03s/it]Train:   1%|          | 15/1875 [01:00<2:04:53,  4.03s/it]                                                          Train:   1%|          | 15/1875 [01:00<2:04:53,  4.03s/it]Train:   1%|          | 15/1875 [01:00<2:04:53,  4.03s/it]Train:   1%|          | 16/1875 [01:04<2:04:39,  4.02s/it]Train:   1%|          | 17/1875 [01:08<2:04:29,  4.02s/it]Train:   1%|          | 18/1875 [01:12<2:04:07,  4.01s/it]Train:   1%|          | 19/1875 [01:16<2:04:10,  4.01s/it]Train:   1%|          | 20/1875 [01:20<2:04:01,  4.01s/it]                                                          Train:   1%|          | 20/1875 [01:20<2:04:01,  4.01s/it]Train:   1%|          | 20/1875 [01:20<2:04:01,  4.01s/it]Train:   1%|          | 21/1875 [01:24<2:03:44,  4.00s/it]Train:   1%|          | 22/1875 [01:28<2:03:49,  4.01s/it]Train:   1%|          | 23/1875 [01:32<2:03:29,  4.00s/it]Train:   1%|▏         | 24/1875 [01:36<2:03:37,  4.01s/it]Train:   1%|▏         | 25/1875 [01:40<2:03:44,  4.01s/it]                                                          Train:   1%|▏         | 25/1875 [01:40<2:03:44,  4.01s/it]Train:   1%|▏         | 25/1875 [01:40<2:03:44,  4.01s/it]Train:   1%|▏         | 26/1875 [01:44<2:03:46,  4.02s/it]Train:   1%|▏         | 27/1875 [01:48<2:03:41,  4.02s/it]Train:   1%|▏         | 28/1875 [01:52<2:03:32,  4.01s/it]Train:   2%|▏         | 29/1875 [01:56<2:03:34,  4.02s/it]Train:   2%|▏         | 30/1875 [02:00<2:03:28,  4.02s/it]                                                          Train:   2%|▏         | 30/1875 [02:00<2:03:28,  4.02s/it]Train:   2%|▏         | 30/1875 [02:00<2:03:28,  4.02s/it]Train:   2%|▏         | 31/1875 [02:04<2:02:57,  4.00s/it]Train:   2%|▏         | 32/1875 [02:08<2:02:57,  4.00s/it]Train:   2%|▏         | 33/1875 [02:12<2:03:16,  4.02s/it]Train:   2%|▏         | 34/1875 [02:16<2:03:12,  4.02s/it]Train:   2%|▏         | 35/1875 [02:20<2:02:51,  4.01s/it]                                                          Train:   2%|▏         | 35/1875 [02:20<2:02:51,  4.01s/it]Train:   2%|▏         | 35/1875 [02:20<2:02:51,  4.01s/it]Train:   2%|▏         | 36/1875 [02:24<2:02:38,  4.00s/it]Train:   2%|▏         | 37/1875 [02:28<2:02:17,  3.99s/it]Train:   2%|▏         | 38/1875 [02:32<2:02:08,  3.99s/it]Train:   2%|▏         | 39/1875 [02:36<2:02:29,  4.00s/it]Train:   2%|▏         | 40/1875 [02:40<2:02:23,  4.00s/it]                                                          Train:   2%|▏         | 40/1875 [02:40<2:02:23,  4.00s/it]Train:   2%|▏         | 40/1875 [02:40<2:02:23,  4.00s/it]Train:   2%|▏         | 41/1875 [02:44<2:02:35,  4.01s/it]Train:   2%|▏         | 42/1875 [02:48<2:02:29,  4.01s/it]Train:   2%|▏         | 43/1875 [02:52<2:02:26,  4.01s/it]Train:   2%|▏         | 44/1875 [02:56<2:02:08,  4.00s/it]Train:   2%|▏         | 45/1875 [03:00<2:01:45,  3.99s/it]                                                          Train:   2%|▏         | 45/1875 [03:00<2:01:45,  3.99s/it]Train:   2%|▏         | 45/1875 [03:00<2:01:45,  3.99s/it]Train:   2%|▏         | 46/1875 [03:04<2:02:07,  4.01s/it]Train:   3%|▎         | 47/1875 [03:09<2:02:08,  4.01s/it]Train:   3%|▎         | 48/1875 [03:13<2:02:08,  4.01s/it]Train:   3%|▎         | 49/1875 [03:16<2:01:37,  4.00s/it]Train:   3%|▎         | 50/1875 [03:20<2:01:28,  3.99s/it]                                                          Train:   3%|▎         | 50/1875 [03:20<2:01:28,  3.99s/it]Train:   3%|▎         | 50/1875 [03:20<2:01:28,  3.99s/it]Train:   3%|▎         | 51/1875 [03:24<2:01:30,  4.00s/it]Train:   3%|▎         | 52/1875 [03:29<2:01:47,  4.01s/it]Train:   3%|▎         | 53/1875 [03:33<2:01:56,  4.02s/it]Train:   3%|▎         | 54/1875 [03:37<2:01:56,  4.02s/it]Train:   3%|▎         | 55/1875 [03:41<2:01:53,  4.02s/it]                                                          Train:   3%|▎         | 55/1875 [03:41<2:01:53,  4.02s/it]Train:   3%|▎         | 55/1875 [03:41<2:01:53,  4.02s/it]Train:   3%|▎         | 56/1875 [03:45<2:01:55,  4.02s/it]Train:   3%|▎         | 57/1875 [03:49<2:01:45,  4.02s/it]Train:   3%|▎         | 58/1875 [03:53<2:01:35,  4.02s/it]Train:   3%|▎         | 59/1875 [03:57<2:01:45,  4.02s/it]Train:   3%|▎         | 60/1875 [04:01<2:01:50,  4.03s/it]                                                          Train:   3%|▎         | 60/1875 [04:01<2:01:50,  4.03s/it]Train:   3%|▎         | 60/1875 [04:01<2:01:50,  4.03s/it]Train:   3%|▎         | 61/1875 [04:05<2:01:45,  4.03s/it]Train:   3%|▎         | 62/1875 [04:09<2:01:37,  4.03s/it]Train:   3%|▎         | 63/1875 [04:13<2:01:08,  4.01s/it]Train:   3%|▎         | 64/1875 [04:17<2:01:06,  4.01s/it]Train:   3%|▎         | 65/1875 [04:21<2:01:09,  4.02s/it]                                                          Train:   3%|▎         | 65/1875 [04:21<2:01:09,  4.02s/it]Train:   3%|▎         | 65/1875 [04:21<2:01:09,  4.02s/it]Train:   4%|▎         | 66/1875 [04:25<2:01:14,  4.02s/it]Train:   4%|▎         | 67/1875 [04:29<2:01:14,  4.02s/it]Train:   4%|▎         | 68/1875 [04:33<2:01:02,  4.02s/it]Train:   4%|▎         | 69/1875 [04:37<2:01:04,  4.02s/it]Train:   4%|▎         | 70/1875 [04:41<2:00:40,  4.01s/it]                                                          Train:   4%|▎         | 70/1875 [04:41<2:00:40,  4.01s/it]Train:   4%|▎         | 70/1875 [04:41<2:00:40,  4.01s/it]Train:   4%|▍         | 71/1875 [04:45<2:00:39,  4.01s/it]Train:   4%|▍         | 72/1875 [04:49<2:00:34,  4.01s/it]Train:   4%|▍         | 73/1875 [04:53<2:00:30,  4.01s/it]Train:   4%|▍         | 74/1875 [04:57<2:00:48,  4.02s/it]Train:   4%|▍         | 75/1875 [05:01<2:00:40,  4.02s/it]                                                          Train:   4%|▍         | 75/1875 [05:01<2:00:40,  4.02s/it]Train:   4%|▍         | 75/1875 [05:01<2:00:40,  4.02s/it]Train:   4%|▍         | 76/1875 [05:05<2:00:20,  4.01s/it]Train:   4%|▍         | 77/1875 [05:09<2:00:26,  4.02s/it]Train:   4%|▍         | 78/1875 [05:13<2:00:17,  4.02s/it]Train:   4%|▍         | 79/1875 [05:17<1:59:58,  4.01s/it]Train:   4%|▍         | 80/1875 [05:21<1:59:59,  4.01s/it]                                                          Train:   4%|▍         | 80/1875 [05:21<1:59:59,  4.01s/it]Train:   4%|▍         | 80/1875 [05:21<1:59:59,  4.01s/it]Train:   4%|▍         | 81/1875 [05:25<1:59:34,  4.00s/it]Train:   4%|▍         | 82/1875 [05:29<1:58:55,  3.98s/it]Train:   4%|▍         | 83/1875 [05:33<1:59:15,  3.99s/it]Train:   4%|▍         | 84/1875 [05:37<1:59:04,  3.99s/it]Train:   5%|▍         | 85/1875 [05:41<1:59:20,  4.00s/it]                                                          Train:   5%|▍         | 85/1875 [05:41<1:59:20,  4.00s/it]Train:   5%|▍         | 85/1875 [05:41<1:59:20,  4.00s/it]Train:   5%|▍         | 86/1875 [05:45<1:59:35,  4.01s/it]Train:   5%|▍         | 87/1875 [05:49<1:59:41,  4.02s/it]Train:   5%|▍         | 88/1875 [05:53<1:59:20,  4.01s/it]Train:   5%|▍         | 89/1875 [05:57<1:58:44,  3.99s/it]Train:   5%|▍         | 90/1875 [06:01<1:58:32,  3.98s/it]                                                          Train:   5%|▍         | 90/1875 [06:01<1:58:32,  3.98s/it]Train:   5%|▍         | 90/1875 [06:01<1:58:32,  3.98s/it]Train:   5%|▍         | 91/1875 [06:05<1:58:51,  4.00s/it]Train:   5%|▍         | 92/1875 [06:09<1:59:00,  4.01s/it]Train:   5%|▍         | 93/1875 [06:13<1:59:14,  4.02s/it]Train:   5%|▌         | 94/1875 [06:17<1:59:22,  4.02s/it]Train:   5%|▌         | 95/1875 [06:21<1:59:12,  4.02s/it]                                                          Train:   5%|▌         | 95/1875 [06:21<1:59:12,  4.02s/it]Train:   5%|▌         | 95/1875 [06:21<1:59:12,  4.02s/it]Train:   5%|▌         | 96/1875 [06:25<1:59:18,  4.02s/it]Train:   5%|▌         | 97/1875 [06:29<1:59:14,  4.02s/it]Train:   5%|▌         | 98/1875 [06:33<1:58:40,  4.01s/it]Train:   5%|▌         | 99/1875 [06:37<1:58:46,  4.01s/it]Train:   5%|▌         | 100/1875 [06:41<1:58:50,  4.02s/it]                                                           Train:   5%|▌         | 100/1875 [06:41<1:58:50,  4.02s/it]Train:   5%|▌         | 100/1875 [06:41<1:58:50,  4.02s/it][INFO:swift] Saving model checkpoint to /home/u1501463/tool_use_LALM/tool_use_training/stage1_training/v5-20260808-112705/checkpoint-100
+Train:   5%|▌         | 101/1875 [06:46<2:07:25,  4.31s/it]Train:   5%|▌         | 102/1875 [06:50<2:05:05,  4.23s/it]Train:   5%|▌         | 103/1875 [06:54<2:02:48,  4.16s/it]Train:   6%|▌         | 104/1875 [06:58<2:01:13,  4.11s/it]Train:   6%|▌         | 105/1875 [07:02<2:00:24,  4.08s/it]                                                           Train:   6%|▌         | 105/1875 [07:02<2:00:24,  4.08s/it]Train:   6%|▌         | 105/1875 [07:02<2:00:24,  4.08s/it]Train:   6%|▌         | 106/1875 [07:06<1:59:42,  4.06s/it]Train:   6%|▌         | 107/1875 [07:10<1:59:07,  4.04s/it]Train:   6%|▌         | 108/1875 [07:14<1:58:47,  4.03s/it]Train:   6%|▌         | 109/1875 [07:18<1:58:32,  4.03s/it]Train:   6%|▌         | 110/1875 [07:22<1:58:26,  4.03s/it]                                                           Train:   6%|▌         | 110/1875 [07:22<1:58:26,  4.03s/it]Train:   6%|▌         | 110/1875 [07:22<1:58:26,  4.03s/it]Train:   6%|▌         | 111/1875 [07:26<1:58:14,  4.02s/it]Train:   6%|▌         | 112/1875 [07:30<1:58:10,  4.02s/it]Train:   6%|▌         | 113/1875 [07:34<1:58:14,  4.03s/it]Train:   6%|▌         | 114/1875 [07:38<1:58:04,  4.02s/it]Train:   6%|▌         | 115/1875 [07:42<1:57:52,  4.02s/it]                                                           Train:   6%|▌         | 115/1875 [07:42<1:57:52,  4.02s/it]Train:   6%|▌         | 115/1875 [07:42<1:57:52,  4.02s/it]Train:   6%|▌         | 116/1875 [07:46<1:58:04,  4.03s/it]Train:   6%|▌         | 117/1875 [07:50<1:58:04,  4.03s/it]Train:   6%|▋         | 118/1875 [07:54<1:57:41,  4.02s/it]Train:   6%|▋         | 119/1875 [07:58<1:57:17,  4.01s/it]Train:   6%|▋         | 120/1875 [08:02<1:57:23,  4.01s/it]                                                           Train:   6%|▋         | 120/1875 [08:02<1:57:23,  4.01s/it]Train:   6%|▋         | 120/1875 [08:02<1:57:23,  4.01s/it]Train:   6%|▋         | 121/1875 [08:06<1:57:19,  4.01s/it]Train:   7%|▋         | 122/1875 [08:10<1:57:03,  4.01s/it]Train:   7%|▋         | 123/1875 [08:14<1:56:37,  3.99s/it]Train:   7%|▋         | 124/1875 [08:18<1:56:44,  4.00s/it]Train:   7%|▋         | 125/1875 [08:22<1:56:46,  4.00s/it]                                                           Train:   7%|▋         | 125/1875 [08:22<1:56:46,  4.00s/it]Train:   7%|▋         | 125/1875 [08:22<1:56:46,  4.00s/it]Train:   7%|▋         | 126/1875 [08:26<1:56:49,  4.01s/it]Train:   7%|▋         | 127/1875 [08:30<1:56:53,  4.01s/it]Train:   7%|▋         | 128/1875 [08:34<1:56:56,  4.02s/it]Train:   7%|▋         | 129/1875 [08:39<1:57:03,  4.02s/it]Train:   7%|▋         | 130/1875 [08:43<1:57:01,  4.02s/it]                                                           Train:   7%|▋         | 130/1875 [08:43<1:57:01,  4.02s/it]Train:   7%|▋         | 130/1875 [08:43<1:57:01,  4.02s/it]Train:   7%|▋         | 131/1875 [08:47<1:56:52,  4.02s/it]Train:   7%|▋         | 132/1875 [08:51<1:56:51,  4.02s/it]Train:   7%|▋         | 133/1875 [08:55<1:56:46,  4.02s/it]Train:   7%|▋         | 134/1875 [08:59<1:56:39,  4.02s/it]Train:   7%|▋         | 135/1875 [09:03<1:56:25,  4.01s/it]                                                           Train:   7%|▋         | 135/1875 [09:03<1:56:25,  4.01s/it]Train:   7%|▋         | 135/1875 [09:03<1:56:25,  4.01s/it]Train:   7%|▋         | 136/1875 [09:07<1:56:00,  4.00s/it]Train:   7%|▋         | 137/1875 [09:11<1:56:11,  4.01s/it]Train:   7%|▋         | 138/1875 [09:15<1:56:17,  4.02s/it]Train:   7%|▋         | 139/1875 [09:19<1:56:12,  4.02s/it]Train:   7%|▋         | 140/1875 [09:23<1:56:03,  4.01s/it]                                                           Train:   7%|▋         | 140/1875 [09:23<1:56:03,  4.01s/it]Train:   7%|▋         | 140/1875 [09:23<1:56:03,  4.01s/it]Train:   8%|▊         | 141/1875 [09:27<1:55:26,  3.99s/it]Train:   8%|▊         | 142/1875 [09:31<1:55:36,  4.00s/it]Train:   8%|▊         | 143/1875 [09:35<1:55:49,  4.01s/it]Train:   8%|▊         | 144/1875 [09:39<1:55:50,  4.02s/it]Train:   8%|▊         | 145/1875 [09:43<1:55:51,  4.02s/it]                                                           Train:   8%|▊         | 145/1875 [09:43<1:55:51,  4.02s/it]Train:   8%|▊         | 145/1875 [09:43<1:55:51,  4.02s/it]Train:   8%|▊         | 146/1875 [09:47<1:55:51,  4.02s/it]Train:   8%|▊         | 147/1875 [09:51<1:55:29,  4.01s/it]Train:   8%|▊         | 148/1875 [09:55<1:55:38,  4.02s/it]Train:   8%|▊         | 149/1875 [09:59<1:55:40,  4.02s/it]Train:   8%|▊         | 150/1875 [10:03<1:55:46,  4.03s/it]                                                           Train:   8%|▊         | 150/1875 [10:03<1:55:46,  4.03s/it]Train:   8%|▊         | 150/1875 [10:03<1:55:46,  4.03s/it]Train:   8%|▊         | 151/1875 [10:07<1:56:00,  4.04s/it]Train:   8%|▊         | 152/1875 [10:11<1:55:22,  4.02s/it]Train:   8%|▊         | 153/1875 [10:15<1:54:59,  4.01s/it]Train:   8%|▊         | 154/1875 [10:19<1:55:01,  4.01s/it]Train:   8%|▊         | 155/1875 [10:23<1:54:59,  4.01s/it]                                                           Train:   8%|▊         | 155/1875 [10:23<1:54:59,  4.01s/it]Train:   8%|▊         | 155/1875 [10:23<1:54:59,  4.01s/it]Train:   8%|▊         | 156/1875 [10:27<1:55:01,  4.01s/it]Train:   8%|▊         | 157/1875 [10:31<1:55:15,  4.03s/it]Train:   8%|▊         | 158/1875 [10:35<1:55:17,  4.03s/it]Train:   8%|▊         | 159/1875 [10:39<1:55:06,  4.02s/it]Train:   9%|▊         | 160/1875 [10:43<1:54:34,  4.01s/it]                                                           Train:   9%|▊         | 160/1875 [10:43<1:54:34,  4.01s/it]Train:   9%|▊         | 160/1875 [10:43<1:54:34,  4.01s/it]Train:   9%|▊         | 161/1875 [10:47<1:54:45,  4.02s/it]Train:   9%|▊         | 162/1875 [10:51<1:54:47,  4.02s/it]Train:   9%|▊         | 163/1875 [10:55<1:54:44,  4.02s/it]Train:   9%|▊         | 164/1875 [10:59<1:54:33,  4.02s/it]Train:   9%|▉         | 165/1875 [11:03<1:54:05,  4.00s/it]                                                           Train:   9%|▉         | 165/1875 [11:03<1:54:05,  4.00s/it]Train:   9%|▉         | 165/1875 [11:03<1:54:05,  4.00s/it]Train:   9%|▉         | 166/1875 [11:07<1:54:12,  4.01s/it]Train:   9%|▉         | 167/1875 [11:11<1:54:22,  4.02s/it]Train:   9%|▉         | 168/1875 [11:15<1:53:54,  4.00s/it]Train:   9%|▉         | 169/1875 [11:19<1:53:54,  4.01s/it]Train:   9%|▉         | 170/1875 [11:23<1:54:06,  4.02s/it]                                                           Train:   9%|▉         | 170/1875 [11:23<1:54:06,  4.02s/it]Train:   9%|▉         | 170/1875 [11:23<1:54:06,  4.02s/it]Train:   9%|▉         | 171/1875 [11:27<1:54:06,  4.02s/it]Train:   9%|▉         | 172/1875 [11:31<1:53:57,  4.01s/it]Train:   9%|▉         | 173/1875 [11:35<1:54:02,  4.02s/it]Train:   9%|▉         | 174/1875 [11:39<1:53:42,  4.01s/it]Train:   9%|▉         | 175/1875 [11:43<1:53:48,  4.02s/it]                                                           Train:   9%|▉         | 175/1875 [11:43<1:53:48,  4.02s/it]Train:   9%|▉         | 175/1875 [11:43<1:53:48,  4.02s/it]Train:   9%|▉         | 176/1875 [11:47<1:53:47,  4.02s/it]Train:   9%|▉         | 177/1875 [11:51<1:53:23,  4.01s/it]Train:   9%|▉         | 178/1875 [11:55<1:53:28,  4.01s/it]Train:  10%|▉         | 179/1875 [11:59<1:53:23,  4.01s/it]Train:  10%|▉         | 180/1875 [12:03<1:53:29,  4.02s/it]                                                           Train:  10%|▉         | 180/1875 [12:03<1:53:29,  4.02s/it]Train:  10%|▉         | 180/1875 [12:03<1:53:29,  4.02s/it]Train:  10%|▉         | 181/1875 [12:07<1:53:35,  4.02s/it]Train:  10%|▉         | 182/1875 [12:11<1:53:29,  4.02s/it]Train:  10%|▉         | 183/1875 [12:15<1:53:17,  4.02s/it]Train:  10%|▉         | 184/1875 [12:19<1:53:18,  4.02s/it]Train:  10%|▉         | 185/1875 [12:23<1:53:39,  4.03s/it]                                                           Train:  10%|▉         | 185/1875 [12:23<1:53:39,  4.03s/it]Train:  10%|▉         | 185/1875 [12:23<1:53:39,  4.03s/it]Train:  10%|▉         | 186/1875 [12:27<1:53:29,  4.03s/it]Train:  10%|▉         | 187/1875 [12:32<1:53:17,  4.03s/it]Train:  10%|█         | 188/1875 [12:36<1:53:06,  4.02s/it]Train:  10%|█         | 189/1875 [12:40<1:52:59,  4.02s/it]Train:  10%|█         | 190/1875 [12:44<1:52:51,  4.02s/it]                                                           Train:  10%|█         | 190/1875 [12:44<1:52:51,  4.02s/it]Train:  10%|█         | 190/1875 [12:44<1:52:51,  4.02s/it]Train:  10%|█         | 191/1875 [12:47<1:52:03,  3.99s/it]Train:  10%|█         | 192/1875 [12:52<1:52:19,  4.00s/it]Train:  10%|█         | 193/1875 [12:56<1:52:33,  4.01s/it]Train:  10%|█         | 194/1875 [13:00<1:52:27,  4.01s/it]Train:  10%|█         | 195/1875 [13:04<1:52:28,  4.02s/it]                                                           Train:  10%|█         | 195/1875 [13:04<1:52:28,  4.02s/it]Train:  10%|█         | 195/1875 [13:04<1:52:28,  4.02s/it]Train:  10%|█         | 196/1875 [13:08<1:52:11,  4.01s/it]Train:  11%|█         | 197/1875 [13:12<1:52:09,  4.01s/it]Train:  11%|█         | 198/1875 [13:16<1:52:16,  4.02s/it]Train:  11%|█         | 199/1875 [13:20<1:51:47,  4.00s/it]Train:  11%|█         | 200/1875 [13:24<1:51:52,  4.01s/it]                                                           Train:  11%|█         | 200/1875 [13:24<1:51:52,  4.01s/it]Train:  11%|█         | 200/1875 [13:24<1:51:52,  4.01s/it][INFO:swift] Saving model checkpoint to /home/u1501463/tool_use_LALM/tool_use_training/stage1_training/v5-20260808-112705/checkpoint-200
+Train:  11%|█         | 201/1875 [13:29<2:00:38,  4.32s/it]Train:  11%|█         | 202/1875 [13:33<1:58:03,  4.23s/it]Train:  11%|█         | 203/1875 [13:37<1:56:24,  4.18s/it]Train:  11%|█         | 204/1875 [13:41<1:54:43,  4.12s/it]Train:  11%|█         | 205/1875 [13:45<1:53:53,  4.09s/it]                                                           Train:  11%|█         | 205/1875 [13:45<1:53:53,  4.09s/it]Train:  11%|█         | 205/1875 [13:45<1:53:53,  4.09s/it]Train:  11%|█         | 206/1875 [13:49<1:53:13,  4.07s/it]Train:  11%|█         | 207/1875 [13:53<1:52:40,  4.05s/it]Train:  11%|█         | 208/1875 [13:57<1:52:28,  4.05s/it]Train:  11%|█         | 209/1875 [14:01<1:52:18,  4.04s/it]Train:  11%|█         | 210/1875 [14:05<1:52:06,  4.04s/it]                                                           Train:  11%|█         | 210/1875 [14:05<1:52:06,  4.04s/it]Train:  11%|█         | 210/1875 [14:05<1:52:06,  4.04s/it]Train:  11%|█▏        | 211/1875 [14:09<1:51:49,  4.03s/it]Train:  11%|█▏        | 212/1875 [14:13<1:51:35,  4.03s/it]Train:  11%|█▏        | 213/1875 [14:17<1:51:24,  4.02s/it]Train:  11%|█▏        | 214/1875 [14:21<1:51:20,  4.02s/it]Train:  11%|█▏        | 215/1875 [14:25<1:51:25,  4.03s/it]                                                           Train:  11%|█▏        | 215/1875 [14:25<1:51:25,  4.03s/it]Train:  11%|█▏        | 215/1875 [14:25<1:51:25,  4.03s/it]Train:  12%|█▏        | 216/1875 [14:29<1:50:56,  4.01s/it]Train:  12%|█▏        | 217/1875 [14:33<1:50:27,  4.00s/it]Train:  12%|█▏        | 218/1875 [14:37<1:50:09,  3.99s/it]Train:  12%|█▏        | 219/1875 [14:41<1:50:37,  4.01s/it]Train:  12%|█▏        | 220/1875 [14:45<1:50:51,  4.02s/it]                                                           Train:  12%|█▏        | 220/1875 [14:45<1:50:51,  4.02s/it]Train:  12%|█▏        | 220/1875 [14:45<1:50:51,  4.02s/it]Train:  12%|█▏        | 221/1875 [14:49<1:50:57,  4.03s/it]Train:  12%|█▏        | 222/1875 [14:53<1:50:52,  4.02s/it]Train:  12%|█▏        | 223/1875 [14:57<1:50:44,  4.02s/it]Train:  12%|█▏        | 224/1875 [15:01<1:50:28,  4.02s/it]Train:  12%|█▏        | 225/1875 [15:05<1:50:40,  4.02s/it]                                                           Train:  12%|█▏        | 225/1875 [15:05<1:50:40,  4.02s/it]Train:  12%|█▏        | 225/1875 [15:05<1:50:40,  4.02s/it]Train:  12%|█▏        | 226/1875 [15:09<1:50:42,  4.03s/it]Train:  12%|█▏        | 227/1875 [15:13<1:50:32,  4.02s/it]Train:  12%|█▏        | 228/1875 [15:17<1:50:22,  4.02s/it]Train:  12%|█▏        | 229/1875 [15:21<1:50:28,  4.03s/it]Train:  12%|█▏        | 230/1875 [15:25<1:49:56,  4.01s/it]                                                           Train:  12%|█▏        | 230/1875 [15:25<1:49:56,  4.01s/it]Train:  12%|█▏        | 230/1875 [15:25<1:49:56,  4.01s/it]Train:  12%|█▏        | 231/1875 [15:29<1:50:01,  4.02s/it]Train:  12%|█▏        | 232/1875 [15:33<1:49:38,  4.00s/it]Train:  12%|█▏        | 233/1875 [15:37<1:49:47,  4.01s/it]Train:  12%|█▏        | 234/1875 [15:41<1:49:28,  4.00s/it]Train:  13%|█▎        | 235/1875 [15:45<1:49:28,  4.01s/it]                                                           Train:  13%|█▎        | 235/1875 [15:45<1:49:28,  4.01s/it]Train:  13%|█▎        | 235/1875 [15:45<1:49:28,  4.01s/it]Train:  13%|█▎        | 236/1875 [15:49<1:49:35,  4.01s/it]Train:  13%|█▎        | 237/1875 [15:53<1:49:39,  4.02s/it]Train:  13%|█▎        | 238/1875 [15:57<1:49:43,  4.02s/it]Train:  13%|█▎        | 239/1875 [16:01<1:49:16,  4.01s/it]Train:  13%|█▎        | 240/1875 [16:05<1:49:13,  4.01s/it]                                                           Train:  13%|█▎        | 240/1875 [16:05<1:49:13,  4.01s/it]Train:  13%|█▎        | 240/1875 [16:05<1:49:13,  4.01s/it]Train:  13%|█▎        | 241/1875 [16:09<1:49:20,  4.02s/it]Train:  13%|█▎        | 242/1875 [16:13<1:49:23,  4.02s/it]Train:  13%|█▎        | 243/1875 [16:17<1:48:31,  3.99s/it]Train:  13%|█▎        | 244/1875 [16:21<1:48:46,  4.00s/it]Train:  13%|█▎        | 245/1875 [16:25<1:48:34,  4.00s/it]                                                           Train:  13%|█▎        | 245/1875 [16:25<1:48:34,  4.00s/it]Train:  13%|█▎        | 245/1875 [16:25<1:48:34,  4.00s/it]Train:  13%|█▎        | 246/1875 [16:29<1:47:58,  3.98s/it]Train:  13%|█▎        | 247/1875 [16:33<1:47:52,  3.98s/it]Train:  13%|█▎        | 248/1875 [16:37<1:48:18,  3.99s/it]Train:  13%|█▎        | 249/1875 [16:41<1:48:05,  3.99s/it]Train:  13%|█▎        | 250/1875 [16:45<1:48:10,  3.99s/it]                                                           Train:  13%|█▎        | 250/1875 [16:45<1:48:10,  3.99s/it]Train:  13%|█▎        | 250/1875 [16:45<1:48:10,  3.99s/it]Train:  13%|█▎        | 251/1875 [16:49<1:48:22,  4.00s/it]Train:  13%|█▎        | 252/1875 [16:53<1:48:28,  4.01s/it]Train:  13%|█▎        | 253/1875 [16:57<1:48:29,  4.01s/it]Train:  14%|█▎        | 254/1875 [17:01<1:48:00,  4.00s/it]Train:  14%|█▎        | 255/1875 [17:05<1:48:10,  4.01s/it]                                                           Train:  14%|█▎        | 255/1875 [17:05<1:48:10,  4.01s/it]Train:  14%|█▎        | 255/1875 [17:05<1:48:10,  4.01s/it]Train:  14%|█▎        | 256/1875 [17:09<1:47:51,  4.00s/it]Train:  14%|█▎        | 257/1875 [17:13<1:48:09,  4.01s/it]Train:  14%|█▍        | 258/1875 [17:17<1:48:06,  4.01s/it]Train:  14%|█▍        | 259/1875 [17:21<1:48:10,  4.02s/it]Train:  14%|█▍        | 260/1875 [17:25<1:47:46,  4.00s/it]                                                           Train:  14%|█▍        | 260/1875 [17:25<1:47:46,  4.00s/it]Train:  14%|█▍        | 260/1875 [17:25<1:47:46,  4.00s/it]Train:  14%|█▍        | 261/1875 [17:29<1:47:35,  4.00s/it]Train:  14%|█▍        | 262/1875 [17:33<1:47:40,  4.00s/it]Train:  14%|█▍        | 263/1875 [17:37<1:47:46,  4.01s/it]Train:  14%|█▍        | 264/1875 [17:41<1:47:36,  4.01s/it]Train:  14%|█▍        | 265/1875 [17:45<1:47:12,  4.00s/it]                                                           Train:  14%|█▍        | 265/1875 [17:45<1:47:12,  4.00s/it]Train:  14%|█▍        | 265/1875 [17:45<1:47:12,  4.00s/it]Train:  14%|█▍        | 266/1875 [17:49<1:47:15,  4.00s/it]Train:  14%|█▍        | 267/1875 [17:53<1:47:24,  4.01s/it]Train:  14%|█▍        | 268/1875 [17:57<1:47:23,  4.01s/it]Train:  14%|█▍        | 269/1875 [18:01<1:47:21,  4.01s/it]Train:  14%|█▍        | 270/1875 [18:05<1:46:43,  3.99s/it]                                                           Train:  14%|█▍        | 270/1875 [18:05<1:46:43,  3.99s/it]Train:  14%|█▍        | 270/1875 [18:05<1:46:43,  3.99s/it]Train:  14%|█▍        | 271/1875 [18:09<1:46:59,  4.00s/it]Train:  15%|█▍        | 272/1875 [18:13<1:46:53,  4.00s/it]Train:  15%|█▍        | 273/1875 [18:17<1:46:59,  4.01s/it]Train:  15%|█▍        | 274/1875 [18:21<1:46:57,  4.01s/it]Train:  15%|█▍        | 275/1875 [18:25<1:47:06,  4.02s/it]                                                           Train:  15%|█▍        | 275/1875 [18:25<1:47:06,  4.02s/it]Train:  15%|█▍        | 275/1875 [18:25<1:47:06,  4.02s/it]Train:  15%|█▍        | 276/1875 [18:29<1:47:09,  4.02s/it]Train:  15%|█▍        | 277/1875 [18:33<1:47:07,  4.02s/it]Train:  15%|█▍        | 278/1875 [18:37<1:46:59,  4.02s/it]Train:  15%|█▍        | 279/1875 [18:42<1:47:05,  4.03s/it]Train:  15%|█▍        | 280/1875 [18:46<1:46:57,  4.02s/it]                                                           Train:  15%|█▍        | 280/1875 [18:46<1:46:57,  4.02s/it]Train:  15%|█▍        | 280/1875 [18:46<1:46:57,  4.02s/it]Train:  15%|█▍        | 281/1875 [18:50<1:46:49,  4.02s/it]Train:  15%|█▌        | 282/1875 [18:54<1:46:40,  4.02s/it]Train:  15%|█▌        | 283/1875 [18:58<1:46:36,  4.02s/it]Train:  15%|█▌        | 284/1875 [19:02<1:46:09,  4.00s/it]Train:  15%|█▌        | 285/1875 [19:06<1:46:17,  4.01s/it]                                                           Train:  15%|█▌        | 285/1875 [19:06<1:46:17,  4.01s/it]Train:  15%|█▌        | 285/1875 [19:06<1:46:17,  4.01s/it]Train:  15%|█▌        | 286/1875 [19:10<1:46:14,  4.01s/it]Train:  15%|█▌        | 287/1875 [19:14<1:46:19,  4.02s/it]Train:  15%|█▌        | 288/1875 [19:18<1:46:13,  4.02s/it]Train:  15%|█▌        | 289/1875 [19:22<1:46:19,  4.02s/it]Train:  15%|█▌        | 290/1875 [19:26<1:46:16,  4.02s/it]                                                           Train:  15%|█▌        | 290/1875 [19:26<1:46:16,  4.02s/it]Train:  15%|█▌        | 290/1875 [19:26<1:46:16,  4.02s/it]Train:  16%|█▌        | 291/1875 [19:30<1:46:24,  4.03s/it]Train:  16%|█▌        | 292/1875 [19:34<1:46:16,  4.03s/it]Train:  16%|█▌        | 293/1875 [19:38<1:46:07,  4.02s/it]Train:  16%|█▌        | 294/1875 [19:42<1:45:56,  4.02s/it]Train:  16%|█▌        | 295/1875 [19:46<1:45:57,  4.02s/it]                                                           Train:  16%|█▌        | 295/1875 [19:46<1:45:57,  4.02s/it]Train:  16%|█▌        | 295/1875 [19:46<1:45:57,  4.02s/it]Train:  16%|█▌        | 296/1875 [19:50<1:45:51,  4.02s/it]Train:  16%|█▌        | 297/1875 [19:54<1:45:20,  4.01s/it]Train:  16%|█▌        | 298/1875 [19:58<1:45:23,  4.01s/it]Train:  16%|█▌        | 299/1875 [20:02<1:45:01,  4.00s/it]Train:  16%|█▌        | 300/1875 [20:06<1:45:15,  4.01s/it]                                                           Train:  16%|█▌        | 300/1875 [20:06<1:45:15,  4.01s/it]Train:  16%|█▌        | 300/1875 [20:06<1:45:15,  4.01s/it][INFO:swift] Saving model checkpoint to /home/u1501463/tool_use_LALM/tool_use_training/stage1_training/v5-20260808-112705/checkpoint-300
+Train:  16%|█▌        | 301/1875 [20:11<1:53:09,  4.31s/it]Train:  16%|█▌        | 302/1875 [20:15<1:50:28,  4.21s/it]Train:  16%|█▌        | 303/1875 [20:19<1:48:28,  4.14s/it]Train:  16%|█▌        | 304/1875 [20:23<1:47:10,  4.09s/it]Train:  16%|█▋        | 305/1875 [20:27<1:46:25,  4.07s/it]                                                           Train:  16%|█▋        | 305/1875 [20:27<1:46:25,  4.07s/it]Train:  16%|█▋        | 305/1875 [20:27<1:46:25,  4.07s/it]Train:  16%|█▋        | 306/1875 [20:31<1:46:04,  4.06s/it]Train:  16%|█▋        | 307/1875 [20:35<1:45:40,  4.04s/it]Train:  16%|█▋        | 308/1875 [20:39<1:45:35,  4.04s/it]Train:  16%|█▋        | 309/1875 [20:43<1:45:42,  4.05s/it]Train:  17%|█▋        | 310/1875 [20:47<1:45:28,  4.04s/it]                                                           Train:  17%|█▋        | 310/1875 [20:47<1:45:28,  4.04s/it]Train:  17%|█▋        | 310/1875 [20:47<1:45:28,  4.04s/it]Train:  17%|█▋        | 311/1875 [20:51<1:45:13,  4.04s/it]Train:  17%|█▋        | 312/1875 [20:55<1:45:10,  4.04s/it]Train:  17%|█▋        | 313/1875 [20:59<1:44:53,  4.03s/it]Train:  17%|█▋        | 314/1875 [21:03<1:44:46,  4.03s/it]Train:  17%|█▋        | 315/1875 [21:07<1:44:40,  4.03s/it]                                                           Train:  17%|█▋        | 315/1875 [21:07<1:44:40,  4.03s/it]Train:  17%|█▋        | 315/1875 [21:07<1:44:40,  4.03s/it]Train:  17%|█▋        | 316/1875 [21:11<1:44:30,  4.02s/it]Train:  17%|█▋        | 317/1875 [21:15<1:44:02,  4.01s/it]Train:  17%|█▋        | 318/1875 [21:19<1:43:24,  3.99s/it]Train:  17%|█▋        | 319/1875 [21:23<1:43:37,  4.00s/it]Train:  17%|█▋        | 320/1875 [21:27<1:43:41,  4.00s/it]                                                           Train:  17%|█▋        | 320/1875 [21:27<1:43:41,  4.00s/it]Train:  17%|█▋        | 320/1875 [21:27<1:43:41,  4.00s/it]Train:  17%|█▋        | 321/1875 [21:31<1:43:50,  4.01s/it]Train:  17%|█▋        | 322/1875 [21:35<1:43:52,  4.01s/it]Train:  17%|█▋        | 323/1875 [21:39<1:43:51,  4.01s/it]Train:  17%|█▋        | 324/1875 [21:43<1:43:33,  4.01s/it]Train:  17%|█▋        | 325/1875 [21:47<1:43:12,  4.00s/it]                                                           Train:  17%|█▋        | 325/1875 [21:47<1:43:12,  4.00s/it]Train:  17%|█▋        | 325/1875 [21:47<1:43:12,  4.00s/it]Train:  17%|█▋        | 326/1875 [21:51<1:43:32,  4.01s/it]Train:  17%|█▋        | 327/1875 [21:55<1:43:31,  4.01s/it]Train:  17%|█▋        | 328/1875 [21:59<1:43:24,  4.01s/it]Train:  18%|█▊        | 329/1875 [22:03<1:43:27,  4.02s/it]Train:  18%|█▊        | 330/1875 [22:07<1:43:31,  4.02s/it]                                                           Train:  18%|█▊        | 330/1875 [22:07<1:43:31,  4.02s/it]Train:  18%|█▊        | 330/1875 [22:07<1:43:31,  4.02s/it]Train:  18%|█▊        | 331/1875 [22:11<1:43:32,  4.02s/it]Train:  18%|█▊        | 332/1875 [22:15<1:43:30,  4.03s/it]Train:  18%|█▊        | 333/1875 [22:19<1:43:04,  4.01s/it]Train:  18%|█▊        | 334/1875 [22:23<1:42:59,  4.01s/it]Train:  18%|█▊        | 335/1875 [22:27<1:43:03,  4.02s/it]                                                           Train:  18%|█▊        | 335/1875 [22:27<1:43:03,  4.02s/it]Train:  18%|█▊        | 335/1875 [22:27<1:43:03,  4.02s/it]Train:  18%|█▊        | 336/1875 [22:31<1:43:05,  4.02s/it]Train:  18%|█▊        | 337/1875 [22:35<1:42:59,  4.02s/it]Train:  18%|█▊        | 338/1875 [22:39<1:42:55,  4.02s/it]Train:  18%|█▊        | 339/1875 [22:43<1:42:35,  4.01s/it]Train:  18%|█▊        | 340/1875 [22:47<1:42:15,  4.00s/it]                                                           Train:  18%|█▊        | 340/1875 [22:47<1:42:15,  4.00s/it]Train:  18%|█▊        | 340/1875 [22:47<1:42:15,  4.00s/it]Train:  18%|█▊        | 341/1875 [22:51<1:42:07,  3.99s/it]Train:  18%|█▊        | 342/1875 [22:55<1:42:18,  4.00s/it]Train:  18%|█▊        | 343/1875 [22:59<1:42:22,  4.01s/it]Train:  18%|█▊        | 344/1875 [23:03<1:42:33,  4.02s/it]Train:  18%|█▊        | 345/1875 [23:07<1:42:47,  4.03s/it]                                                           Train:  18%|█▊        | 345/1875 [23:07<1:42:47,  4.03s/it]Train:  18%|█▊        | 345/1875 [23:07<1:42:47,  4.03s/it]Train:  18%|█▊        | 346/1875 [23:11<1:42:43,  4.03s/it]Train:  19%|█▊        | 347/1875 [23:15<1:42:29,  4.02s/it]Train:  19%|█▊        | 348/1875 [23:19<1:42:06,  4.01s/it]Train:  19%|█▊        | 349/1875 [23:23<1:41:52,  4.01s/it]Train:  19%|█▊        | 350/1875 [23:27<1:41:33,  4.00s/it]                                                           Train:  19%|█▊        | 350/1875 [23:27<1:41:33,  4.00s/it]Train:  19%|█▊        | 350/1875 [23:27<1:41:33,  4.00s/it]Train:  19%|█▊        | 351/1875 [23:31<1:41:52,  4.01s/it]Train:  19%|█▉        | 352/1875 [23:35<1:41:29,  4.00s/it]Train:  19%|█▉        | 353/1875 [23:39<1:41:35,  4.01s/it]Train:  19%|█▉        | 354/1875 [23:43<1:41:43,  4.01s/it]Train:  19%|█▉        | 355/1875 [23:47<1:41:37,  4.01s/it]                                                           Train:  19%|█▉        | 355/1875 [23:48<1:41:37,  4.01s/it]Train:  19%|█▉        | 355/1875 [23:48<1:41:37,  4.01s/it]Train:  19%|█▉        | 356/1875 [23:51<1:41:20,  4.00s/it]Train:  19%|█▉        | 357/1875 [23:56<1:41:26,  4.01s/it]Train:  19%|█▉        | 358/1875 [24:00<1:41:26,  4.01s/it]Train:  19%|█▉        | 359/1875 [24:04<1:41:29,  4.02s/it]Train:  19%|█▉        | 360/1875 [24:08<1:41:33,  4.02s/it]                                                           Train:  19%|█▉        | 360/1875 [24:08<1:41:33,  4.02s/it]Train:  19%|█▉        | 360/1875 [24:08<1:41:33,  4.02s/it]Train:  19%|█▉        | 361/1875 [24:12<1:41:29,  4.02s/it]Train:  19%|█▉        | 362/1875 [24:16<1:41:26,  4.02s/it]Train:  19%|█▉        | 363/1875 [24:20<1:41:08,  4.01s/it]Train:  19%|█▉        | 364/1875 [24:24<1:40:58,  4.01s/it]Train:  19%|█▉        | 365/1875 [24:28<1:40:42,  4.00s/it]                                                           Train:  19%|█▉        | 365/1875 [24:28<1:40:42,  4.00s/it]Train:  19%|█▉        | 365/1875 [24:28<1:40:42,  4.00s/it]Train:  20%|█▉        | 366/1875 [24:32<1:40:45,  4.01s/it]Train:  20%|█▉        | 367/1875 [24:36<1:40:49,  4.01s/it]Train:  20%|█▉        | 368/1875 [24:40<1:40:44,  4.01s/it]Train:  20%|█▉        | 369/1875 [24:44<1:40:48,  4.02s/it]Train:  20%|█▉        | 370/1875 [24:48<1:40:43,  4.02s/it]                                                           Train:  20%|█▉        | 370/1875 [24:48<1:40:43,  4.02s/it]Train:  20%|█▉        | 370/1875 [24:48<1:40:43,  4.02s/it]Train:  20%|█▉        | 371/1875 [24:52<1:40:30,  4.01s/it]Train:  20%|█▉        | 372/1875 [24:56<1:40:25,  4.01s/it]Train:  20%|█▉        | 373/1875 [25:00<1:40:20,  4.01s/it]Train:  20%|█▉        | 374/1875 [25:04<1:40:27,  4.02s/it]Train:  20%|██        | 375/1875 [25:08<1:40:09,  4.01s/it]                                                           Train:  20%|██        | 375/1875 [25:08<1:40:09,  4.01s/it]Train:  20%|██        | 375/1875 [25:08<1:40:09,  4.01s/it]Train:  20%|██        | 376/1875 [25:12<1:40:22,  4.02s/it]Train:  20%|██        | 377/1875 [25:16<1:40:22,  4.02s/it]Train:  20%|██        | 378/1875 [25:20<1:40:12,  4.02s/it]Train:  20%|██        | 379/1875 [25:24<1:40:10,  4.02s/it]Train:  20%|██        | 380/1875 [25:28<1:39:50,  4.01s/it]                                                           Train:  20%|██        | 380/1875 [25:28<1:39:50,  4.01s/it]Train:  20%|██        | 380/1875 [25:28<1:39:50,  4.01s/it]Train:  20%|██        | 381/1875 [25:32<1:39:56,  4.01s/it]Train:  20%|██        | 382/1875 [25:36<1:39:51,  4.01s/it]Train:  20%|██        | 383/1875 [25:40<1:39:14,  3.99s/it]Train:  20%|██        | 384/1875 [25:44<1:39:25,  4.00s/it]Train:  21%|██        | 385/1875 [25:48<1:39:26,  4.00s/it]                                                           Train:  21%|██        | 385/1875 [25:48<1:39:26,  4.00s/it]Train:  21%|██        | 385/1875 [25:48<1:39:26,  4.00s/it]Train:  21%|██        | 386/1875 [25:52<1:39:40,  4.02s/it]Train:  21%|██        | 387/1875 [25:56<1:39:33,  4.01s/it]Train:  21%|██        | 388/1875 [26:00<1:39:40,  4.02s/it]Train:  21%|██        | 389/1875 [26:04<1:39:29,  4.02s/it]Train:  21%|██        | 390/1875 [26:08<1:39:17,  4.01s/it]                                                           Train:  21%|██        | 390/1875 [26:08<1:39:17,  4.01s/it]Train:  21%|██        | 390/1875 [26:08<1:39:17,  4.01s/it]Train:  21%|██        | 391/1875 [26:12<1:39:14,  4.01s/it]Train:  21%|██        | 392/1875 [26:16<1:39:14,  4.02s/it]Train:  21%|██        | 393/1875 [26:20<1:39:01,  4.01s/it]Train:  21%|██        | 394/1875 [26:24<1:38:50,  4.00s/it]Train:  21%|██        | 395/1875 [26:28<1:38:54,  4.01s/it]                                                           Train:  21%|██        | 395/1875 [26:28<1:38:54,  4.01s/it]Train:  21%|██        | 395/1875 [26:28<1:38:54,  4.01s/it]Train:  21%|██        | 396/1875 [26:32<1:39:05,  4.02s/it]Train:  21%|██        | 397/1875 [26:36<1:38:40,  4.01s/it]Train:  21%|██        | 398/1875 [26:40<1:38:46,  4.01s/it]Train:  21%|██▏       | 399/1875 [26:44<1:38:30,  4.00s/it]Train:  21%|██▏       | 400/1875 [26:48<1:38:29,  4.01s/it]                                                           Train:  21%|██▏       | 400/1875 [26:48<1:38:29,  4.01s/it]Train:  21%|██▏       | 400/1875 [26:48<1:38:29,  4.01s/it][INFO:swift] Saving model checkpoint to /home/u1501463/tool_use_LALM/tool_use_training/stage1_training/v5-20260808-112705/checkpoint-400
+Train:  21%|██▏       | 401/1875 [26:53<1:45:40,  4.30s/it]Train:  21%|██▏       | 402/1875 [26:57<1:43:38,  4.22s/it]Train:  21%|██▏       | 403/1875 [27:01<1:42:07,  4.16s/it]Train:  22%|██▏       | 404/1875 [27:05<1:41:03,  4.12s/it]Train:  22%|██▏       | 405/1875 [27:09<1:40:06,  4.09s/it]                                                           Train:  22%|██▏       | 405/1875 [27:09<1:40:06,  4.09s/it]Train:  22%|██▏       | 405/1875 [27:09<1:40:06,  4.09s/it]Train:  22%|██▏       | 406/1875 [27:13<1:39:44,  4.07s/it]Train:  22%|██▏       | 407/1875 [27:17<1:39:19,  4.06s/it]Train:  22%|██▏       | 408/1875 [27:21<1:39:06,  4.05s/it]Train:  22%|██▏       | 409/1875 [27:25<1:38:41,  4.04s/it]Train:  22%|██▏       | 410/1875 [27:29<1:38:08,  4.02s/it]                                                           Train:  22%|██▏       | 410/1875 [27:29<1:38:08,  4.02s/it]Train:  22%|██▏       | 410/1875 [27:29<1:38:08,  4.02s/it]Train:  22%|██▏       | 411/1875 [27:33<1:38:07,  4.02s/it]Train:  22%|██▏       | 412/1875 [27:37<1:38:04,  4.02s/it]Train:  22%|██▏       | 413/1875 [27:41<1:38:08,  4.03s/it]Train:  22%|██▏       | 414/1875 [27:45<1:37:38,  4.01s/it]Train:  22%|██▏       | 415/1875 [27:49<1:37:34,  4.01s/it]                                                           Train:  22%|██▏       | 415/1875 [27:49<1:37:34,  4.01s/it]Train:  22%|██▏       | 415/1875 [27:49<1:37:34,  4.01s/it]Train:  22%|██▏       | 416/1875 [27:53<1:37:34,  4.01s/it]Train:  22%|██▏       | 417/1875 [27:57<1:37:34,  4.02s/it]Train:  22%|██▏       | 418/1875 [28:01<1:37:41,  4.02s/it]Train:  22%|██▏       | 419/1875 [28:05<1:37:39,  4.02s/it]Train:  22%|██▏       | 420/1875 [28:09<1:37:30,  4.02s/it]                                                           Train:  22%|██▏       | 420/1875 [28:09<1:37:30,  4.02s/it]Train:  22%|██▏       | 420/1875 [28:09<1:37:30,  4.02s/it]Train:  22%|██▏       | 421/1875 [28:13<1:37:24,  4.02s/it]Train:  23%|██▎       | 422/1875 [28:17<1:37:15,  4.02s/it]Train:  23%|██▎       | 423/1875 [28:21<1:37:11,  4.02s/it]Train:  23%|██▎       | 424/1875 [28:25<1:37:11,  4.02s/it]Train:  23%|██▎       | 425/1875 [28:29<1:37:05,  4.02s/it]                                                           Train:  23%|██▎       | 425/1875 [28:29<1:37:05,  4.02s/it]Train:  23%|██▎       | 425/1875 [28:29<1:37:05,  4.02s/it]Train:  23%|██▎       | 426/1875 [28:33<1:36:59,  4.02s/it]Train:  23%|██▎       | 427/1875 [28:38<1:37:07,  4.02s/it]Train:  23%|██▎       | 428/1875 [28:42<1:36:58,  4.02s/it]Train:  23%|██▎       | 429/1875 [28:46<1:36:53,  4.02s/it]Train:  23%|██▎       | 430/1875 [28:50<1:37:00,  4.03s/it]                                                           Train:  23%|██▎       | 430/1875 [28:50<1:37:00,  4.03s/it]Train:  23%|██▎       | 430/1875 [28:50<1:37:00,  4.03s/it]Train:  23%|██▎       | 431/1875 [28:54<1:36:57,  4.03s/it]Train:  23%|██▎       | 432/1875 [28:58<1:36:28,  4.01s/it]Train:  23%|██▎       | 433/1875 [29:02<1:36:33,  4.02s/it]Train:  23%|██▎       | 434/1875 [29:06<1:36:22,  4.01s/it]Train:  23%|██▎       | 435/1875 [29:10<1:36:24,  4.02s/it]                                                           Train:  23%|██▎       | 435/1875 [29:10<1:36:24,  4.02s/it]Train:  23%|██▎       | 435/1875 [29:10<1:36:24,  4.02s/it]Train:  23%|██▎       | 436/1875 [29:14<1:36:30,  4.02s/it]Train:  23%|██▎       | 437/1875 [29:18<1:36:20,  4.02s/it]Train:  23%|██▎       | 438/1875 [29:22<1:36:15,  4.02s/it]Train:  23%|██▎       | 439/1875 [29:26<1:36:08,  4.02s/it]Train:  23%|██▎       | 440/1875 [29:30<1:36:07,  4.02s/it]                                                           Train:  23%|██▎       | 440/1875 [29:30<1:36:07,  4.02s/it]Train:  23%|██▎       | 440/1875 [29:30<1:36:07,  4.02s/it]Train:  24%|██▎       | 441/1875 [29:34<1:36:07,  4.02s/it]Train:  24%|██▎       | 442/1875 [29:38<1:35:59,  4.02s/it]Train:  24%|██▎       | 443/1875 [29:42<1:35:58,  4.02s/it]Train:  24%|██▎       | 444/1875 [29:46<1:35:31,  4.01s/it]Train:  24%|██▎       | 445/1875 [29:50<1:35:31,  4.01s/it]                                                           Train:  24%|██▎       | 445/1875 [29:50<1:35:31,  4.01s/it]Train:  24%|██▎       | 445/1875 [29:50<1:35:31,  4.01s/it]Train:  24%|██▍       | 446/1875 [29:54<1:35:29,  4.01s/it]Train:  24%|██▍       | 447/1875 [29:58<1:35:18,  4.00s/it]Train:  24%|██▍       | 448/1875 [30:02<1:35:25,  4.01s/it]Train:  24%|██▍       | 449/1875 [30:06<1:35:05,  4.00s/it]Train:  24%|██▍       | 450/1875 [30:10<1:34:46,  3.99s/it]                                                           Train:  24%|██▍       | 450/1875 [30:10<1:34:46,  3.99s/it]Train:  24%|██▍       | 450/1875 [30:10<1:34:46,  3.99s/it]Train:  24%|██▍       | 451/1875 [30:14<1:34:52,  4.00s/it]Train:  24%|██▍       | 452/1875 [30:18<1:34:38,  3.99s/it]Train:  24%|██▍       | 453/1875 [30:22<1:34:38,  3.99s/it]Train:  24%|██▍       | 454/1875 [30:26<1:34:44,  4.00s/it]Train:  24%|██▍       | 455/1875 [30:30<1:34:59,  4.01s/it]                                                           Train:  24%|██▍       | 455/1875 [30:30<1:34:59,  4.01s/it]Train:  24%|██▍       | 455/1875 [30:30<1:34:59,  4.01s/it]Train:  24%|██▍       | 456/1875 [30:34<1:34:59,  4.02s/it]Train:  24%|██▍       | 457/1875 [30:38<1:34:51,  4.01s/it]Train:  24%|██▍       | 458/1875 [30:42<1:34:44,  4.01s/it]Train:  24%|██▍       | 459/1875 [30:46<1:34:24,  4.00s/it]Train:  25%|██▍       | 460/1875 [30:50<1:34:14,  4.00s/it]                                                           Train:  25%|██▍       | 460/1875 [30:50<1:34:14,  4.00s/it]Train:  25%|██▍       | 460/1875 [30:50<1:34:14,  4.00s/it]Train:  25%|██▍       | 461/1875 [30:54<1:34:01,  3.99s/it]Train:  25%|██▍       | 462/1875 [30:58<1:34:06,  4.00s/it]Train:  25%|██▍       | 463/1875 [31:02<1:34:07,  4.00s/it]Train:  25%|██▍       | 464/1875 [31:06<1:34:14,  4.01s/it]Train:  25%|██▍       | 465/1875 [31:10<1:34:18,  4.01s/it]                                                           Train:  25%|██▍       | 465/1875 [31:10<1:34:18,  4.01s/it]Train:  25%|██▍       | 465/1875 [31:10<1:34:18,  4.01s/it]Train:  25%|██▍       | 466/1875 [31:14<1:34:17,  4.02s/it]Train:  25%|██▍       | 467/1875 [31:18<1:34:19,  4.02s/it]Train:  25%|██▍       | 468/1875 [31:22<1:34:12,  4.02s/it]Train:  25%|██▌       | 469/1875 [31:26<1:33:29,  3.99s/it]Train:  25%|██▌       | 470/1875 [31:30<1:33:34,  4.00s/it]                                                           Train:  25%|██▌       | 470/1875 [31:30<1:33:34,  4.00s/it]Train:  25%|██▌       | 470/1875 [31:30<1:33:34,  4.00s/it]Train:  25%|██▌       | 471/1875 [31:34<1:33:23,  3.99s/it]Train:  25%|██▌       | 472/1875 [31:38<1:33:14,  3.99s/it]Train:  25%|██▌       | 473/1875 [31:42<1:33:26,  4.00s/it]Train:  25%|██▌       | 474/1875 [31:46<1:33:13,  3.99s/it]Train:  25%|██▌       | 475/1875 [31:50<1:33:23,  4.00s/it]                                                           Train:  25%|██▌       | 475/1875 [31:50<1:33:23,  4.00s/it]Train:  25%|██▌       | 475/1875 [31:50<1:33:23,  4.00s/it]Train:  25%|██▌       | 476/1875 [31:54<1:33:38,  4.02s/it]Train:  25%|██▌       | 477/1875 [31:58<1:33:23,  4.01s/it]Train:  25%|██▌       | 478/1875 [32:02<1:33:25,  4.01s/it]Train:  26%|██▌       | 479/1875 [32:06<1:33:17,  4.01s/it]Train:  26%|██▌       | 480/1875 [32:10<1:33:18,  4.01s/it]                                                           Train:  26%|██▌       | 480/1875 [32:10<1:33:18,  4.01s/it]Train:  26%|██▌       | 480/1875 [32:10<1:33:18,  4.01s/it]Train:  26%|██▌       | 481/1875 [32:14<1:33:21,  4.02s/it]Train:  26%|██▌       | 482/1875 [32:18<1:33:16,  4.02s/it]Train:  26%|██▌       | 483/1875 [32:22<1:33:15,  4.02s/it]Train:  26%|██▌       | 484/1875 [32:26<1:33:22,  4.03s/it]Train:  26%|██▌       | 485/1875 [32:30<1:33:10,  4.02s/it]                                                           Train:  26%|██▌       | 485/1875 [32:30<1:33:10,  4.02s/it]Train:  26%|██▌       | 485/1875 [32:30<1:33:10,  4.02s/it]Train:  26%|██▌       | 486/1875 [32:34<1:33:12,  4.03s/it]Train:  26%|██▌       | 487/1875 [32:38<1:33:06,  4.03s/it]Train:  26%|██▌       | 488/1875 [32:42<1:32:39,  4.01s/it]Train:  26%|██▌       | 489/1875 [32:46<1:32:36,  4.01s/it]Train:  26%|██▌       | 490/1875 [32:50<1:32:37,  4.01s/it]                                                           Train:  26%|██▌       | 490/1875 [32:50<1:32:37,  4.01s/it]Train:  26%|██▌       | 490/1875 [32:50<1:32:37,  4.01s/it]Train:  26%|██▌       | 491/1875 [32:54<1:32:46,  4.02s/it]Train:  26%|██▌       | 492/1875 [32:58<1:32:38,  4.02s/it]Train:  26%|██▋       | 493/1875 [33:02<1:32:31,  4.02s/it]Train:  26%|██▋       | 494/1875 [33:06<1:32:35,  4.02s/it]Train:  26%|██▋       | 495/1875 [33:10<1:32:32,  4.02s/it]                                                           Train:  26%|██▋       | 495/1875 [33:10<1:32:32,  4.02s/it]Train:  26%|██▋       | 495/1875 [33:10<1:32:32,  4.02s/it]Train:  26%|██▋       | 496/1875 [33:14<1:32:32,  4.03s/it]Train:  27%|██▋       | 497/1875 [33:18<1:32:32,  4.03s/it]Train:  27%|██▋       | 498/1875 [33:22<1:32:35,  4.03s/it]Train:  27%|██▋       | 499/1875 [33:26<1:32:21,  4.03s/it]Train:  27%|██▋       | 500/1875 [33:30<1:31:51,  4.01s/it]                                                           Train:  27%|██▋       | 500/1875 [33:30<1:31:51,  4.01s/it]Train:  27%|██▋       | 500/1875 [33:30<1:31:51,  4.01s/it][INFO:swift] Saving model checkpoint to /home/u1501463/tool_use_LALM/tool_use_training/stage1_training/v5-20260808-112705/checkpoint-500
+Train:  27%|██▋       | 501/1875 [33:35<1:38:32,  4.30s/it]Train:  27%|██▋       | 502/1875 [33:39<1:36:45,  4.23s/it]Train:  27%|██▋       | 503/1875 [33:43<1:34:55,  4.15s/it]Train:  27%|██▋       | 504/1875 [33:47<1:33:35,  4.10s/it]Train:  27%|██▋       | 505/1875 [33:51<1:33:01,  4.07s/it]                                                           Train:  27%|██▋       | 505/1875 [33:51<1:33:01,  4.07s/it]Train:  27%|██▋       | 505/1875 [33:51<1:33:01,  4.07s/it]Train:  27%|██▋       | 506/1875 [33:55<1:32:47,  4.07s/it]Train:  27%|██▋       | 507/1875 [33:59<1:32:24,  4.05s/it]Train:  27%|██▋       | 508/1875 [34:03<1:32:05,  4.04s/it]Train:  27%|██▋       | 509/1875 [34:07<1:31:50,  4.03s/it]Train:  27%|██▋       | 510/1875 [34:11<1:31:36,  4.03s/it]                                                           Train:  27%|██▋       | 510/1875 [34:11<1:31:36,  4.03s/it]Train:  27%|██▋       | 510/1875 [34:11<1:31:36,  4.03s/it]Train:  27%|██▋       | 511/1875 [34:15<1:31:16,  4.02s/it]Train:  27%|██▋       | 512/1875 [34:19<1:30:54,  4.00s/it]Train:  27%|██▋       | 513/1875 [34:23<1:30:56,  4.01s/it]Train:  27%|██▋       | 514/1875 [34:27<1:30:56,  4.01s/it]Train:  27%|██▋       | 515/1875 [34:31<1:30:54,  4.01s/it]                                                           Train:  27%|██▋       | 515/1875 [34:31<1:30:54,  4.01s/it]Train:  27%|██▋       | 515/1875 [34:31<1:30:54,  4.01s/it]Train:  28%|██▊       | 516/1875 [34:35<1:30:47,  4.01s/it]Train:  28%|██▊       | 517/1875 [34:39<1:30:47,  4.01s/it]Train:  28%|██▊       | 518/1875 [34:44<1:30:49,  4.02s/it]Train:  28%|██▊       | 519/1875 [34:48<1:30:53,  4.02s/it]Train:  28%|██▊       | 520/1875 [34:52<1:30:53,  4.02s/it]                                                           Train:  28%|██▊       | 520/1875 [34:52<1:30:53,  4.02s/it]Train:  28%|██▊       | 520/1875 [34:52<1:30:53,  4.02s/it]Train:  28%|██▊       | 521/1875 [34:56<1:30:42,  4.02s/it]Train:  28%|██▊       | 522/1875 [35:00<1:30:49,  4.03s/it]Train:  28%|██▊       | 523/1875 [35:04<1:30:45,  4.03s/it]Train:  28%|██▊       | 524/1875 [35:08<1:30:49,  4.03s/it]Train:  28%|██▊       | 525/1875 [35:12<1:30:30,  4.02s/it]                                                           Train:  28%|██▊       | 525/1875 [35:12<1:30:30,  4.02s/it]Train:  28%|██▊       | 525/1875 [35:12<1:30:30,  4.02s/it]Train:  28%|██▊       | 526/1875 [35:16<1:30:30,  4.03s/it]Train:  28%|██▊       | 527/1875 [35:20<1:30:01,  4.01s/it]Train:  28%|██▊       | 528/1875 [35:24<1:30:03,  4.01s/it]Train:  28%|██▊       | 529/1875 [35:28<1:29:48,  4.00s/it]Train:  28%|██▊       | 530/1875 [35:32<1:29:48,  4.01s/it]                                                           Train:  28%|██▊       | 530/1875 [35:32<1:29:48,  4.01s/it]Train:  28%|██▊       | 530/1875 [35:32<1:29:48,  4.01s/it]Train:  28%|██▊       | 531/1875 [35:36<1:29:54,  4.01s/it]Train:  28%|██▊       | 532/1875 [35:40<1:29:39,  4.01s/it]Train:  28%|██▊       | 533/1875 [35:44<1:29:55,  4.02s/it]Train:  28%|██▊       | 534/1875 [35:48<1:30:02,  4.03s/it]Train:  29%|██▊       | 535/1875 [35:52<1:29:53,  4.02s/it]                                                           Train:  29%|██▊       | 535/1875 [35:52<1:29:53,  4.02s/it]Train:  29%|██▊       | 535/1875 [35:52<1:29:53,  4.02s/it]Train:  29%|██▊       | 536/1875 [35:56<1:29:32,  4.01s/it]Train:  29%|██▊       | 537/1875 [36:00<1:29:30,  4.01s/it]Train:  29%|██▊       | 538/1875 [36:04<1:29:32,  4.02s/it]Train:  29%|██▊       | 539/1875 [36:08<1:29:31,  4.02s/it]Train:  29%|██▉       | 540/1875 [36:12<1:29:09,  4.01s/it]                                                           Train:  29%|██▉       | 540/1875 [36:12<1:29:09,  4.01s/it]Train:  29%|██▉       | 540/1875 [36:12<1:29:09,  4.01s/it]Train:  29%|██▉       | 541/1875 [36:16<1:29:15,  4.01s/it]Train:  29%|██▉       | 542/1875 [36:20<1:28:56,  4.00s/it]Train:  29%|██▉       | 543/1875 [36:24<1:28:55,  4.01s/it]Train:  29%|██▉       | 544/1875 [36:28<1:28:51,  4.01s/it]Train:  29%|██▉       | 545/1875 [36:32<1:28:50,  4.01s/it]                                                           Train:  29%|██▉       | 545/1875 [36:32<1:28:50,  4.01s/it]Train:  29%|██▉       | 545/1875 [36:32<1:28:50,  4.01s/it]Train:  29%|██▉       | 546/1875 [36:36<1:29:00,  4.02s/it]Train:  29%|██▉       | 547/1875 [36:40<1:29:03,  4.02s/it]Train:  29%|██▉       | 548/1875 [36:44<1:28:54,  4.02s/it]Train:  29%|██▉       | 549/1875 [36:48<1:28:47,  4.02s/it]Train:  29%|██▉       | 550/1875 [36:52<1:28:51,  4.02s/it]                                                           Train:  29%|██▉       | 550/1875 [36:52<1:28:51,  4.02s/it]Train:  29%|██▉       | 550/1875 [36:52<1:28:51,  4.02s/it]Train:  29%|██▉       | 551/1875 [36:56<1:28:42,  4.02s/it]Train:  29%|██▉       | 552/1875 [37:00<1:28:23,  4.01s/it]Train:  29%|██▉       | 553/1875 [37:04<1:28:34,  4.02s/it]Train:  30%|██▉       | 554/1875 [37:08<1:28:21,  4.01s/it]Train:  30%|██▉       | 555/1875 [37:12<1:28:23,  4.02s/it]                                                           Train:  30%|██▉       | 555/1875 [37:12<1:28:23,  4.02s/it]Train:  30%|██▉       | 555/1875 [37:12<1:28:23,  4.02s/it]Train:  30%|██▉       | 556/1875 [37:16<1:28:18,  4.02s/it]Train:  30%|██▉       | 557/1875 [37:20<1:28:24,  4.02s/it]Train:  30%|██▉       | 558/1875 [37:24<1:28:22,  4.03s/it]Train:  30%|██▉       | 559/1875 [37:28<1:28:11,  4.02s/it]Train:  30%|██▉       | 560/1875 [37:32<1:28:00,  4.02s/it]                                                           Train:  30%|██▉       | 560/1875 [37:32<1:28:00,  4.02s/it]Train:  30%|██▉       | 560/1875 [37:32<1:28:00,  4.02s/it]Train:  30%|██▉       | 561/1875 [37:36<1:27:40,  4.00s/it]Train:  30%|██▉       | 562/1875 [37:40<1:27:39,  4.01s/it]Train:  30%|███       | 563/1875 [37:44<1:27:44,  4.01s/it]Train:  30%|███       | 564/1875 [37:48<1:27:38,  4.01s/it]Train:  30%|███       | 565/1875 [37:52<1:27:38,  4.01s/it]                                                           Train:  30%|███       | 565/1875 [37:52<1:27:38,  4.01s/it]Train:  30%|███       | 565/1875 [37:52<1:27:38,  4.01s/it]Train:  30%|███       | 566/1875 [37:56<1:27:39,  4.02s/it]Train:  30%|███       | 567/1875 [38:00<1:27:32,  4.02s/it]Train:  30%|███       | 568/1875 [38:04<1:27:23,  4.01s/it]Train:  30%|███       | 569/1875 [38:08<1:27:28,  4.02s/it]Train:  30%|███       | 570/1875 [38:12<1:27:26,  4.02s/it]                                                           Train:  30%|███       | 570/1875 [38:12<1:27:26,  4.02s/it]Train:  30%|███       | 570/1875 [38:12<1:27:26,  4.02s/it]Train:  30%|███       | 571/1875 [38:16<1:27:23,  4.02s/it]Train:  31%|███       | 572/1875 [38:20<1:26:57,  4.00s/it]Train:  31%|███       | 573/1875 [38:24<1:26:56,  4.01s/it]Train:  31%|███       | 574/1875 [38:28<1:27:00,  4.01s/it]Train:  31%|███       | 575/1875 [38:32<1:26:49,  4.01s/it]                                                           Train:  31%|███       | 575/1875 [38:32<1:26:49,  4.01s/it]Train:  31%|███       | 575/1875 [38:32<1:26:49,  4.01s/it]Train:  31%|███       | 576/1875 [38:36<1:26:50,  4.01s/it]Train:  31%|███       | 577/1875 [38:40<1:26:49,  4.01s/it]Train:  31%|███       | 578/1875 [38:44<1:26:52,  4.02s/it]Train:  31%|███       | 579/1875 [38:48<1:26:49,  4.02s/it]Train:  31%|███       | 580/1875 [38:53<1:26:48,  4.02s/it]                                                           Train:  31%|███       | 580/1875 [38:53<1:26:48,  4.02s/it]Train:  31%|███       | 580/1875 [38:53<1:26:48,  4.02s/it]Train:  31%|███       | 581/1875 [38:57<1:26:42,  4.02s/it]Train:  31%|███       | 582/1875 [39:01<1:26:34,  4.02s/it]Train:  31%|███       | 583/1875 [39:05<1:26:30,  4.02s/it]Train:  31%|███       | 584/1875 [39:09<1:26:33,  4.02s/it]Train:  31%|███       | 585/1875 [39:13<1:26:24,  4.02s/it]                                                           Train:  31%|███       | 585/1875 [39:13<1:26:24,  4.02s/it]Train:  31%|███       | 585/1875 [39:13<1:26:24,  4.02s/it]Train:  31%|███▏      | 586/1875 [39:17<1:26:14,  4.01s/it]Train:  31%|███▏      | 587/1875 [39:21<1:25:52,  4.00s/it]slurmstepd-hgpn02: error: *** JOB 295160 ON hgpn02 CANCELLED AT 2026-08-08T12:07:19 DUE TO TIME LIMIT ***

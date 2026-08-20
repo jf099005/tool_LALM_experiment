@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=training                     # 工作名稱
+#SBATCH --job-name=qwen3_omni_grpo_smoketest    # 工作名稱
 #SBATCH --partition=normal                         # 使用的 partition (請根據你的系統修改)
-#SBATCH --time=01:40:00                         # 執行時間上限 (小時:分鐘:秒)
+#SBATCH --time=01:00:00                         # 小規模測試上限 -- GRPO 還要跑 rollout 生成，比 SFT 更吃記憶體，比起 SFT 更可能在 2 張卡上 OOM，這正是這次測試要驗證的地方
 #SBATCH --account=MST113234     ####### 請記得換成您的計畫代碼 #######
 #SBATCH --nodes=1                               # (-N) Maximum number of nodes to be allocated
-#SBATCH --gpus-per-node=1                       # Gpus per node
-#SBATCH --cpus-per-task=4                       # (-c) Number of cores per MPI task
+#SBATCH --gpus-per-node=2                       # 2x H100 80G -- 需與 run_grpo.sh 的 NPROC_PER_NODE 預設值一致
+#SBATCH --cpus-per-task=8                       # (-c) Number of cores per MPI task -- 依 GPU 數等比例縮放
 #SBATCH --ntasks-per-node=1                     # Maximum number of tasks on each node
 #SBATCH -o ./logs/training_%j.log               # output file (%j expands to jobId)
 #SBATCH -e ./logs/training_%j.err               # output file (%j expands to jobId)
@@ -40,11 +40,6 @@ GPU_MONITOR_PID=$!
 
 conda activate swift
 
-python -u train.py \
-	--model /work/u1501463/model_qwen_25/ \
-	--dataset /work/u1501463/stage1/train.jsonl \
-	--output_dir ./stage1_training
-
+bash run_grpo.sh
 
 echo "after conda"
-
