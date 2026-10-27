@@ -35,6 +35,13 @@ KNOWN_DEFAULT_SYSTEM_PROMPTS = {
     "qwen2_omni": "You are a helpful assistant.",
     "qwen2_5_vl": "You are a helpful assistant.",
     "qwen2_audio": "You are a helpful assistant.",
+    # Unlike the rest of the Qwen family, ms-swift's own template registration
+    # (`QwenTemplateMeta(MLLMTemplateType.qwen3_omni, ..., default_system=None, ...)`
+    # in swift/template/templates/qwen.py) explicitly overrides the default system
+    # message to *none* for Qwen3-Omni. Empty here (not "You are a helpful
+    # assistant.") to match that -- see `compose_system_prompt`, which still
+    # concatenates cleanly with the tool catalogue when this is "".
+    "qwen3_omni": "",
 }
 GENERIC_FALLBACK_SYSTEM_PROMPT = "You are a helpful assistant."
 
@@ -103,7 +110,13 @@ def compose_system_prompt(
     `base_system_prompt` (an explicit override) wins if given; otherwise the
     base is auto-detected from `model_dir`/`model_type` via
     `load_official_system_prompt`.
+
+    `tools_block` is expected to already be a complete, self-labeled
+    preamble section -- see `tools.tools_registry.describe_available_tools`,
+    which renders it via a `tool_call_formats.ToolCallFormat` (Qwen's own
+    "# Tools" heading by default). This function just concatenates; it
+    doesn't add its own label on top.
     """
     if base_system_prompt is None:
         base_system_prompt = load_official_system_prompt(model_dir, model_type)
-    return f"{base_system_prompt}\n\nAvailable tools:\n{tools_block}"
+    return f"{base_system_prompt}\n\n{tools_block}"

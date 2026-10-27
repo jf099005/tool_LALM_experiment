@@ -1,0 +1,73 @@
+{
+  "num_samples": 100,
+  "total_predicted_tool_calls": 100,
+  "total_successful_tool_calls": 99,
+  "overall_tool_call_success_rate": 0.99,
+  "mean_exact_sequence_match": 0.98,
+  "mean_tool_name_precision": 0.98,
+  "mean_tool_name_recall": 0.98,
+  "mean_tool_name_f1": 0.98,
+  "mean_gt_tool_coverage": 0.98,
+  "mean_used_any_gt_tool": 0.98,
+  "mean_used_all_gt_tools": 0.98,
+  "mean_audio_log_mel_cosine": 0.9934854435920716,
+  "mean_audio_mfcc_cosine": 0.9944084095954895,
+  "mean_audio_closeness_score": 0.9969734561443329,
+  "mean_audio_log_mel_cosine_diff": 0.07104084700345993,
+  "mean_audio_mfcc_cosine_diff": 0.05757001101970673,
+  "mean_audio_closeness_diff": 0.032152707651257516,
+  "mean_duration_ratio": 0.9997795010856314,
+  "stop_reason_counts": {
+    "model_signaled_done": 99,
+    "tool_execution_failed": 1
+  },
+  "total_tag_malformed_valid_content": 0,
+  "tag_malformed_valid_content_rate_over_turns": 0.0,
+  "num_samples_with_tag_malformed_valid_content": 0,
+  "breakdown_by_num_gt_steps": {
+    "1": {
+      "n": 100,
+      "mean_tool_name_f1": 0.98,
+      "mean_audio_closeness": 0.9969734561443329
+    }
+  },
+  "param_metrics_by_tool": {
+    "clipping": {
+      "n": 14,
+      "mean_audio_begin_offset_sec": 0.0,
+      "mean_audio_end_offset_sec": 0.08185714285714285,
+      "mean_audio_id_match": 1.0
+    },
+    "denoise": {
+      "n": 17,
+      "mean_algorithm_match": 0.47058823529411764,
+      "mean_audio_id_match": 1.0,
+      "mean_sensitivity_diff": 0.35
+    },
+    "pitch_shift": {
+      "n": 18,
+      "mean_n_steps_diff": 0.4444444444444444,
+      "mean_bins_per_octave_diff": 0.0,
+      "mean_audio_id_match": 1.0
+    },
+    "pre_emphasis": {
+      "n": 14,
+      "mean_audio_begin_offset_sec": 0.0,
+      "mean_audio_end_offset_sec": 0.0001428571428570637,
+      "mean_coef_diff": 0.06071428571428568,
+      "mean_audio_id_match": 1.0
+    },
+    "time_stretch": {
+      "n": 20,
+      "mean_rate_diff": 0.0,
+      "mean_audio_id_match": 1.0
+    },
+    "trim_silence": {
+      "n": 15,
+      "mean_audio_begin_offset_sec": 0.0,
+      "mean_audio_end_offset_sec": 0.00019999999999988915,
+      "mean_threshold_db_diff": 7.333333333333333,
+      "mean_audio_id_match": 1.0
+    }
+  }
+}

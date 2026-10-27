@@ -1,0 +1,37 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+Research code for teaching a large audio-language model (Qwen3-Omni-30B-A3B, earlier Qwen2.5-Omni) to call audio-processing tools (clip, denoise, source separation, super-resolution, pitch/time, ...) in a multi-turn loop, then using that to answer audio QA/MCQ benchmarks (MMAU, MMAR, DCASE 2025 task 5).
+
+**Read `AGENT_TOOL_DESIGN.md` (Chinese) before any task touching tools, prompts, or the tool-call protocol** — it is the authoritative design doc, and it asks to be updated when responsibilities move. `TODO.md` lists consumers still on the old protocol. Several READMEs (`interface/README.md`, `testing_tool_use_benchmark/README.md`) are stale: they describe the legacy flat-JSON `output_audio_id` protocol and `~/miniconda3/envs/ms-swift` paths.
+
+## Running things (SLURM cluster — hard rule)
+
+- Never run training/inference/eval/GPU work directly (no `python train.py`, `srun`, `torchrun`, `sbatch` by Claude). Write or edit an `.sbatch` file and hand it to the user to submit; a `PreToolUse` hook enforces this. `pip install` for env setup is allowed; on any permission error stop and report.
+- Every sbatch follows the same pattern: `#SBATCH --partition=normal --account=MST113234`, `ml load miniconda3/24.11.1`, `source $(conda info --base)/etc/profile.d/conda.sh`, `conda activate <env>`, logs to `./logs/<name>_%j.{log,err}`, submitted from the script's own directory. `conda` is not on PATH otherwise. Background `nvidia-smi` logging loops must sleep ≥300 s (NCHC treats polling at <30 s for >10 min as a system attack); never poll/monitor from the Claude session itself.
+- Conda envs live in `~/.conda/envs/` (not `~/miniconda3`, which no longer exists). Since 2026-10-16 `~/.conda` is a symlink to `/work/u1501463/.conda`; all scripts, shebangs and `tools_registry._CONDA_ENV_PYTHON` use the `/home/u1501463/.conda/...` form, so keep the symlink (removing it breaks every env):
+  - `swift-qwen3` — ms-swift 4.x; stage-1 data generation, SFT (`tool_use_training/train.py` wraps ms-swift `sft_main`), benchmark eval, LoRA merge (`swift export`).
+  - `verl-omni` — stage-3 RL (verl + editable `~/verl-omni`, vllm/vllm-omni). Its vllm must be the `0.27.0+cu129` wheel (GPU nodes run driver 550; the default PyPI wheel is CUDA-13 and won't run). `stage3_mcq_rl/run_grpo.sh` unsets Slurm's `ROCR_VISIBLE_DEVICES` (verl rejects it).
+  - `deepfilternet`, `audiosr`, `sam_audio` — one env per heavy DL tool; never imported into the main env (see below). `sam_audio` needs `module load cuda/12.4` (keep that module out of verl-omni processes — stage-3 sbatches pass it only to tool servers via `HEAVY_TOOL_LD_LIBRARY_PATH`).
+- Data, models and checkpoints live under `/work/u1501463/` (base model `Qwen3-Omni-30B-A3B-Instruct`, stage-1 data `stage1_full_toolset/`, stage-1 LoRA `stage1_model_full_toolset/v1-*/checkpoint-100`, datasets AudioMCQ, CompA_R, DCASE_2025_task5, audioset_20k, MMAU, MMAR, MMAU-Pro).
+- No test suite/linter/build. Ad-hoc checks: `tools/smoke_test_dl_envs.sbatch` (heavy tool envs) and `tool_use_training/stage3_mcq_rl/tests/smoke_agent_loop.py` (CPU-only; run under verl-omni; `smoke_test.sbatch` wraps it plus a 2-step GPU run).
+
+## Architecture
+
+Dependencies point one way: `tools/` + `tool_call_formats.py` + `official_system_prompt.py` ← `interface/` ← consumers (`tool_use_training/*`, `testing_tool_use_benchmark/`).
+
+- **`tools/tools_registry.py` is the single definition of the active toolset** (`available_tool_names/schemas`, `describe_available_tools`). Every consumer — data generation, benchmark, live agent, RL — reads it, so the model is never shown a tool it wasn't trained on. To add/remove a tool, change its `@register` block there; don't add allowlists elsewhere. `tools/_tool_table.py`/`TOOL_NAME_TO_CLASS` is the full catalogue of implemented tools, not the active set. The `@register` closures also carry random-parameter synthesis used only for training-data generation.
+- **Heavy tools** (`human_voice_enhance`, `super_resolution`, `extract_target`, `remove_target`) run out-of-process in their own conda env via `tools/heavy_tool_pool.py`: inside `tools_registry.serve_heavy_tools()` one persistent `heavy_tool_server.py` per env (Unix socket, path advertised by `HEAVY_TOOL_POOL_DIR`, inherited by child processes); otherwise a one-shot subprocess that reloads the model per call. Unavailable tools are bugs to fix in the env, not something to gate with availability checks.
+- **Two address spaces**: tools execute on `audio_path`; the model only sees/emits `audio_id` (`audio_0` = input, later ids assigned by the harness after each call — the model never names outputs). The only conversion point is `interface/executor.py::run_tool_call()`; every new eval/reward/agent must call it rather than re-implementing validate+execute.
+- **Wire format** is pluggable in `tool_call_formats.py` (default `QwenToolCallFormat`: Hermes `<tools>`/`<tool_call>{"name","arguments"}`; plain text with no `<tool_call>` = done). Tool-result turns are `Output of step k: <audio_k><audio>` (`interface/protocol.py::render_tool_result_message`), deliberately **not** wrapped in `<tool_response>` — ms-swift's hermes agent template adds that wrapper; only `interface/engine.py::VLLMEngine` (raw ChatML) wraps manually.
+- **System prompt** = `official_system_prompt.compose_system_prompt(persona, tools_block)`; the persona for Qwen3-Omni is empty (`model_type="qwen3_omni"`), so the system turn starts with `"\n\n# Tools"`. Training, eval and RL must produce it byte-identically.
+- `interface/agent.py::ToolCallingAgent` is the reference multi-turn loop (engine `generate_turn` → `parse_turn` → `run_tool_call` → tool turn), with `SwiftEngine`/`VLLMEngine` backends in `interface/engine.py`.
+
+## Pipeline stages (`tool_use_training/`)
+
+1. **Stage 1 — SFT** (`gen_1st_stage_data/`): `build_dataset.py` synthesizes source→target audio pairs by applying random tool chains, then emits ms-swift multi-turn rows (assistant `<tool_call>` turn → tool turn with the real output audio → closing turn; optional one-line CoT from `cot_templates.py`). `testing_tool_use_benchmark/build_benchmark.py` reuses the same generator with a different seed; `run_eval.py` scores tool-chain accuracy and audio fidelity.
+2. **Stage 2** (`gen_2nd_2_data/`, `tool_use_RL_full/`): disturb-and-recover data and an older single-shot GRPO attempt (one `{"tool_calls": [...]}` JSON, not per-turn). `tool_appliers.py` intentionally duplicates `tools_registry` appliers so stages evolve independently (see design doc §7 for other intentional "duplicates").
+3. **Stage 3 — MCQ RL** (`stage3_mcq_rl/`, see its README): verl-omni GSPO with a custom agent loop (`audio_tool_agent_loop.py`) because verl's `ToolAgentLoop` can't return audio. Order: `merge_stage1.sbatch` → `build_data.sbatch` → `smoke_test.sbatch` → `train.sbatch` → `eval.sbatch` (val_only over MMAU test-mini + MMAR). Prompt/answer format lives only in `mcq_protocol.py`; training must launch via `launch_with_tool_pool.py` (the agent loop refuses to run without the heavy-tool pool).
+
+Older DCASE/MCQ QA paths (`prompts/`, `audio_edit/editor.py`, `apply_tools.py`, `qwen25_*`/`qwen3_*` evaluation scripts at the root) call tools by real `audio_path` and don't use the `audio_id` protocol; leave them alone unless asked.

@@ -26,7 +26,10 @@ def cmp(sample_a, sample_b):
     function to change the merge criteria (e.g. prefer `correct`, lower
     semantic entropy, etc).
     """
-
+    if sample_a.get("correct"):
+        return sample_a
+    if not sample_b.get("correct"):
+        return sample_a
     delta = 0.1
 
     pa = (sample_a.get("uncertainty") or {}).get("p_true")

@@ -1,0 +1,62 @@
+目前 toolset 一覽（來源：tools/tools_registry.py::available_tool_names()，2026-10-17）
+====================================================================================
+
+說明：
+- 這份清單是 tools/tools_registry.py 裡「有 @register 且未被註解」的工具，也就是
+  training data 生成、benchmark construct、live agent 實際會用到的那一組。
+- 「必填參數」只列 required 裡的參數（不含 audio_path/output_path，由 harness 自動帶入，
+  模型不需要也不應該自己填）；「選填參數」是 schema 裡其餘的 properties。
+- 執行方式：「in-process」＝在呼叫端目前的 Python 直譯器內直接跑；
+  「heavy (conda env)」＝由 tools/heavy_tool_pool.py 轉發到各自獨立的 conda env 執行
+  （在 serve_heavy_tools() 區塊內走常駐 server，否則走一次性 subprocess）。
+
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+| #  | 工具名稱            | 功能說明                                                      | 必填參數             | 選填參數                                         | 執行方式 / 所屬 conda env       |
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+| 1  | clipping           | 從來源 WAV 依 HH:MM:SS.mmm 起訖時間擷取片段                          | audio_begin,       | (無)                                           | in-process                 |
+|    |                    |                                                              | audio_end          |                                               |                             |
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+| 2  | denoise            | 對 WAV 套用降噪／回音消除，可選演算法                                   | algorithm          | noise_factor, sensitivity                     | in-process                 |
+|    |                    | (spectral_subtraction / wiener / echo_cancellation /        |                    |                                               |                             |
+|    |                    | adaptive)                                                    |                    |                                               |                             |
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+| 3  | pre_emphasis       | 對 WAV 片段套用預強調濾波，提升高頻、改善頻譜平衡                            | audio_begin,       | coef                                          | in-process                 |
+|    |                    |                                                              | audio_end          |                                               |                             |
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+| 4  | trim_silence       | 裁掉 WAV 片段開頭／結尾的靜音                                        | audio_begin,       | threshold_db, frame_length, hop_length        | in-process                 |
+|    |                    | (需 librosa，_HAS_LIBROSA 為真才註冊)                               | audio_end          |                                               | (需 librosa)                |
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+| 5  | pitch_shift        | 用 librosa 將音訊移調 n_steps 個半音，不改變長度                         | n_steps            | bins_per_octave                               | in-process                 |
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+| 6  | time_stretch       | 用 librosa 以固定倍率 rate 伸縮時長，不改變音高                          | rate               | (無)                                           | in-process                 |
+|    |                    | (rate>1 加速縮短；rate<1 減速拉長)                                   |                    |                                               |                             |
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+| 7  | human_voice_enhance| 用 DeepFilterNet 降低背景噪音、增強人聲                                | (無，僅 audio_path)  | (無)                                           | heavy (conda env:          |
+|    |                    |                                                              |                    |                                               | deepfilternet)              |
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+| 8  | super_resolution   | 用 AudioSR latent diffusion 模型做超解析，輸出 48kHz                  | (無，可選            | model_name (basic/speech), ddim_steps,        | heavy (conda env:          |
+|    |                    | (適合修復低品質／窄頻帶／低取樣率錄音)                                     | model_name)        | guidance_scale                                | audiosr)                    |
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+| 9  | extract_target     | 用 SAM-Audio 從 WAV 片段抽出指定音源，僅保留目標聲道                       | target_description | (無)                                           | heavy (conda env:          |
+|    |                    | 標籤固定為："vocals","background sound","background music","noise" |                    |                                               | sam_audio)                  |
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+| 10 | remove_target      | 用 SAM-Audio 從 WAV 片段移除指定音源，保留其餘聲音                        | target_description | (無)                                           | heavy (conda env:          |
+|    |                    | 標籤固定為："vocals","background sound","background music","noise" |                    |                                               | sam_audio)                  |
++----+--------------------+------------------------------------------------------------+--------------------+----------------------------------------------+-----------------------------+
+
+目前「已實作但未啟用」的工具（tools_registry.py 裡 @register 被註解掉，不在上面清單裡）：
+  amplitude_normalize, loudness_normalize, remove_dc_offset, spectral_normalize,
+  add_noise, pad_noise, insert_event
+這些在 tools/ 底下有完整實作（normalize.py / audio_edit/editor.py），但目前不會被模型看到、
+也不會出現在訓練資料或 benchmark 裡；要啟用請在 tools_registry.py 取消對應 @register 的註解。
+
+asr（ASRTool，Whisper 語音辨識轉文字）不在這份清單裡：它在 tools/_tool_table.py 有登記、
+在 apply_tools.py::TOOL_ENV 也有對應的 Whisper env，但 tools_registry.py 裡沒有
+@register("asr", ...) 區塊，所以不屬於「模型可呼叫的 audio-to-audio 工具鏈」，只在其他腳本
+（如 apply_tools.py）被直接呼叫。
+
+資料來源檔案：
+  tools/tools_registry.py          - 啟用清單與啟用條件 (_HAS_LIBROSA/_HAS_DEEPFILTER/_HAS_AUDIOSR/_HAS_SAM_AUDIO)
+  tools/clipping.py, denoise.py, normalize.py, pitch_time.py - 輕量工具的 description()/parameter_schema()
+  tools/human_voice_enhance.py, super_resolution.py, extract_remove_target.py, source_separation.py - 重量 DL 工具
+  tools/_tool_table.py             - 全部已實作工具（含未啟用者）的完整目錄

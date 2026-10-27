@@ -4,6 +4,11 @@ Each template takes the source audio reference and the target audio
 reference and renders a full question. A new template is picked at random
 per sample so the dataset doesn't collapse onto one repeated phrasing.
 
+`source`/`target` are already-rendered audio tags (e.g. `<audio_0><audio>`,
+see `interface.protocol.audio_tag`), not file paths -- the caller embeds the
+model-facing reference directly, so no downstream step needs to find-and-replace
+a literal path with a tag after the fact.
+
 The tool catalogue is NOT rendered here -- it lives in the system prompt
 instead (see `official_system_prompt.py`), not repeated inline in every user
 turn.

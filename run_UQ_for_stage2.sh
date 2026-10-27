@@ -1,4 +1,4 @@
-exp_name=human_voice_amplify
+# exp_name=human_voice_amplify
 
 # --- Uncertainty quantification controls -----------------------------------
 # Number of stochastic samples drawn per item (temperature ~1.0) used for the
@@ -15,7 +15,7 @@ uq_semantic_entropy=false              # H_sem via NLI entailment clustering (lo
 uq_p_true=true                         # P(True) self-verification (one extra generation per item)
 # -----------------------------------------------------------------------------
 
-result_path=/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_stage_data/exp/eval_result
+result_path=/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp/eval_result
 mkdir -p ${result_path}
 
 to_flag() {
@@ -27,12 +27,14 @@ to_flag() {
     fi
 }
 
-original_path=tool_use_training/gen_2nd_2_data/exp/original_subset.json
-tool_applied_path=tool_use_training/gen_2nd_2_data/exp/tool_applied_subset.json
+stage2_datapath=/home/u1501463/tool_use_LALM/tool_use_training/gen_2nd_2_data/exp
 
-echo "Running uncertainty quantification on original subset..."
+original_path=${stage2_datapath}/original_subset.json
+tool_applied_path=${stage2_datapath}/tool_applied_subset.json
 
-python qwen25_with_tool_chain_evaluation.py \
+# echo "Running uncertainty quantification on original subset..."
+
+python qwen25_batch_evaluation.py \
     --subset_path ${original_path} \
     --compute_uncertainty \
     --output_path ${result_path}/disturbed_uq_results.json \
@@ -51,7 +53,7 @@ python qwen25_with_tool_chain_evaluation.py \
 
 echo "Running uncertainty quantification on recovered subset..."
 
-python qwen25_with_tool_chain_evaluation.py \
+python qwen25_batch_evaluation.py \
     --subset_path ${tool_applied_path} \
     --compute_uncertainty \
     --output_path ${result_path}/tool_applied_uq_results.json \

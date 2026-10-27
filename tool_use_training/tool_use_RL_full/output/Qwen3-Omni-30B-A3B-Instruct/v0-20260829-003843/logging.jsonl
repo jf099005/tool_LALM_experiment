@@ -1,0 +1,1 @@
+{"model_parameter_info": "PeftModelForCausalLM: 33263.7579M Params (1997.5373M Trainable [6.0051%]), 1.9201M Buffers.", "last_model_checkpoint": null, "best_model_checkpoint": null, "best_metric": null, "global_step": 0, "log_history": [], "memory": null}

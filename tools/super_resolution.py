@@ -13,9 +13,22 @@ try:
     import torch
     import torchaudio
     from audiosr import build_model, super_resolution
+    import audiosr.utils as _audiosr_utils
     _AUDIOSR_AVAILABLE = True
 except ImportError:  # pragma: no cover
     _AUDIOSR_AVAILABLE = False
+
+if _AUDIOSR_AVAILABLE:
+    # Upstream bug (audiosr 0.0.7, utils.lowpass_filtering_prepare_inference): for near-silent
+    # input, or when the detected cutoff lands on the top STFT bin, cutoff_freq becomes 24000 Hz
+    # == Nyquist at fs=48000, so scipy's filter design raises "critical frequencies must be
+    # 0 < Wn < 1". Upstream's intent there is "don't lowpass", so clamp just below Nyquist.
+    _upstream_lowpass = _audiosr_utils.lowpass
+
+    def _lowpass_below_nyquist(data, highcut, fs, order=5, _type="butter"):
+        return _upstream_lowpass(data, min(highcut, 0.99 * fs / 2), fs, order=order, _type=_type)
+
+    _audiosr_utils.lowpass = _lowpass_below_nyquist
 
 _MODEL_CACHE: Dict[str, Any] = {}
 

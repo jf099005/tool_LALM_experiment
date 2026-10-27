@@ -7,10 +7,12 @@ output schema is eval-oriented: it keeps the per-step ground-truth tool calls
 own predicted tool calls execute, and (b) compare the model's reconstructed
 audio against the ground-truth intermediate/final audio.
 
-Run this under the `ms-swift` conda env (it has librosa/soundfile/numpy/scipy,
-which is enough for every tool except the heavy ML-backed ones that depend on
-deepfilternet/audiosr/sam_audio -- those are simply absent from the toolset if
-unavailable, same as build_dataset.py).
+Run this under the `swift-qwen3`/`ms-swift` conda env (it has librosa/soundfile/numpy/scipy,
+which is enough for the light tools). The heavy ML-backed tools (human_voice_enhance /
+super_resolution / extract_target / remove_target) are part of the toolset whenever their
+`deepfilternet`/`audiosr`/`sam_audio` conda env exists (same as build_dataset.py) and are run
+in those envs through persistent servers started by `__main__` -- so this needs a GPU
+allocation: submit `construct.sbatch`, don't run it on a login node.
 
 Usage:
     ~/miniconda3/envs/ms-swift/bin/python build_benchmark.py \
@@ -34,8 +36,12 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from tool_use_training.gen_1st_stage_data.build_dataset import build_one_sample, collect_source_files  # noqa: E402
-from tools import synthetic_registry as tool_registry  # noqa: E402
+from tool_use_training.gen_1st_stage_data.build_dataset import (  # noqa: E402
+    build_one_sample,
+    collect_source_files,
+    load_excluded_stems,
+)
+from tools import tools_registry as tool_registry  # noqa: E402
 
 
 def main() -> None:
@@ -52,6 +58,18 @@ def main() -> None:
         "--output-file", type=Path, default=Path(__file__).resolve().parent / "benchmark.json",
     )
     parser.add_argument("--seed", type=int, default=1234, help="Use a seed disjoint from training generation.")
+    parser.add_argument(
+        "--exclude",
+        type=str,
+        default=None,
+        help=(
+            "Path to a dataset produced by gen_1st_stage_data/build_dataset.py -- either its "
+            "raw dataset JSON (--output-file) or its ms-swift SFT JSONL (--swift-output-file, "
+            "e.g. train.jsonl) -- whose source audio files must not be resampled here, so the "
+            "benchmark's held-out audio doesn't overlap with what the model was trained on. "
+            "Pass 'None' or omit to disable."
+        ),
+    )
     parser.add_argument("--max-attempts-per-sample", type=int, default=5)
     parser.add_argument(
         "--held-out-fraction", type=float, default=1.0,
@@ -63,7 +81,14 @@ def main() -> None:
 
     rng = random.Random(args.seed)
 
-    source_files = collect_source_files(args.sources)
+    exclude_path = None
+    if args.exclude and args.exclude.lower() != "none":
+        exclude_path = Path(args.exclude)
+    excluded_stems = load_excluded_stems(exclude_path)
+    if excluded_stems:
+        print(f"Excluding {len(excluded_stems)} source audio stem(s) from {exclude_path}", file=sys.stderr)
+
+    source_files = collect_source_files(args.sources, excluded_stems=excluded_stems)
     if not source_files:
         raise SystemExit(f"No source audio files found for sources={args.sources}")
     if args.held_out_fraction < 1.0:
@@ -110,4 +135,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    with tool_registry.serve_heavy_tools():
+        main()

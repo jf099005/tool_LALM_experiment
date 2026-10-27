@@ -21,6 +21,8 @@ except ImportError:  # pragma: no cover
     SAMAudio = None
     SAMAudioProcessor = None
 
+_MODEL_CACHE: Dict[str, Any] = {}
+
 
 class SourceSeparationTool(Tool):
     @classmethod
@@ -134,15 +136,20 @@ class SourceSeparationTool(Tool):
 
     @classmethod
     def _load_model_and_processor(cls):
+        # Cached per process so a long-lived worker (tools/heavy_tool_server.py) loads the
+        # model once instead of once per call; one-shot callers are unaffected.
+        if "sam" in _MODEL_CACHE:
+            return _MODEL_CACHE["sam"]
+
         local_model_dir = Path.cwd() / "models--facebook--sam-audio-large" / "snapshots" / "5f2cd3a9471a08c7282c06036be6893e18de8b70"
+        # separate() is always called with predict_spans=False, reranking_candidates=1, so the
+        # rankers (ImageBind/CLAP/Judge, need extra installs) and span predictor are never used.
+        model_kwargs = {"visual_ranker": None, "text_ranker": None, "span_predictor": None}
         if local_model_dir.exists():
             model_source = str(local_model_dir)
-            model_kwargs = {}
         else:
             model_source = "facebook/sam-audio-large"
-            model_kwargs = {
-                "cache_dir": "/work/u1501463/"
-            }
+            model_kwargs["cache_dir"] = "/work/u1501463/"
 
         model = SAMAudio.from_pretrained(model_source, **model_kwargs)
         processor = SAMAudioProcessor.from_pretrained(model_source)
@@ -153,7 +160,8 @@ class SourceSeparationTool(Tool):
 
         model = model.eval().to(device)
 
-        return model, processor, device
+        _MODEL_CACHE["sam"] = (model, processor, device)
+        return _MODEL_CACHE["sam"]
 
     @classmethod
     def _execute_single(
@@ -248,7 +256,20 @@ class SourceSeparationTool(Tool):
 
     @staticmethod
     def _save_wav(path: Path, wav: torch.Tensor, sample_rate: int) -> None:
-        torchaudio.save(str(path), wav.cpu().float().unsqueeze(0), sample_rate)
+        # PCM16, not torchaudio.save's default float32 WAV: the other tools (and
+        # tools_registry.get_duration_seconds) read chained inputs with stdlib `wave`,
+        # which rejects float WAVs.
+        import wave
+
+        import numpy as np
+
+        audio = wav.detach().cpu().float().clamp(-1.0, 1.0).numpy().reshape(-1)
+        audio_int16 = np.int16(np.round(audio * np.iinfo(np.int16).max))
+        with wave.open(str(path), "wb") as output_wav:
+            output_wav.setnchannels(1)
+            output_wav.setsampwidth(2)
+            output_wav.setframerate(sample_rate)
+            output_wav.writeframes(audio_int16.tobytes())
 
     @staticmethod
     def _parse_timestamp(value: str) -> float:
