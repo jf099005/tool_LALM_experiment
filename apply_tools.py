@@ -33,16 +33,16 @@ TOOLS_REQUIRING_OUTPUT_PATH: set[str] = {
 }
 
 TOOL_ENV: dict[str, str] = {
-    'asr': '/home/u1501463/miniconda3/envs/Whisper/bin/python',
-    'clipping': '/home/u1501463/miniconda3/envs/Whisper/bin/python',
-    'denoise': '/home/u1501463/miniconda3/envs/deepfilternet/bin/python',
-    'source_separation': '/home/u1501463/miniconda3/envs/sam_audio/bin/python',
-    'extract_target': '/home/u1501463/miniconda3/envs/sam_audio/bin/python',
-    'remove_target': '/home/u1501463/miniconda3/envs/sam_audio/bin/python',
-    'human_voice_enhance': '/home/u1501463/miniconda3/envs/deepfilternet/bin/python',
-    'super_resolution': '/home/u1501463/miniconda3/envs/audiosr/bin/python',
-    'pitch_shift': '/home/u1501463/miniconda3/envs/Whisper/bin/python',
-    'time_stretch': '/home/u1501463/miniconda3/envs/Whisper/bin/python',
+    'asr': '/home/u1501463/.conda/envs/Whisper/bin/python',
+    'clipping': '/home/u1501463/.conda/envs/Whisper/bin/python',
+    'denoise': '/home/u1501463/.conda/envs/deepfilternet/bin/python',
+    'source_separation': '/home/u1501463/.conda/envs/sam_audio/bin/python',
+    'extract_target': '/home/u1501463/.conda/envs/sam_audio/bin/python',
+    'remove_target': '/home/u1501463/.conda/envs/sam_audio/bin/python',
+    'human_voice_enhance': '/home/u1501463/.conda/envs/deepfilternet/bin/python',
+    'super_resolution': '/home/u1501463/.conda/envs/audiosr/bin/python',
+    'pitch_shift': '/home/u1501463/.conda/envs/Whisper/bin/python',
+    'time_stretch': '/home/u1501463/.conda/envs/Whisper/bin/python',
 }
 
 

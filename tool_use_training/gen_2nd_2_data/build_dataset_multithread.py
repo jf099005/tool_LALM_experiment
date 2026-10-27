@@ -187,7 +187,10 @@ def main() -> None:
     print(f"Running with {args.workers} worker thread(s)", file=sys.stderr)
     print_lock = threading.Lock()
     results: List[Optional[Dict[str, Any]]] = [None] * len(sampled)
-    with ThreadPoolExecutor(max_workers=args.workers) as executor:
+    # Heavy ML tools (if any are enabled) share one persistent server per conda env, so their
+    # GPU calls are serialized however many worker threads are waiting on them.
+    with ta.heavy_tool_pool.serve(ta.heavy_env_pythons(tool_config, tool_names)), \
+            ThreadPoolExecutor(max_workers=args.workers) as executor:
         future_to_idx = {
             executor.submit(
                 _process_item, idx, len(sampled), item, args, tool_names, tool_weights_list,

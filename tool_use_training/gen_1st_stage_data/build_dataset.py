@@ -35,9 +35,13 @@ Usage:
 
 See tools/tools_registry.py -- the project-wide toolset definition -- for which
 tools are active; it depends on what's importable in the current interpreter
-(run under the project's `ms-swift` env
-for librosa/soundfile-backed tools, or `deepfilternet`/`audiosr`/`sam_audio`
-to unlock those specific heavy tools).
+(run under the project's `swift-qwen3`/`ms-swift` env for the librosa/soundfile-backed
+tools). The heavy ML tools (human_voice_enhance / super_resolution / extract_target /
+remove_target) don't need their own env to be the current one: they're dispatched to
+`deepfilternet` / `audiosr` / `sam_audio` conda envs through persistent per-env servers that
+`__main__` starts up front (`tool_registry.serve_heavy_tools()`), so their models load once and
+GPU use stays serialized however many `--workers` there are. That needs a GPU allocation --
+submit via `run.sbatch`, not on a login node.
 """
 
 from __future__ import annotations
@@ -46,6 +50,7 @@ import argparse
 import json
 import os
 import random
+import shutil
 import sys
 import traceback
 import uuid
@@ -298,7 +303,6 @@ def build_one_sample(
 
     audio_a = tool_registry.ensure_wav(source_file, sample_dir)
     if audio_a.parent != sample_dir:
-        import shutil
         copied = sample_dir / f"A_{audio_a.name}"
         shutil.copy(str(audio_a), str(copied))
         audio_a = copied
@@ -394,6 +398,9 @@ def _build_sample_task(
         except Exception:
             print(f"Attempt {attempt + 1} failed for {sample_id} ({source_file}):", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)
+            # Retries reuse sample_id (hence the same sample_dir): drop the failed attempt's
+            # A_*.wav / step outputs so they don't sit next to the next attempt's files.
+            shutil.rmtree(work_dir / sample_id, ignore_errors=True)
             source_file = rng.choice(source_files)
 
     print(f"Giving up on {sample_id} after {max_attempts} attempts.", file=sys.stderr)
@@ -443,9 +450,10 @@ def main() -> None:
         default=1,
         help=(
             "Number of worker processes to build samples in parallel. "
-            "1 = sequential (original behavior). Each active tool here is "
-            "CPU-only, so this scales with core count -- avoid setting it "
-            "above os.cpu_count()."
+            "1 = sequential (original behavior). The light tools are CPU-only, so this "
+            "scales with core count -- avoid setting it above os.cpu_count(). The heavy "
+            "ML tools funnel through one GPU-backed server per conda env (served one call "
+            "at a time), so a sample that draws one waits its turn there."
         ),
     )
     parser.add_argument(
@@ -636,4 +644,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    # Entered before main() so the ProcessPoolExecutor workers it creates inherit the pool.
+    with tool_registry.serve_heavy_tools():
+        main()

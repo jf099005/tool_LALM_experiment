@@ -1,0 +1,1534 @@
+-----------------
+loading CUDA 12.4
+-----------------
+
+W1003 11:38:38.435000 2674227 site-packages/torch/distributed/run.py:792] 
+W1003 11:38:38.435000 2674227 site-packages/torch/distributed/run.py:792] *****************************************
+W1003 11:38:38.435000 2674227 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1003 11:38:38.435000 2674227 site-packages/torch/distributed/run.py:792] *****************************************
+[INFO:swift] Successfully registered `/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/dataset/data/dataset_info.json`.
+[INFO:swift] rank: 0, local_rank: 0, world_size: 2, local_world_size: 2
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+[INFO:swift] Setting args.lazy_tokenize: True
+[INFO:swift] Using deepspeed: {'fp16': {'enabled': 'auto', 'loss_scale': 0, 'loss_scale_window': 1000, 'initial_scale_power': 16, 'hysteresis': 2, 'min_loss_scale': 1}, 'bf16': {'enabled': 'auto'}, 'zero_optimization': {'stage': 3, 'offload_optimizer': {'device': 'none', 'pin_memory': True}, 'offload_param': {'device': 'none', 'pin_memory': True}, 'overlap_comm': False, 'contiguous_gradients': True, 'sub_group_size': 1000000000.0, 'reduce_bucket_size': 'auto', 'zero_quantized_weights': False, 'zero_quantized_gradients': False, 'stage3_prefetch_bucket_size': 'auto', 'stage3_param_persistence_threshold': 'auto', 'stage3_max_live_parameters': 1000000000.0, 'stage3_max_reuse_distance': 1000000000.0, 'stage3_gather_16bit_weights_on_model_save': True}, 'gradient_accumulation_steps': 'auto', 'gradient_clipping': 'auto', 'steps_per_print': 2000, 'train_batch_size': 'auto', 'train_micro_batch_size_per_gpu': 'auto', 'wall_clock_breakdown': False}
+[INFO:swift] Setting args.dataloader_num_workers: 1
+[INFO:swift] output_dir: /work/u1501463/stage1_model_full_toolset/v1-20261003-113849
+[INFO:swift] args: SftArguments(
+acc_strategy=token,
+accelerator_config={'dispatch_batches': False},
+adalora_beta1=0.85,
+adalora_beta2=0.85,
+adalora_deltaT=1,
+adalora_init_r=12,
+adalora_orth_reg_weight=0.5,
+adalora_target_r=8,
+adalora_tfinal=0,
+adalora_tinit=0,
+adam_beta1=0.9,
+adam_beta2=0.95,
+adam_epsilon=1e-08,
+adapter_act=gelu,
+adapter_length=128,
+adapters=[],
+add_non_thinking_prefix=True,
+add_version=True,
+agent_template=None,
+aligner_lr=None,
+attn_impl=None,
+auto_find_batch_size=False,
+average_tokens_across_devices=True,
+batch_eval_metrics=False,
+bf16=True,
+bf16_full_eval=False,
+bnb_4bit_compute_dtype=torch.bfloat16,
+bnb_4bit_quant_storage=None,
+bnb_4bit_quant_type=nf4,
+bnb_4bit_use_double_quant=True,
+boft_block_num=0,
+boft_block_size=4,
+boft_dropout=0.0,
+boft_n_butterfly_factor=1,
+cached_dataset=[],
+cached_val_dataset=[],
+callbacks=[],
+check_model=True,
+columns={},
+create_checkpoint_symlink=False,
+custom_dataset_info=[],
+custom_register_path=[],
+data_seed=42,
+dataloader_drop_last=False,
+dataloader_num_workers=None,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+dataset=['/work/u1501463/stage1_full_toolset/train.jsonl'],
+dataset_num_proc=1,
+dataset_shuffle=True,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_static_graph=None,
+ddp_timeout=18000000,
+debug=,
+deepspeed={'fp16': {'enabled': 'auto', 'loss_scale': 0, 'loss_scale_window': 1000, 'initial_scale_power': 16, 'hysteresis': 2, 'min_loss_scale': 1}, 'bf16': {'enabled': 'auto'}, 'zero_optimization': {'stage': 3, 'offload_optimizer': {'device': 'none', 'pin_memory': True}, 'offload_param': {'device': 'none', 'pin_memory': True}, 'overlap_comm': False, 'contiguous_gradients': True, 'sub_group_size': 1000000000.0, 'reduce_bucket_size': 'auto', 'zero_quantized_weights': False, 'zero_quantized_gradients': False, 'stage3_prefetch_bucket_size': 'auto', 'stage3_param_persistence_threshold': 'auto', 'stage3_max_live_parameters': 1000000000.0, 'stage3_max_reuse_distance': 1000000000.0, 'stage3_gather_16bit_weights_on_model_save': True}, 'gradient_accumulation_steps': 'auto', 'gradient_clipping': 'auto', 'steps_per_print': 2000, 'train_batch_size': 'auto', 'train_micro_batch_size_per_gpu': 'auto', 'wall_clock_breakdown': False},
+deepspeed_autotp_size=None,
+device_groups=None,
+device_map=None,
+disable_auto_column_mapping=False,
+disable_ignore_empty_think=False,
+disable_tqdm=None,
+do_eval=False,
+do_predict=False,
+do_train=False,
+download_mode=reuse_dataset_if_exists,
+ds3_gather_for_generation=True,
+early_stop_interval=None,
+enable_channel_loss=False,
+enable_dft_loss=False,
+enable_jit_checkpoint=False,
+enable_npu_model_patch=True,
+enable_thinking=None,
+eval_accumulation_steps=None,
+eval_dataset=[],
+eval_dataset_args=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_generation_config=None,
+eval_limit=None,
+eval_metric=None,
+eval_on_start=False,
+eval_steps=50,
+eval_strategy=no,
+eval_use_evalscope=False,
+eval_use_gather_object=False,
+experts_impl=None,
+external_plugins=[],
+extra_eval_args=None,
+fourier_n_frequency=2000,
+fourier_scaling=300.0,
+fp16=False,
+fp16_full_eval=False,
+freeze_aligner=True,
+freeze_llm=False,
+freeze_parameters=[],
+freeze_parameters_ratio=0.0,
+freeze_parameters_regex=None,
+freeze_vit=True,
+fsdp=[],
+fsdp_config=None,
+full_determinism=False,
+galore_cos_threshold=0.4,
+galore_gamma_proj=2,
+galore_optim_per_parameter=False,
+galore_proj_bits=4,
+galore_proj_group_size=256,
+galore_proj_quant=False,
+galore_proj_type=std,
+galore_quantization=False,
+galore_queue_size=5,
+galore_rank=128,
+galore_scale=1.0,
+galore_target_modules=None,
+galore_update_proj_gap=50,
+galore_with_embedding=False,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gradient_accumulation_steps=8,
+gradient_checkpointing=True,
+gradient_checkpointing_kwargs=None,
+greater_is_better=False,
+group_by_length=False,
+hqq_axis=None,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=None,
+hub_revision=None,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_args_error=False,
+ignore_data_skip=False,
+include_for_metrics=[],
+include_num_input_tokens_seen=no,
+init_strategy=None,
+init_weights=True,
+interleave_prob=None,
+is_binary_loss_scale=None,
+label_names=None,
+label_smoothing_factor=0.0,
+lazy_tokenize=True,
+learning_rate=0.0001,
+length_column_name=length,
+liger_kernel_config=None,
+lisa_activated_layers=0,
+lisa_step_interval=20,
+llamapro_num_groups=None,
+llamapro_num_new_blocks=4,
+load_args=False,
+load_best_model_at_end=False,
+load_data_args=False,
+load_from_cache_file=False,
+local_rank=0,
+local_repo_path=None,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=/work/u1501463/stage1_model_full_toolset/v1-20261003-113849/runs,
+logging_first_step=True,
+logging_nan_inf_filter=True,
+logging_steps=5,
+logging_strategy=steps,
+logprobs=False,
+lora_alpha=32,
+lora_bias=none,
+lora_dropout=0.05,
+lora_dtype=None,
+lora_ga_batch_size=2,
+lora_ga_direction=ArB2r,
+lora_ga_iters=2,
+lora_ga_max_length=1024,
+lora_ga_scale=stable,
+lora_ga_stable_gamma=16,
+lora_rank=8,
+lorap_lr_ratio=None,
+loss_scale=default,
+loss_type=None,
+lr_scheduler_kwargs=None,
+lr_scheduler_type=cosine,
+max_epochs=None,
+max_grad_norm=1.0,
+max_length=20000,
+max_memory={},
+max_model_len=None,
+max_new_tokens=64,
+max_pixels=None,
+max_shard_size=5GB,
+max_steps=-1,
+metric_for_best_model=loss,
+model=/work/u1501463/Qwen3-Omni-30B-A3B-Instruct/,
+model_author=None,
+model_kwargs={},
+model_name=None,
+model_revision=None,
+model_type=qwen3_omni_moe,
+modules_to_save=[],
+neftune_noise_alpha=None,
+new_special_tokens=[],
+norm_bbox=None,
+num_beams=1,
+num_labels=None,
+num_train_epochs=3.0,
+optim=adamw_torch,
+optim_args=None,
+optim_target_modules=None,
+optimizer=None,
+output_dir=/work/u1501463/stage1_model_full_toolset/v1-20261003-113849,
+packing=False,
+packing_length=None,
+packing_num_proc=1,
+padding_free=False,
+padding_side=right,
+parallelism_config=None,
+per_device_eval_batch_size=1,
+per_device_train_batch_size=3,
+predict_with_generate=False,
+prediction_loss_only=False,
+preserve_thinking=None,
+problem_type=None,
+project=huggingface,
+push_to_hub=False,
+quant_bits=None,
+quant_method=None,
+ray_exp_name=None,
+reft_args=None,
+reft_intervention_type=LoreftIntervention,
+reft_layer_key=None,
+reft_layers=None,
+reft_rank=4,
+remove_unused_columns=True,
+repetition_penalty=None,
+report_to=['tensorboard'],
+response_prefix=None,
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+resume_only_model=False,
+rope_scaling=None,
+router_aux_loss_coef=0.0,
+run_name=/work/u1501463/stage1_model_full_toolset/v1-20261003-113849,
+safe_serialization=True,
+save_on_each_node=False,
+save_only_model=False,
+save_steps=50,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+sequence_parallel_size=1,
+shuffle_buffer_size=1000,
+skip_memory_metrics=True,
+sortish_sampler=False,
+split_dataset_ratio=0.0,
+stop_words=[],
+stopping_strategy=first_exhausted,
+stream=False,
+streaming=False,
+strict=False,
+structured_outputs_regex=None,
+swanlab_email_language=zh,
+swanlab_exp_name=None,
+swanlab_mode=cloud,
+swanlab_notification_method=None,
+swanlab_project=ms-swift,
+swanlab_receiver_email=None,
+swanlab_secret=None,
+swanlab_sender_email=None,
+swanlab_smtp_port=None,
+swanlab_smtp_server=None,
+swanlab_token=<SWANLAB_TOKEN>,
+swanlab_webhook_url=None,
+swanlab_workspace=None,
+system=None,
+target_modules=['all-linear'],
+target_parameters=None,
+target_regex=None,
+task_type=causal_lm,
+temperature=0.0,
+template=qwen3_omni,
+template_backend=swift,
+tf32=None,
+top_k=None,
+top_logprobs=None,
+top_p=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_dtype=torch.bfloat16,
+torch_empty_cache_steps=None,
+trackio_bucket_id=None,
+trackio_space_id=None,
+trackio_static_space_id=None,
+train_dataloader_shuffle=True,
+train_sampling_strategy=random,
+trainable_parameters=[],
+trainable_parameters_regex=None,
+truncation_strategy=delete,
+tuner_backend=peft,
+tuner_type=lora,
+use_cache=False,
+use_chat_template=True,
+use_cpu=False,
+use_dora=False,
+use_flash_ckpt=False,
+use_galore=False,
+use_hf=False,
+use_liger_kernel=False,
+use_logits_to_keep=None,
+use_ray=False,
+use_rslora=False,
+use_swift_lora=False,
+val_dataset=[],
+val_dataset_shuffle=False,
+vera_d_initial=0.1,
+vera_dropout=0.0,
+vera_projection_prng_key=0,
+vera_rank=256,
+vit_gradient_checkpointing=False,
+vit_lr=None,
+warmup_ratio=None,
+warmup_steps=0,
+weight_decay=0.1,
+zero_hpz_partition_size=None,
+)
+[INFO:swift] Global seed set to 42
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[INFO:swift] Setting ENABLE_AUDIO_OUTPUT: None. You can adjust this hyperparameter through the environment variable: `ENABLE_AUDIO_OUTPUT`.
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[INFO:swift] Setting max_ratio: 200. You can adjust this hyperparameter through the environment variable: `MAX_RATIO`.
+[INFO:swift] Setting frame_factor: 2. You can adjust this hyperparameter through the environment variable: `FRAME_FACTOR`.
+[INFO:swift] Setting fps: 2.0. You can adjust this hyperparameter through the environment variable: `FPS`.
+[INFO:swift] Setting fps_min_frames: 4. You can adjust this hyperparameter through the environment variable: `FPS_MIN_FRAMES`.
+[INFO:swift] Setting fps_max_frames: 768. You can adjust this hyperparameter through the environment variable: `FPS_MAX_FRAMES`.
+[INFO:swift] Setting image_max_token_num: 16384. You can adjust this hyperparameter through the environment variable: `IMAGE_MAX_TOKEN_NUM`.
+[INFO:swift] Setting image_min_token_num: 4. You can adjust this hyperparameter through the environment variable: `IMAGE_MIN_TOKEN_NUM`.
+[INFO:swift] Setting spatial_merge_size: 2. You can adjust this hyperparameter through the environment variable: `SPATIAL_MERGE_SIZE`.
+[INFO:swift] Setting video_max_token_num: 768. You can adjust this hyperparameter through the environment variable: `VIDEO_MAX_TOKEN_NUM`.
+[INFO:swift] Setting video_min_token_num: 128. You can adjust this hyperparameter through the environment variable: `VIDEO_MIN_TOKEN_NUM`.
+[INFO:swift] model_kwargs: {'device_map': None, 'dtype': torch.bfloat16}
+[INFO:swift] Setting z3_leaf_modules: [<class 'transformers.models.qwen3_omni_moe.modeling_qwen3_omni_moe.Qwen3OmniMoeThinkerTextSparseMoeBlock'>]
+[INFO:swift] model_info: ModelInfo(model_type='qwen3_omni_moe', model_dir='/work/u1501463/Qwen3-Omni-30B-A3B-Instruct', torch_dtype=torch.bfloat16, max_model_len=65536, quant_method=None, quant_bits=None, rope_scaling=None, is_moe_model=True, is_multimodal=True, config=Qwen3OmniMoeConfig {
+  "architectures": [
+    "Qwen3OmniMoeForConditionalGeneration"
+  ],
+  "assistant_token_id": 77091,
+  "code2wav_config": {
+    "attention_bias": false,
+    "attention_dropout": 0.0,
+    "codebook_dim": 512,
+    "codebook_size": 2048,
+    "decoder_dim": 1536,
+    "hidden_act": "silu",
+    "hidden_size": 1024,
+    "initializer_range": 0.02,
+    "intermediate_size": 3072,
+    "layer_scale_initial_scale": 0.01,
+    "max_position_embeddings": 8000,
+    "model_type": "",
+    "num_attention_heads": 16,
+    "num_hidden_layers": 8,
+    "num_key_value_heads": 16,
+    "num_quantizers": 16,
+    "num_semantic_quantizers": 1,
+    "rms_norm_eps": 1e-05,
+    "rope_parameters": {
+      "rope_theta": 10000,
+      "rope_type": "default"
+    },
+    "semantic_codebook_size": 4096,
+    "sliding_window": 72,
+    "upsample_rates": [
+      8,
+      5,
+      4,
+      3
+    ],
+    "upsampling_ratios": [
+      2,
+      2
+    ],
+    "vector_quantization_hidden_dimension": 512
+  },
+  "dtype": "bfloat16",
+  "enable_audio_output": true,
+  "hidden_size": 2048,
+  "im_end_token_id": 151645,
+  "im_start_token_id": 151644,
+  "initializer_range": 0.02,
+  "model_type": "qwen3_omni_moe",
+  "system_token_id": 8948,
+  "talker_config": {
+    "accept_hidden_layer": 24,
+    "audio_end_token_id": 151670,
+    "audio_start_token_id": 151669,
+    "audio_token_id": 151675,
+    "code_predictor_config": {
+      "_name_or_path": "",
+      "add_cross_attention": false,
+      "architectures": null,
+      "attention_bias": false,
+      "attention_dropout": 0,
+      "bos_token_id": null,
+      "chunk_size_feed_forward": 0,
+      "cross_attention_hidden_size": null,
+      "decoder_start_token_id": null,
+      "dtype": null,
+      "eos_token_id": null,
+      "finetuning_task": null,
+      "head_dim": 128,
+      "hidden_act": "silu",
+      "hidden_size": 1024,
+      "id2label": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "initializer_range": 0.02,
+      "intermediate_size": 3072,
+      "is_decoder": false,
+      "is_encoder_decoder": false,
+      "label2id": {
+        "LABEL_0": 0,
+        "LABEL_1": 1
+      },
+      "layer_types": [
+        "full_attention",
+        "full_attention",
+        "full_attention",
+        "full_attention",
+        "full_attention"
+      ],
+      "max_position_embeddings": 32768,
+      "max_window_layers": 28,
+      "model_type": "qwen3_omni_moe_talker_code_predictor",
+      "num_attention_heads": 16,
+      "num_code_groups": 16,
+      "num_hidden_layers": 5,
+      "num_key_value_heads": 8,
+      "output_attentions": false,
+      "output_hidden_states": false,
+      "pad_token_id": null,
+      "prefix": null,
+      "problem_type": null,
+      "pruned_heads": {},
+      "return_dict": true,
+      "rms_norm_eps": 1e-06,
+      "rope_parameters": {
+        "rope_theta": 1000000,
+        "rope_type": "default"
+      },
+      "sep_token_id": null,
+      "sliding_window": null,
+      "task_specific_params": null,
+      "tf_legacy_loss": false,
+      "tie_encoder_decoder": false,
+      "tie_word_embeddings": false,
+      "tokenizer_class": null,
+      "torchscript": false,
+      "use_bfloat16": false,
+      "use_cache": true,
+      "use_sliding_window": false,
+      "vocab_size": 2048
+    },
+    "codec_bos_id": 2149,
+    "codec_eos_token_id": 2150,
+    "codec_nothink_id": 2155,
+    "codec_pad_id": 2148,
+    "codec_think_bos_id": 2156,
+    "codec_think_eos_id": 2157,
+    "image_token_id": 151655,
+    "initializer_range": 0.02,
+    "model_type": "",
+    "num_code_groups": 16,
+    "output_router_logits": false,
+    "position_id_per_seconds": 13,
+    "seconds_per_chunk": 2,
+    "spatial_merge_size": 2,
+    "speaker_id": {
+      "aiden": 2303,
+      "chelsie": 2301,
+      "ethan": 2302
+    },
+    "text_config": {
+      "_name_or_path": "",
+      "architectures": null,
+      "attention_bias": false,
+      "attention_dropout": 0,
+      "bos_token_id": null,
+      "chunk_size_feed_forward": 0,
+      "decoder_sparse_step": 1,
+      "dtype": null,
+      "eos_token_id": null,
+      "head_dim": 128,
+      "hidden_act": "silu",
+      "hidden_size": 1024,
+      "id2label": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "initializer_range": 0.02,
+      "intermediate_size": 2048,
+      "is_encoder_decoder": false,
+      "label2id": {
+        "LABEL_0": 0,
+        "LABEL_1": 1
+      },
+      "max_position_embeddings": 65536,
+      "mlp_only_layers": [],
+      "model_type": "qwen3_omni_moe_talker_text",
+      "moe_intermediate_size": 384,
+      "norm_topk_prob": true,
+      "num_attention_heads": 16,
+      "num_experts_per_tok": 6,
+      "num_hidden_layers": 20,
+      "num_key_value_heads": 2,
+      "num_local_experts": 128,
+      "output_attentions": false,
+      "output_hidden_states": false,
+      "output_router_logits": false,
+      "pad_token_id": null,
+      "problem_type": null,
+      "return_dict": true,
+      "rms_norm_eps": 1e-06,
+      "rope_parameters": {
+        "interleaved": true,
+        "mrope_section": [
+          24,
+          20,
+          20
+        ],
+        "rope_theta": 1000000,
+        "rope_type": "default",
+        "type": "default"
+      },
+      "router_aux_loss_coef": 0.001,
+      "shared_expert_intermediate_size": 768,
+      "sliding_window": null,
+      "tie_word_embeddings": false,
+      "use_cache": true,
+      "use_sliding_window": false,
+      "vocab_size": 3072
+    },
+    "thinker_hidden_size": 2048,
+    "tie_word_embeddings": false,
+    "video_token_id": 151656,
+    "vision_start_token_id": 151652
+  },
+  "thinker_config": {
+    "audio_config": {
+      "_name_or_path": "",
+      "activation_dropout": 0,
+      "activation_function": "gelu",
+      "add_cross_attention": false,
+      "architectures": null,
+      "attention_dropout": 0,
+      "bos_token_id": null,
+      "chunk_size_feed_forward": 0,
+      "conv_chunksize": 500,
+      "cross_attention_hidden_size": null,
+      "d_model": 1280,
+      "decoder_start_token_id": null,
+      "downsample_hidden_size": 480,
+      "dropout": 0,
+      "dtype": "bfloat16",
+      "encoder_attention_heads": 20,
+      "encoder_ffn_dim": 5120,
+      "encoder_layers": 32,
+      "eos_token_id": null,
+      "finetuning_task": null,
+      "id2label": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "initializer_range": 0.02,
+      "is_decoder": false,
+      "is_encoder_decoder": false,
+      "label2id": {
+        "LABEL_0": 0,
+        "LABEL_1": 1
+      },
+      "max_source_positions": 1500,
+      "model_type": "qwen3_omni_moe_audio_encoder",
+      "n_window": 50,
+      "n_window_infer": 800,
+      "num_mel_bins": 128,
+      "output_attentions": false,
+      "output_dim": 2048,
+      "output_hidden_states": false,
+      "pad_token_id": null,
+      "prefix": null,
+      "problem_type": null,
+      "pruned_heads": {},
+      "return_dict": true,
+      "scale_embedding": false,
+      "sep_token_id": null,
+      "task_specific_params": null,
+      "tf_legacy_loss": false,
+      "tie_encoder_decoder": false,
+      "tie_word_embeddings": true,
+      "tokenizer_class": null,
+      "torchscript": false,
+      "use_bfloat16": false
+    },
+    "audio_end_token_id": 151670,
+    "audio_start_token_id": 151669,
+    "audio_token_id": 151675,
+    "dtype": "bfloat16",
+    "image_token_id": 151655,
+    "initializer_range": 0.02,
+    "model_type": "qwen3_omni_moe_thinker",
+    "position_id_per_seconds": 13,
+    "seconds_per_chunk": 2,
+    "text_config": {
+      "_name_or_path": "",
+      "add_cross_attention": false,
+      "architectures": null,
+      "attention_bias": false,
+      "attention_dropout": 0.0,
+      "bos_token_id": null,
+      "chunk_size_feed_forward": 0,
+      "cross_attention_hidden_size": null,
+      "decoder_sparse_step": 1,
+      "decoder_start_token_id": null,
+      "dtype": "bfloat16",
+      "eos_token_id": null,
+      "finetuning_task": null,
+      "head_dim": 128,
+      "hidden_act": "silu",
+      "hidden_size": 2048,
+      "id2label": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "initializer_range": 0.02,
+      "intermediate_size": 768,
+      "is_decoder": false,
+      "is_encoder_decoder": false,
+      "label2id": {
+        "LABEL_0": 0,
+        "LABEL_1": 1
+      },
+      "max_position_embeddings": 65536,
+      "mlp_only_layers": [],
+      "model_type": "qwen3_omni_moe_text",
+      "moe_intermediate_size": 768,
+      "norm_topk_prob": true,
+      "num_attention_heads": 32,
+      "num_experts": 128,
+      "num_experts_per_tok": 8,
+      "num_hidden_layers": 48,
+      "num_key_value_heads": 4,
+      "output_attentions": false,
+      "output_hidden_states": false,
+      "output_router_logits": false,
+      "pad_token_id": null,
+      "prefix": null,
+      "problem_type": null,
+      "pruned_heads": {},
+      "return_dict": true,
+      "rms_norm_eps": 1e-06,
+      "rope_parameters": {
+        "interleaved": true,
+        "mrope_interleaved": true,
+        "mrope_section": [
+          24,
+          20,
+          20
+        ],
+        "rope_theta": 1000000,
+        "rope_type": "default",
+        "type": "default"
+      },
+      "router_aux_loss_coef": 0.001,
+      "sep_token_id": null,
+      "shared_expert_intermediate_size": 0,
+      "sliding_window": null,
+      "task_specific_params": null,
+      "tf_legacy_loss": false,
+      "tie_encoder_decoder": false,
+      "tie_word_embeddings": false,
+      "tokenizer_class": null,
+      "torchscript": false,
+      "use_bfloat16": false,
+      "use_cache": true,
+      "use_qk_norm": true,
+      "use_sliding_window": false,
+      "vocab_size": 152064
+    },
+    "tie_word_embeddings": false,
+    "user_token_id": 872,
+    "video_token_id": 151656,
+    "vision_config": {
+      "_name_or_path": "",
+      "add_cross_attention": false,
+      "apply_vit_abs_pos_embed": true,
+      "architectures": null,
+      "bos_token_id": null,
+      "chunk_size_feed_forward": 0,
+      "cross_attention_hidden_size": null,
+      "decoder_start_token_id": null,
+      "deepstack_visual_indexes": [
+        8,
+        16,
+        24
+      ],
+      "depth": 27,
+      "dtype": "bfloat16",
+      "eos_token_id": null,
+      "finetuning_task": null,
+      "hidden_act": "gelu_pytorch_tanh",
+      "hidden_size": 1152,
+      "id2label": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "image_size": 768,
+      "in_channels": 3,
+      "in_chans": 3,
+      "initializer_range": 0.02,
+      "intermediate_size": 4304,
+      "is_decoder": false,
+      "is_encoder_decoder": false,
+      "label2id": {
+        "LABEL_0": 0,
+        "LABEL_1": 1
+      },
+      "model_type": "qwen3_omni_moe_vision_encoder",
+      "num_heads": 16,
+      "num_position_embeddings": 2304,
+      "out_hidden_size": 2048,
+      "output_attentions": false,
+      "output_hidden_states": false,
+      "pad_token_id": null,
+      "patch_size": 16,
+      "prefix": null,
+      "problem_type": null,
+      "pruned_heads": {},
+      "return_dict": true,
+      "sep_token_id": null,
+      "spatial_merge_size": 2,
+      "spatial_patch_size": 16,
+      "task_specific_params": null,
+      "temporal_patch_size": 2,
+      "tf_legacy_loss": false,
+      "tie_encoder_decoder": false,
+      "tie_word_embeddings": true,
+      "tokenizer_class": null,
+      "tokens_per_second": 2,
+      "torchscript": false,
+      "use_bfloat16": false
+    },
+    "vision_end_token_id": 151653,
+    "vision_start_token_id": 151652
+  },
+  "transformers_version": "5.12.1",
+  "tts_bos_token_id": 151672,
+  "tts_eos_token_id": 151673,
+  "tts_pad_token_id": 151671,
+  "user_token_id": 872
+}
+, task_type='causal_lm', num_labels=None)
+[INFO:swift] model.generation_config: GenerationConfig {
+  "do_sample": false,
+  "eos_token_id": 151645,
+  "length_penalty": 1.0,
+  "max_new_tokens": 64,
+  "num_beams": 1,
+  "pad_token_id": 151643,
+  "talker_max_new_tokens": 4096,
+  "talker_repetition_penalty": 1.05,
+  "talker_temperature": 0.9,
+  "talker_top_k": 50,
+  "talker_top_p": 1.0,
+  "temperature": 1.0,
+  "top_k": 50,
+  "top_p": 1.0
+}
+
+[INFO:swift] default_system: None
+[INFO:swift] max_length: 20000
+[INFO:swift] response_prefix: None
+[INFO:swift] agent_template: hermes
+[INFO:swift] norm_bbox: norm1000
+[INFO:swift] Setting ROOT_IMAGE_DIR: None. You can adjust this hyperparameter through the environment variable: `ROOT_IMAGE_DIR`.
+[INFO:swift] Setting QWENVL_BBOX_FORMAT: legacy. You can adjust this hyperparameter through the environment variable: `QWENVL_BBOX_FORMAT`.
+[INFO:swift] Setting use_audio_in_video: False. You can adjust this hyperparameter through the environment variable: `USE_AUDIO_IN_VIDEO`.
+[INFO:swift] Setting sampling_rate: 16000. You can adjust this hyperparameter through the environment variable: `SAMPLING_RATE`.
+[INFO:swift] Start time of running main: 2026-10-03 11:40:22.247019
+[INFO:swift] swift.__version__: 4.3.1
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 4196 examples [00:00, 37036.42 examples/s]Generating train split: 5000 examples [00:00, 36659.97 examples/s]
+Map (num_proc=1):   0%|          | 0/5000 [00:00<?, ? examples/s]Map (num_proc=1):  20%|██        | 1000/5000 [00:00<00:01, 2471.57 examples/s]Map (num_proc=1):  60%|██████    | 3000/5000 [00:00<00:00, 6515.72 examples/s]Map (num_proc=1): 100%|██████████| 5000/5000 [00:00<00:00, 9427.57 examples/s]Map (num_proc=1): 100%|██████████| 5000/5000 [00:00<00:00, 6124.43 examples/s]
+[INFO:swift] train_dataset: Dataset({
+    features: ['messages', 'audios'],
+    num_rows: 5000
+})
+[INFO:swift] val_dataset: None
+[INFO:swift] [INPUT_IDS] [151644, 8948, 1406, 2, 13852, 271, 2610, 1231, 1618, 825, 476, 803, 5746, 311, 7789, 448, 279, 1196, 3239, 382, 2610, 525, 3897, 448, 729, 32628, 2878, 366, 15918, 1472, 15918, 29, 11874, 9492, 510, 27, 15918, 397, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 564, 5654, 497, 330, 4684, 788, 330, 28959, 264, 88330, 7699, 10238, 504, 264, 2530, 1034, 1948, 5189, 24756, 25, 8035, 25, 1220, 744, 3821, 3161, 323, 835, 48781, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 16736, 23338, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 16736, 6213, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 16736, 23338, 497, 330, 16736, 6213, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 5183, 68189, 497, 330, 4684, 788, 330, 28497, 11980, 13951, 476, 1687, 35835, 311, 264, 88330, 7699, 1034, 1667, 279, 11882, 12111, 13, 44089, 7699, 842, 323, 12111, 26, 10101, 11980, 18588, 323, 26443, 2524, 8692, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 19688, 788, 5212, 1313, 788, 330, 917, 497, 330, 9018, 788, 4383, 67082, 3461, 5228, 26425, 497, 330, 16632, 798, 497, 330, 3047, 666, 49222, 497, 330, 41562, 1341, 2137, 330, 52218, 18588, 788, 5212, 1313, 788, 330, 4082, 14345, 330, 82, 47837, 788, 5212, 1313, 788, 330, 4082, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 19688, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 23493, 11123, 497, 330, 4684, 788, 330, 28959, 264, 3151, 5112, 2530, 504, 264, 88330, 7699, 10238, 13, 576, 2383, 1969, 387, 825, 315, 279, 8356, 7248, 2750, 25, 7245, 85, 509, 1127, 16215, 7245, 6742, 5112, 16215, 7245, 6742, 4627, 16215, 7245, 52218, 2105, 13, 65567, 1172, 279, 27432, 2169, 5496, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 5657, 11448, 788, 5212, 1313, 788, 330, 917, 497, 330, 9018, 788, 4383, 85, 509, 1127, 497, 330, 6742, 5112, 497, 330, 6742, 4627, 497, 330, 52218, 7914, 330, 4684, 788, 330, 785, 5112, 2530, 311, 8649, 1189, 2137, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 5657, 11448, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 25312, 76765, 6205, 71, 681, 497, 330, 4684, 788, 330, 57468, 681, 3738, 7743, 304, 458, 7699, 1034, 553, 17719, 4004, 11980, 1667, 18183, 5632, 6954, 13, 66446, 88330, 11, 9412, 18, 11, 89099, 11, 506, 22254, 11, 15235, 1748, 11, 323, 1008, 19856, 33798, 553, 5112, 1192, 476, 72346, 64, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 3056, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 53238, 22230, 497, 330, 4684, 788, 330, 24841, 279, 9649, 315, 458, 7699, 1034, 320, 54, 8093, 476, 9412, 18, 8, 553, 264, 1372, 315, 5234, 275, 3154, 2041, 10018, 1181, 8090, 11, 1667, 72346, 64, 13, 44089, 7699, 842, 323, 308, 22731, 320, 325, 1763, 3154, 26, 6785, 28635, 705, 11, 8225, 28635, 1495, 568, 497, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 77, 22731, 788, 5212, 1313, 788, 330, 4082, 497, 330, 4684, 788, 330, 2833, 315, 5234, 275, 3154, 311, 6407, 13, 43903, 2750, 6407, 705, 11, 8225, 2750, 6407, 1495, 1189, 2137, 330, 39330, 5678, 70135, 523, 788, 5212, 1313, 788, 330, 11662, 497, 330, 4684, 788, 330, 2833, 315, 7354, 817, 73932, 320, 2258, 220, 16, 17, 568, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 77, 22731, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 1726, 22504, 54149, 497, 330, 4684, 788, 330, 28497, 264, 855, 36512, 54149, 4051, 311, 264, 88330, 7699, 10238, 311, 7760, 1550, 78312, 2213, 323, 7269, 55977, 8172, 13, 44089, 7699, 842, 323, 24756, 25, 8035, 25, 1220, 744, 3821, 48781, 369, 7699, 23338, 323, 7699, 6213, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 16736, 23338, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 16736, 6213, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 64650, 788, 5212, 1313, 788, 330, 4082, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 16736, 23338, 497, 330, 16736, 6213, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 5399, 11123, 497, 330, 4684, 788, 330, 13021, 264, 3151, 5112, 2530, 504, 264, 88330, 7699, 10238, 13, 576, 2383, 1969, 387, 825, 315, 279, 8356, 7248, 2750, 25, 7245, 85, 509, 1127, 16215, 7245, 6742, 5112, 16215, 7245, 6742, 4627, 16215, 7245, 52218, 2105, 13, 65567, 279, 32147, 7699, 448, 429, 2530, 6963, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 5657, 11448, 788, 5212, 1313, 788, 330, 917, 497, 330, 9018, 788, 4383, 85, 509, 1127, 497, 330, 6742, 5112, 497, 330, 6742, 4627, 497, 330, 52218, 7914, 330, 4684, 788, 330, 785, 5112, 2530, 311, 4057, 1189, 2137, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 5657, 11448, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 9522, 39849, 497, 330, 4684, 788, 330, 98778, 1516, 323, 14952, 1550, 78312, 7716, 315, 458, 7699, 1034, 1667, 279, 12352, 14557, 41667, 57330, 1614, 11, 17387, 264, 220, 19, 23, 61756, 2550, 13, 50512, 369, 18392, 3347, 22092, 11, 7055, 2852, 31511, 11, 476, 3347, 83879, 43026, 37040, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 2528, 1269, 788, 5212, 1313, 788, 330, 917, 497, 330, 9018, 788, 4383, 22342, 497, 330, 88225, 7914, 330, 4684, 788, 330, 14755, 14557, 29295, 311, 990, 13, 364, 88225, 6, 374, 32419, 369, 8806, 7699, 1189, 2137, 330, 631, 318, 22731, 788, 5212, 1313, 788, 330, 4082, 497, 330, 4684, 788, 330, 2833, 315, 30904, 1791, 24892, 7354, 13, 34221, 374, 28393, 714, 1231, 7269, 4271, 1189, 2137, 330, 23448, 681, 16727, 788, 5212, 1313, 788, 330, 4082, 497, 330, 4684, 788, 330, 33895, 12577, 18821, 5452, 1189, 2137, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 3056, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 1678, 1261, 10209, 497, 330, 4684, 788, 330, 1462, 5477, 10209, 458, 7699, 1034, 320, 54, 8093, 476, 9412, 18, 8, 553, 264, 8356, 4379, 2041, 10018, 1181, 9649, 11, 1667, 72346, 64, 13, 44089, 7699, 842, 323, 4379, 320, 7698, 861, 220, 16, 24722, 705, 14, 8676, 724, 11, 4379, 366, 220, 16, 69170, 1495, 14, 4129, 724, 568, 497, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 7698, 788, 5212, 1313, 788, 330, 4082, 497, 330, 4684, 788, 330, 53898, 8168, 13, 24979, 861, 220, 16, 4628, 705, 320, 8676, 268, 1215, 2750, 366, 220, 16, 6301, 1495, 320, 4129, 268, 568, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 7698, 1341, 3417, 532, 4913, 1313, 788, 330, 1688, 497, 330, 1688, 788, 5212, 606, 788, 330, 10666, 643, 321, 763, 497, 330, 4684, 788, 330, 25656, 21162, 504, 279, 7167, 323, 835, 315, 264, 88330, 7699, 10238, 13, 44089, 7699, 842, 323, 24756, 25, 8035, 25, 1220, 744, 3821, 48781, 369, 7699, 23338, 323, 7699, 6213, 10465, 330, 13786, 788, 5212, 1313, 788, 330, 1700, 497, 330, 13193, 788, 5212, 16736, 23338, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 16736, 6213, 788, 5212, 1313, 788, 330, 917, 497, 330, 2243, 788, 330, 23180, 25, 8035, 25, 1220, 744, 3821, 14345, 330, 28902, 8685, 788, 5212, 1313, 788, 330, 4082, 14345, 330, 6763, 5118, 788, 5212, 1313, 788, 330, 11662, 14345, 330, 25115, 5118, 788, 5212, 1313, 788, 330, 11662, 14345, 330, 16736, 842, 788, 5212, 1313, 788, 330, 917, 497, 330, 4684, 788, 330, 764, 315, 458, 7699, 498, 3003, 2669, 3884, 320, 276, 1946, 7699, 11, 476, 458, 877, 279, 32408, 12607, 311, 458, 6788, 1618, 594, 2550, 568, 1416, 39442, 11, 16674, 311, 53684, 7699, 697, 3681, 2484, 1429, 5926, 8947, 320, 269, 279, 13309, 1946, 7699, 11, 389, 697, 1156, 2484, 568, 9207, 2137, 330, 6279, 788, 4383, 16736, 23338, 497, 330, 16736, 6213, 1341, 3417, 532, 522, 15918, 1339, 2461, 1817, 729, 1618, 11, 470, 264, 2951, 1633, 448, 729, 829, 323, 5977, 2878, 220, 151657, 151658, 11874, 9492, 510, 151657, 198, 4913, 606, 788, 366, 1688, 11494, 8066, 330, 16370, 788, 366, 2116, 56080, 40432, 31296, 151658, 151645, 198, 151644, 872, 198, 22043, 279, 4024, 323, 23507, 7699, 3685, 11, 23583, 279, 15664, 15301, 429, 33061, 1105, 382, 18395, 7699, 25, 366, 16736, 62, 15, 29, 151669, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151670, 198, 8963, 291, 7699, 25, 366, 16736, 62, 16, 29, 151669, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151670, 151645, 198, 151644, 77091, 198, 54931, 15148, 11, 279, 8766, 278, 4161, 315, 279, 2169, 374, 4722, 8674, 311, 279, 1482, 7699, 11, 1393, 279, 23230, 323, 2213, 525, 34857, 13, 1417, 17680, 279, 9649, 553, 308, 22731, 10829, 19, 1265, 5285, 1105, 624, 151657, 198, 4913, 606, 788, 330, 53238, 22230, 497, 330, 16370, 788, 5212, 77, 22731, 788, 481, 19, 11, 330, 16736, 842, 788, 330, 16736, 62, 15, 95642, 151658, 151645, 198, 151644, 872, 198, 151665, 198, 5097, 315, 3019, 220, 16, 25, 366, 16736, 62, 17, 29, 151669, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151675, 151670, 198, 151666, 151645, 198, 151644, 77091, 198, 6262, 4583, 13, 151645, 198]
+[INFO:swift] [INPUT] <|im_start|>system
+
+
+# Tools
+
+You may call one or more functions to assist with the user query.
+
+You are provided with function signatures within <tools></tools> XML tags:
+<tools>
+{"type": "function", "function": {"name": "clipping", "description": "Extract a WAV audio segment from a source file between specified HH:MM:SS.mmm begin and end timestamps.", "parameters": {"type": "object", "properties": {"audio_begin": {"type": "string", "format": "HH:MM:SS.mmm"}, "audio_end": {"type": "string", "format": "HH:MM:SS.mmm"}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["audio_begin", "audio_end"]}}}
+{"type": "function", "function": {"name": "denoise", "description": "Apply noise reduction or echo cancellation to a WAV audio file using the chosen algorithm. Requires audio_id and algorithm; optional noise_factor and sensitivity control processing.", "parameters": {"type": "object", "properties": {"algorithm": {"type": "string", "enum": ["spectral_subtraction", "wiener", "echo_cancellation", "adaptive"]}, "noise_factor": {"type": "number"}, "sensitivity": {"type": "number"}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["algorithm"]}}}
+{"type": "function", "function": {"name": "extract_target", "description": "Extract a specific sound source from a WAV audio segment. The label must be one of the fixed supported values: \"vocals\", \"background sound\", \"background music\", \"noise\". Saves only the extracted target channel.", "parameters": {"type": "object", "properties": {"target_description": {"type": "string", "enum": ["vocals", "background sound", "background music", "noise"], "description": "The sound source to extract."}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["target_description"]}}}
+{"type": "function", "function": {"name": "human_voice_enhance", "description": "Enhance human voice in an audio file by reducing background noise using DeepFilterNet. Supports WAV, MP3, FLAC, OGG, AIFF, and other formats readable by soundfile or librosa.", "parameters": {"type": "object", "properties": {"audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": []}}}
+{"type": "function", "function": {"name": "pitch_shift", "description": "Shift the pitch of an audio file (WAV or MP3) by a number of semitones without changing its duration, using librosa. Requires audio_id and n_steps (semitones; positive shifts up, negative shifts down).", "parameters": {"type": "object", "properties": {"n_steps": {"type": "number", "description": "Number of semitones to shift. Positive values shift up, negative values shift down."}, "bins_per_octave": {"type": "integer", "description": "Number of steps per octave (default 12)."}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["n_steps"]}}}
+{"type": "function", "function": {"name": "pre_emphasis", "description": "Apply a pre-emphasis filter to a WAV audio segment to boost high-frequency content and improve spectral balance. Requires audio_id and HH:MM:SS.mmm timestamps for audio_begin and audio_end.", "parameters": {"type": "object", "properties": {"audio_begin": {"type": "string", "format": "HH:MM:SS.mmm"}, "audio_end": {"type": "string", "format": "HH:MM:SS.mmm"}, "coef": {"type": "number"}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["audio_begin", "audio_end"]}}}
+{"type": "function", "function": {"name": "remove_target", "description": "Remove a specific sound source from a WAV audio segment. The label must be one of the fixed supported values: \"vocals\", \"background sound\", \"background music\", \"noise\". Saves the residual audio with that source removed.", "parameters": {"type": "object", "properties": {"target_description": {"type": "string", "enum": ["vocals", "background sound", "background music", "noise"], "description": "The sound source to remove."}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["target_description"]}}}
+{"type": "function", "function": {"name": "super_resolution", "description": "Upsample and restore high-frequency detail of an audio file using the AudioSR latent diffusion model, producing a 48kHz output. Useful for improving low-quality, band-limited, or low-sample-rate recordings.", "parameters": {"type": "object", "properties": {"model_name": {"type": "string", "enum": ["basic", "speech"], "description": "AudioSR checkpoint to use. 'speech' is tuned for speech audio."}, "ddim_steps": {"type": "number", "description": "Number of DDIM sampling steps. Higher is slower but may improve quality."}, "guidance_scale": {"type": "number", "description": "Classifier-free guidance scale."}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": []}}}
+{"type": "function", "function": {"name": "time_stretch", "description": "Time-stretch an audio file (WAV or MP3) by a fixed rate without changing its pitch, using librosa. Requires audio_id and rate (rate > 1 speeds up/shortens, rate < 1 slows down/lengthens).", "parameters": {"type": "object", "properties": {"rate": {"type": "number", "description": "Stretch factor. Values > 1 speed up (shorten); values < 1 slow down (lengthen)."}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["rate"]}}}
+{"type": "function", "function": {"name": "trim_silence", "description": "Trim silence from the beginning and end of a WAV audio segment. Requires audio_id and HH:MM:SS.mmm timestamps for audio_begin and audio_end.", "parameters": {"type": "object", "properties": {"audio_begin": {"type": "string", "format": "HH:MM:SS.mmm"}, "audio_end": {"type": "string", "format": "HH:MM:SS.mmm"}, "threshold_db": {"type": "number"}, "frame_length": {"type": "integer"}, "hop_length": {"type": "integer"}, "audio_id": {"type": "string", "description": "Id of an audio you've already seen (an input audio, or an id the harness assigned to an earlier call's output). If omitted, defaults to whichever audio your previous turn most recently produced (or the sole input audio, on your first turn)."}}, "required": ["audio_begin", "audio_end"]}}}
+</tools>
+
+For each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:
+<tool_call>
+{"name": <function-name>, "arguments": <args-json-object>}
+</tool_call><|im_end|>
+<|im_start|>user
+Given the original and transformed audio below, infer the editing pipeline that connects them.
+
+Original audio: <audio_0><|audio_start|>[151675 * 130]<|audio_end|>
+Transformed audio: <audio_1><|audio_start|>[151675 * 130]<|audio_end|><|im_end|>
+<|im_start|>assistant
+Listening closely, the tonal register of the target is lower relative to the current audio, while the tempo and content are unchanged. Shifting the pitch by n_steps=-4 should align them.
+<tool_call>
+{"name": "pitch_shift", "arguments": {"n_steps": -4, "audio_id": "audio_0"}}
+</tool_call><|im_end|>
+<|im_start|>user
+<tool_response>
+Output of step 1: <audio_2><|audio_start|>[151675 * 130]<|audio_end|>
+</tool_response><|im_end|>
+<|im_start|>assistant
+Task complete.<|im_end|>
+
+[INFO:swift] [LABELS_IDS] [-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 54931, 15148, 11, 279, 8766, 278, 4161, 315, 279, 2169, 374, 4722, 8674, 311, 279, 1482, 7699, 11, 1393, 279, 23230, 323, 2213, 525, 34857, 13, 1417, 17680, 279, 9649, 553, 308, 22731, 10829, 19, 1265, 5285, 1105, 624, 151657, 198, 4913, 606, 788, 330, 53238, 22230, 497, 330, 16370, 788, 5212, 77, 22731, 788, 481, 19, 11, 330, 16736, 842, 788, 330, 16736, 62, 15, 95642, 151658, 151645, 198, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, 6262, 4583, 13, 151645, 198]
+[INFO:swift] [LABELS] [-100 * 2377]Listening closely, the tonal register of the target is lower relative to the current audio, while the tempo and content are unchanged. Shifting the pitch by n_steps=-4 should align them.
+<tool_call>
+{"name": "pitch_shift", "arguments": {"n_steps": -4, "audio_id": "audio_0"}}
+</tool_call><|im_end|>
+[-100 * 155]Task complete.<|im_end|>
+
+[INFO:swift] The SftArguments will be saved in: /work/u1501463/stage1_model_full_toolset/v1-20261003-113849/args.json
+[INFO:swift] lora_config: LoraConfig(task_type='CAUSAL_LM', peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, peft_version='0.20.0', base_model_name_or_path='/work/u1501463/Qwen3-Omni-30B-A3B-Instruct', revision=None, inference_mode=False, r=8, target_modules={'k_proj', 'q_proj', 'o_proj', 'v_proj'}, exclude_modules=None, lora_alpha=32, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=[], init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', trainable_token_indices=None, loftq_config={}, eva_config=None, corda_config=None, lora_ga_config=None, use_dora=False, velora_config=None, alora_invocation_tokens=None, use_qalora=False, qalora_group_size=16, monteclora_config=None, layer_replication=None, runtime_config=LoraRuntimeConfig(ephemeral_gpu_offload=False), lora_bias=False, target_parameters=set(), use_bdlora=None, arrow_config=None, ensure_weight_tying=False, lora_dtype=None, lorap_lr_ratio=None, lorap_emb_lr=1e-06)
+[INFO:swift] model: PeftModelForCausalLM(
+  (base_model): LoraModel(
+    (model): Qwen3OmniMoeForConditionalGeneration(
+      (thinker): Qwen3OmniMoeThinkerForConditionalGeneration(
+        (audio_tower): Qwen3OmniMoeAudioEncoder(
+          (positional_embedding): SinusoidsPositionEmbedding()
+          (layers): ModuleList(
+            (0-31): 32 x Qwen3OmniMoeAudioEncoderLayer(
+              (self_attn): Qwen3OmniMoeAudioAttention(
+                (k_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1280, out_features=1280, bias=True)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1280, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=1280, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (v_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1280, out_features=1280, bias=True)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1280, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=1280, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (q_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1280, out_features=1280, bias=True)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1280, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=1280, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (out_proj): Linear(in_features=1280, out_features=1280, bias=True)
+              )
+              (self_attn_layer_norm): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+              (activation_fn): GELUActivation()
+              (fc1): Linear(in_features=1280, out_features=5120, bias=True)
+              (fc2): Linear(in_features=5120, out_features=1280, bias=True)
+              (final_layer_norm): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+            )
+          )
+          (ln_post): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+          (conv2d1): Conv2d(1, 480, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+          (conv2d2): Conv2d(480, 480, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+          (conv2d3): Conv2d(480, 480, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+          (conv_out): Linear(in_features=7680, out_features=1280, bias=False)
+          (proj1): Linear(in_features=1280, out_features=1280, bias=True)
+          (act): GELUActivation()
+          (proj2): Linear(in_features=1280, out_features=2048, bias=True)
+        )
+        (visual): Qwen3OmniMoeVisionEncoder(
+          (merger_list): ModuleList(
+            (0-2): 3 x Qwen3OmniMoeVisionPatchMerger(
+              (ln_q): LayerNorm((4608,), eps=1e-06, elementwise_affine=True)
+              (mlp): ModuleList(
+                (0): Linear(in_features=4608, out_features=4608, bias=True)
+                (1): GELU(approximate='none')
+                (2): Linear(in_features=4608, out_features=2048, bias=True)
+              )
+            )
+          )
+          (patch_embed): Qwen3OmniMoeVisionPatchEmbed(
+            (proj): Conv3d(3, 1152, kernel_size=(2, 16, 16), stride=(2, 16, 16))
+          )
+          (pos_embed): Embedding(2304, 1152)
+          (rotary_pos_emb): Qwen3OmniMoeVisionRotaryEmbedding()
+          (blocks): ModuleList(
+            (0-26): 27 x Qwen3OmniMoeVisionBlock(
+              (norm1): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+              (norm2): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+              (attn): Qwen3OmniMoeVisionAttention(
+                (qkv): Linear(in_features=1152, out_features=3456, bias=True)
+                (proj): Linear(in_features=1152, out_features=1152, bias=True)
+              )
+              (mlp): Qwen3OmniMoeVisionMLP(
+                (linear_fc1): Linear(in_features=1152, out_features=4304, bias=True)
+                (linear_fc2): Linear(in_features=4304, out_features=1152, bias=True)
+                (act_fn): GELUTanh()
+              )
+            )
+          )
+          (merger): Qwen3OmniMoeVisionPatchMerger(
+            (ln_q): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+            (mlp): ModuleList(
+              (0): Linear(in_features=4608, out_features=4608, bias=True)
+              (1): GELU(approximate='none')
+              (2): Linear(in_features=4608, out_features=2048, bias=True)
+            )
+          )
+        )
+        (model): Qwen3OmniMoeThinkerTextModel(
+          (embed_tokens): Embedding(152064, 2048)
+          (layers): ModuleList(
+            (0-47): 48 x Qwen3OmniMoeThinkerTextDecoderLayer(
+              (self_attn): Qwen3OmniMoeThinkerTextAttention(
+                (q_proj): lora.Linear(
+                  (base_layer): Linear(in_features=2048, out_features=4096, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=2048, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=4096, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (k_proj): lora.Linear(
+                  (base_layer): Linear(in_features=2048, out_features=512, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=2048, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=512, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (v_proj): lora.Linear(
+                  (base_layer): Linear(in_features=2048, out_features=512, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=2048, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=512, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (o_proj): lora.Linear(
+                  (base_layer): Linear(in_features=4096, out_features=2048, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=4096, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=2048, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (q_norm): Qwen3OmniMoeThinkerTextRMSNorm((0,), eps=1e-06)
+                (k_norm): Qwen3OmniMoeThinkerTextRMSNorm((0,), eps=1e-06)
+              )
+              (mlp): Qwen3OmniMoeThinkerTextSparseMoeBlock(
+                (experts): Qwen3OmniMoeThinkerTextExperts(
+                  (act_fn): SiLUActivation()
+                )
+                (gate): Qwen3OmniMoeThinkerTextTopKRouter()
+              )
+              (input_layernorm): Qwen3OmniMoeThinkerTextRMSNorm((0,), eps=1e-06)
+              (post_attention_layernorm): Qwen3OmniMoeThinkerTextRMSNorm((0,), eps=1e-06)
+            )
+          )
+          (norm): Qwen3OmniMoeTextRMSNorm((0,), eps=1e-06)
+          (rotary_emb): Qwen3OmniMoeThinkerTextRotaryEmbedding()
+        )
+        (lm_head): Linear(in_features=2048, out_features=152064, bias=False)
+      )
+      (talker): Qwen3OmniMoeTalkerForConditionalGeneration(
+        (model): Qwen3OmniMoeTalkerModel(
+          (layers): ModuleList(
+            (0-19): 20 x Qwen3OmniMoeTalkerDecoderLayer(
+              (self_attn): Qwen3OmniMoeThinkerTextAttention(
+                (q_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1024, out_features=2048, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1024, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=2048, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (k_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1024, out_features=256, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1024, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=256, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (v_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1024, out_features=256, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1024, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=256, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (o_proj): lora.Linear(
+                  (base_layer): Linear(in_features=2048, out_features=1024, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=2048, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=1024, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (q_norm): Qwen3OmniMoeThinkerTextRMSNorm((0,), eps=1e-06)
+                (k_norm): Qwen3OmniMoeThinkerTextRMSNorm((0,), eps=1e-06)
+              )
+              (mlp): Qwen3OmniMoeTalkerTextSparseMoeBlock(
+                (gate): Qwen3OmniMoeTalkerTextTopKRouter()
+                (experts): Qwen3OmniMoeTalkerTextExperts(
+                  (act_fn): SiLUActivation()
+                )
+                (shared_expert): Qwen3OmniMoeTalkerTextMLP(
+                  (gate_proj): Linear(in_features=1024, out_features=768, bias=False)
+                  (up_proj): Linear(in_features=1024, out_features=768, bias=False)
+                  (down_proj): Linear(in_features=768, out_features=1024, bias=False)
+                  (act_fn): SiLUActivation()
+                )
+                (shared_expert_gate): Linear(in_features=1024, out_features=1, bias=False)
+              )
+              (input_layernorm): Qwen3OmniMoeThinkerTextRMSNorm((0,), eps=1e-06)
+              (post_attention_layernorm): Qwen3OmniMoeThinkerTextRMSNorm((0,), eps=1e-06)
+            )
+          )
+          (norm): Qwen3OmniMoeTextRMSNorm((0,), eps=1e-06)
+          (rotary_emb): Qwen3OmniMoeTalkerRotaryEmbedding()
+          (codec_embedding): Embedding(3072, 1024)
+        )
+        (text_projection): Qwen3OmniMoeTalkerResizeMLP(
+          (linear_fc1): Linear(in_features=2048, out_features=2048, bias=True)
+          (linear_fc2): Linear(in_features=2048, out_features=1024, bias=True)
+          (act_fn): SiLUActivation()
+        )
+        (hidden_projection): Qwen3OmniMoeTalkerResizeMLP(
+          (linear_fc1): Linear(in_features=2048, out_features=2048, bias=True)
+          (linear_fc2): Linear(in_features=2048, out_features=1024, bias=True)
+          (act_fn): SiLUActivation()
+        )
+        (codec_head): Linear(in_features=1024, out_features=3072, bias=False)
+        (code_predictor): Qwen3OmniMoeTalkerCodePredictorModelForConditionalGeneration(
+          (model): Qwen3OmniMoeTalkerCodePredictorModel(
+            (layers): ModuleList(
+              (0-4): 5 x Qwen3OmniMoeTalkerCodePredictorDecoderLayer(
+                (self_attn): Qwen3OmniMoeTalkerCodePredictorAttention(
+                  (q_proj): lora.Linear(
+                    (base_layer): Linear(in_features=1024, out_features=2048, bias=False)
+                    (lora_dropout): ModuleDict(
+                      (default): Dropout(p=0.05, inplace=False)
+                    )
+                    (lora_A): ModuleDict(
+                      (default): Linear(in_features=1024, out_features=8, bias=False)
+                    )
+                    (lora_B): ModuleDict(
+                      (default): Linear(in_features=8, out_features=2048, bias=False)
+                    )
+                    (lora_embedding_A): ParameterDict()
+                    (lora_embedding_B): ParameterDict()
+                    (lora_magnitude_vector): ModuleDict()
+                  )
+                  (k_proj): lora.Linear(
+                    (base_layer): Linear(in_features=1024, out_features=1024, bias=False)
+                    (lora_dropout): ModuleDict(
+                      (default): Dropout(p=0.05, inplace=False)
+                    )
+                    (lora_A): ModuleDict(
+                      (default): Linear(in_features=1024, out_features=8, bias=False)
+                    )
+                    (lora_B): ModuleDict(
+                      (default): Linear(in_features=8, out_features=1024, bias=False)
+                    )
+                    (lora_embedding_A): ParameterDict()
+                    (lora_embedding_B): ParameterDict()
+                    (lora_magnitude_vector): ModuleDict()
+                  )
+                  (v_proj): lora.Linear(
+                    (base_layer): Linear(in_features=1024, out_features=1024, bias=False)
+                    (lora_dropout): ModuleDict(
+                      (default): Dropout(p=0.05, inplace=False)
+                    )
+                    (lora_A): ModuleDict(
+                      (default): Linear(in_features=1024, out_features=8, bias=False)
+                    )
+                    (lora_B): ModuleDict(
+                      (default): Linear(in_features=8, out_features=1024, bias=False)
+                    )
+                    (lora_embedding_A): ParameterDict()
+                    (lora_embedding_B): ParameterDict()
+                    (lora_magnitude_vector): ModuleDict()
+                  )
+                  (o_proj): lora.Linear(
+                    (base_layer): Linear(in_features=2048, out_features=1024, bias=False)
+                    (lora_dropout): ModuleDict(
+                      (default): Dropout(p=0.05, inplace=False)
+                    )
+                    (lora_A): ModuleDict(
+                      (default): Linear(in_features=2048, out_features=8, bias=False)
+                    )
+                    (lora_B): ModuleDict(
+                      (default): Linear(in_features=8, out_features=1024, bias=False)
+                    )
+                    (lora_embedding_A): ParameterDict()
+                    (lora_embedding_B): ParameterDict()
+                    (lora_magnitude_vector): ModuleDict()
+                  )
+                  (q_norm): Qwen3OmniMoeRMSNorm((0,), eps=1e-06)
+                  (k_norm): Qwen3OmniMoeRMSNorm((0,), eps=1e-06)
+                )
+                (mlp): Qwen3OmniMoeMLP(
+                  (gate_proj): Linear(in_features=1024, out_features=3072, bias=False)
+                  (up_proj): Linear(in_features=1024, out_features=3072, bias=False)
+                  (down_proj): Linear(in_features=3072, out_features=1024, bias=False)
+                  (act_fn): SiLUActivation()
+                )
+                (input_layernorm): Qwen3OmniMoeRMSNorm((0,), eps=1e-06)
+                (post_attention_layernorm): Qwen3OmniMoeRMSNorm((0,), eps=1e-06)
+              )
+            )
+            (norm): Qwen3OmniMoeRMSNorm((0,), eps=1e-06)
+            (rotary_emb): Qwen3OmniMoeRotaryEmbedding()
+            (codec_embedding): ModuleList(
+              (0-14): 15 x Embedding(2048, 1024)
+            )
+          )
+          (lm_head): ModuleList(
+            (0-14): 15 x Linear(in_features=1024, out_features=2048, bias=False)
+          )
+        )
+      )
+      (code2wav): Qwen3OmniMoeCode2Wav(
+        (pre_transformer): Qwen3OmniMoeCode2WavTransformerModel(
+          (layers): ModuleList(
+            (0-7): 8 x Qwen3OmniMoeCode2WavTransformerLayer(
+              (self_attn): Qwen3OmniMoeCode2WavAttention(
+                (q_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1024, out_features=1024, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1024, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=1024, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (k_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1024, out_features=1024, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1024, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=1024, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (v_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1024, out_features=1024, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1024, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=1024, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (o_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1024, out_features=1024, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Dropout(p=0.05, inplace=False)
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1024, out_features=8, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=8, out_features=1024, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (q_norm): Identity()
+                (k_norm): Identity()
+              )
+              (mlp): Qwen3OmniMoeCode2WavMlp(
+                (gate_proj): Linear(in_features=1024, out_features=3072, bias=False)
+                (up_proj): Linear(in_features=1024, out_features=3072, bias=False)
+                (down_proj): Linear(in_features=3072, out_features=1024, bias=False)
+                (act_fn): SiLUActivation()
+              )
+              (input_layernorm): Qwen3OmniMoeCode2WavRMSNorm((0,), eps=1e-05)
+              (post_attention_layernorm): Qwen3OmniMoeCode2WavRMSNorm((0,), eps=1e-05)
+              (self_attn_layer_scale): Qwen3OmniMoeCode2WavLayerScale()
+              (mlp_layer_scale): Qwen3OmniMoeCode2WavLayerScale()
+            )
+          )
+          (norm): Qwen3OmniMoeRMSNorm((0,), eps=1e-05)
+          (rotary_emb): Qwen3OmniMoeRotaryEmbedding()
+        )
+        (code_embedding): Embedding(32768, 1024)
+        (upsample): ModuleList(
+          (0-1): 2 x ModuleList(
+            (0): Qwen3OmniMoeCausalTransConvNet(
+              (conv): ConvTranspose1d(1024, 1024, kernel_size=(2,), stride=(2,))
+            )
+            (1): Qwen3OmniMoeConvNeXtBlock(
+              (dwconv): Qwen3OmniMoeCausalConvNet(
+                (conv): Conv1d(1024, 1024, kernel_size=(7,), stride=(1,), groups=1024)
+              )
+              (norm): LayerNorm((1024,), eps=1e-06, elementwise_affine=True)
+              (pwconv1): Linear(in_features=1024, out_features=4096, bias=True)
+              (act): GELU(approximate='none')
+              (pwconv2): Linear(in_features=4096, out_features=1024, bias=True)
+            )
+          )
+        )
+        (decoder): ModuleList(
+          (0): Qwen3OmniMoeCausalConvNet(
+            (conv): Conv1d(1024, 1536, kernel_size=(7,), stride=(1,))
+          )
+          (1): Qwen3OmniMoeCode2WavDecoderBlock(
+            (block): ModuleList(
+              (0): SnakeBeta()
+              (1): Qwen3OmniMoeCausalTransConvNet(
+                (conv): ConvTranspose1d(1536, 768, kernel_size=(16,), stride=(8,))
+              )
+              (2): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(768, 768, kernel_size=(7,), stride=(1,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(768, 768, kernel_size=(1,), stride=(1,))
+                )
+              )
+              (3): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(768, 768, kernel_size=(7,), stride=(1,), dilation=(3,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(768, 768, kernel_size=(1,), stride=(1,))
+                )
+              )
+              (4): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(768, 768, kernel_size=(7,), stride=(1,), dilation=(9,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(768, 768, kernel_size=(1,), stride=(1,))
+                )
+              )
+            )
+          )
+          (2): Qwen3OmniMoeCode2WavDecoderBlock(
+            (block): ModuleList(
+              (0): SnakeBeta()
+              (1): Qwen3OmniMoeCausalTransConvNet(
+                (conv): ConvTranspose1d(768, 384, kernel_size=(10,), stride=(5,))
+              )
+              (2): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(384, 384, kernel_size=(7,), stride=(1,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(384, 384, kernel_size=(1,), stride=(1,))
+                )
+              )
+              (3): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(384, 384, kernel_size=(7,), stride=(1,), dilation=(3,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(384, 384, kernel_size=(1,), stride=(1,))
+                )
+              )
+              (4): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(384, 384, kernel_size=(7,), stride=(1,), dilation=(9,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(384, 384, kernel_size=(1,), stride=(1,))
+                )
+              )
+            )
+          )
+          (3): Qwen3OmniMoeCode2WavDecoderBlock(
+            (block): ModuleList(
+              (0): SnakeBeta()
+              (1): Qwen3OmniMoeCausalTransConvNet(
+                (conv): ConvTranspose1d(384, 192, kernel_size=(8,), stride=(4,))
+              )
+              (2): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(192, 192, kernel_size=(7,), stride=(1,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(192, 192, kernel_size=(1,), stride=(1,))
+                )
+              )
+              (3): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(192, 192, kernel_size=(7,), stride=(1,), dilation=(3,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(192, 192, kernel_size=(1,), stride=(1,))
+                )
+              )
+              (4): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(192, 192, kernel_size=(7,), stride=(1,), dilation=(9,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(192, 192, kernel_size=(1,), stride=(1,))
+                )
+              )
+            )
+          )
+          (4): Qwen3OmniMoeCode2WavDecoderBlock(
+            (block): ModuleList(
+              (0): SnakeBeta()
+              (1): Qwen3OmniMoeCausalTransConvNet(
+                (conv): ConvTranspose1d(192, 96, kernel_size=(6,), stride=(3,))
+              )
+              (2): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(96, 96, kernel_size=(7,), stride=(1,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(96, 96, kernel_size=(1,), stride=(1,))
+                )
+              )
+              (3): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(96, 96, kernel_size=(7,), stride=(1,), dilation=(3,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(96, 96, kernel_size=(1,), stride=(1,))
+                )
+              )
+              (4): Qwen3OmniMoeCode2WavDecoderResidualUnit(
+                (act1): SnakeBeta()
+                (conv1): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(96, 96, kernel_size=(7,), stride=(1,), dilation=(9,))
+                )
+                (act2): SnakeBeta()
+                (conv2): Qwen3OmniMoeCausalConvNet(
+                  (conv): Conv1d(96, 96, kernel_size=(1,), stride=(1,))
+                )
+              )
+            )
+          )
+          (5): SnakeBeta()
+          (6): Qwen3OmniMoeCausalConvNet(
+            (conv): Conv1d(96, 1, kernel_size=(7,), stride=(1,))
+          )
+        )
+      )
+    )
+  )
+)
+[INFO:swift] model_parameter_info: PeftModelForCausalLM: 35270.7958M Params (10.9773M Trainable [0.0311%]), 1.9205M Buffers.
+[RANK 0] Detected kernel version 4.18.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[INFO:swift] use_reentrant: True
+[INFO:swift] The logging file will be saved in: /work/u1501463/stage1_model_full_toolset/v1-20261003-113849/logging.jsonl
+[INFO:swift] Successfully registered post_encode hook: ['PeftModelForCausalLM'].
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 151645, 'pad_token_id': 151643}.
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 151645, 'pad_token_id': 151643}.
+[RANK 0] Gradient accumulation steps mismatch: GradientAccumulationPlugin has 1, DeepSpeed config has 8. Using DeepSpeed's value.
+Train:   0%|          | 0/315 [00:00<?, ?it/s][INFO:swift] use_logits_to_keep: False
+[INFO:swift] router_aux_loss_coef: 0.0
+Train:   0%|          | 1/315 [01:17<6:47:54, 77.95s/it]                                                        Train:   0%|          | 1/315 [01:17<6:47:54, 77.95s/it]Train:   0%|          | 1/315 [01:17<6:47:54, 77.95s/it]Train:   1%|          | 2/315 [01:48<4:21:29, 50.13s/it]Train:   1%|          | 3/315 [02:19<3:34:09, 41.19s/it]Train:   1%|▏         | 4/315 [02:49<3:11:52, 37.02s/it]Train:   2%|▏         | 5/315 [03:20<2:59:01, 34.65s/it]                                                        Train:   2%|▏         | 5/315 [03:20<2:59:01, 34.65s/it]Train:   2%|▏         | 5/315 [03:20<2:59:01, 34.65s/it]Train:   2%|▏         | 6/315 [03:51<2:52:49, 33.56s/it]Train:   2%|▏         | 7/315 [04:21<2:46:44, 32.48s/it]Train:   3%|▎         | 8/315 [04:52<2:42:54, 31.84s/it]Train:   3%|▎         | 9/315 [05:22<2:40:24, 31.45s/it]Train:   3%|▎         | 10/315 [05:53<2:38:21, 31.15s/it]                                                         Train:   3%|▎         | 10/315 [05:53<2:38:21, 31.15s/it]Train:   3%|▎         | 10/315 [05:53<2:38:21, 31.15s/it]Train:   3%|▎         | 11/315 [06:24<2:36:52, 30.96s/it]Train:   4%|▍         | 12/315 [06:54<2:35:38, 30.82s/it]Train:   4%|▍         | 13/315 [07:25<2:35:46, 30.95s/it]Train:   4%|▍         | 14/315 [07:56<2:34:51, 30.87s/it]Train:   5%|▍         | 15/315 [08:26<2:33:32, 30.71s/it]                                                         Train:   5%|▍         | 15/315 [08:26<2:33:32, 30.71s/it]Train:   5%|▍         | 15/315 [08:26<2:33:32, 30.71s/it]Train:   5%|▌         | 16/315 [08:57<2:32:41, 30.64s/it]Train:   5%|▌         | 17/315 [09:27<2:31:48, 30.57s/it]Train:   6%|▌         | 18/315 [09:58<2:31:02, 30.51s/it]Train:   6%|▌         | 19/315 [10:28<2:30:56, 30.60s/it]Train:   6%|▋         | 20/315 [10:59<2:30:50, 30.68s/it]                                                         Train:   6%|▋         | 20/315 [10:59<2:30:50, 30.68s/it]Train:   6%|▋         | 20/315 [10:59<2:30:50, 30.68s/it]Train:   7%|▋         | 21/315 [11:30<2:30:01, 30.62s/it]Train:   7%|▋         | 22/315 [12:00<2:29:16, 30.57s/it]Train:   7%|▋         | 23/315 [12:31<2:28:36, 30.54s/it]Train:   8%|▊         | 24/315 [13:01<2:27:56, 30.50s/it]Train:   8%|▊         | 25/315 [13:32<2:27:28, 30.51s/it]                                                         Train:   8%|▊         | 25/315 [13:32<2:27:28, 30.51s/it]Train:   8%|▊         | 25/315 [13:32<2:27:28, 30.51s/it]Train:   8%|▊         | 26/315 [14:03<2:27:56, 30.71s/it]Train:   9%|▊         | 27/315 [14:33<2:27:01, 30.63s/it]Train:   9%|▉         | 28/315 [15:04<2:26:06, 30.55s/it]Train:   9%|▉         | 29/315 [15:34<2:25:32, 30.53s/it]Train:  10%|▉         | 30/315 [16:05<2:25:00, 30.53s/it]                                                         Train:  10%|▉         | 30/315 [16:05<2:25:00, 30.53s/it]Train:  10%|▉         | 30/315 [16:05<2:25:00, 30.53s/it]Train:  10%|▉         | 31/315 [16:35<2:24:21, 30.50s/it]Train:  10%|█         | 32/315 [17:05<2:23:50, 30.50s/it]Train:  10%|█         | 33/315 [17:37<2:24:28, 30.74s/it]Train:  11%|█         | 34/315 [18:07<2:23:38, 30.67s/it]Train:  11%|█         | 35/315 [18:38<2:22:50, 30.61s/it]                                                         Train:  11%|█         | 35/315 [18:38<2:22:50, 30.61s/it]Train:  11%|█         | 35/315 [18:38<2:22:50, 30.61s/it]Train:  11%|█▏        | 36/315 [19:08<2:22:16, 30.60s/it]Train:  12%|█▏        | 37/315 [19:39<2:21:37, 30.57s/it]Train:  12%|█▏        | 38/315 [20:09<2:21:00, 30.54s/it]Train:  12%|█▏        | 39/315 [20:40<2:20:57, 30.64s/it]Train:  13%|█▎        | 40/315 [21:11<2:20:45, 30.71s/it]                                                         Train:  13%|█▎        | 40/315 [21:11<2:20:45, 30.71s/it]Train:  13%|█▎        | 40/315 [21:11<2:20:45, 30.71s/it]Train:  13%|█▎        | 41/315 [21:42<2:19:57, 30.65s/it]Train:  13%|█▎        | 42/315 [22:12<2:19:18, 30.62s/it]Train:  14%|█▎        | 43/315 [22:43<2:18:33, 30.56s/it]Train:  14%|█▍        | 44/315 [23:13<2:17:48, 30.51s/it]Train:  14%|█▍        | 45/315 [23:43<2:17:10, 30.49s/it]                                                         Train:  14%|█▍        | 45/315 [23:43<2:17:10, 30.49s/it]Train:  14%|█▍        | 45/315 [23:43<2:17:10, 30.49s/it]Train:  15%|█▍        | 46/315 [24:15<2:17:48, 30.74s/it]Train:  15%|█▍        | 47/315 [24:45<2:17:01, 30.68s/it]Train:  15%|█▌        | 48/315 [25:16<2:16:12, 30.61s/it]Train:  16%|█▌        | 49/315 [25:46<2:15:30, 30.57s/it]Train:  16%|█▌        | 50/315 [26:17<2:14:49, 30.53s/it]                                                         Train:  16%|█▌        | 50/315 [26:17<2:14:49, 30.53s/it]Train:  16%|█▌        | 50/315 [26:17<2:14:49, 30.53s/it][INFO:swift] Saving model checkpoint to /work/u1501463/stage1_model_full_toolset/v1-20261003-113849/checkpoint-50
+Train:  16%|█▌        | 51/315 [26:49<2:16:27, 31.01s/it]Train:  17%|█▋        | 52/315 [27:19<2:15:09, 30.83s/it]Train:  17%|█▋        | 53/315 [27:50<2:15:02, 30.92s/it]Train:  17%|█▋        | 54/315 [28:21<2:13:46, 30.75s/it]Train:  17%|█▋        | 55/315 [28:51<2:12:54, 30.67s/it]                                                         Train:  17%|█▋        | 55/315 [28:51<2:12:54, 30.67s/it]Train:  17%|█▋        | 55/315 [28:51<2:12:54, 30.67s/it]Train:  18%|█▊        | 56/315 [29:21<2:12:03, 30.59s/it]Train:  18%|█▊        | 57/315 [29:52<2:11:24, 30.56s/it]Train:  18%|█▊        | 58/315 [30:22<2:10:50, 30.55s/it]Train:  19%|█▊        | 59/315 [30:54<2:10:59, 30.70s/it]Train:  19%|█▉        | 60/315 [31:24<2:09:56, 30.58s/it]                                                         Train:  19%|█▉        | 60/315 [31:24<2:09:56, 30.58s/it]Train:  19%|█▉        | 60/315 [31:24<2:09:56, 30.58s/it]Train:  19%|█▉        | 61/315 [31:54<2:09:09, 30.51s/it]Train:  20%|█▉        | 62/315 [32:25<2:08:30, 30.48s/it]Train:  20%|██        | 63/315 [32:55<2:07:52, 30.45s/it]Train:  20%|██        | 64/315 [33:25<2:07:17, 30.43s/it]Train:  21%|██        | 65/315 [33:56<2:06:46, 30.43s/it]                                                         Train:  21%|██        | 65/315 [33:56<2:06:46, 30.43s/it]Train:  21%|██        | 65/315 [33:56<2:06:46, 30.43s/it]Train:  21%|██        | 66/315 [34:27<2:07:12, 30.65s/it]Train:  21%|██▏       | 67/315 [34:57<2:06:28, 30.60s/it]Train:  22%|██▏       | 68/315 [35:28<2:05:42, 30.54s/it]Train:  22%|██▏       | 69/315 [35:58<2:05:06, 30.52s/it]Train:  22%|██▏       | 70/315 [36:29<2:04:25, 30.47s/it]                                                         Train:  22%|██▏       | 70/315 [36:29<2:04:25, 30.47s/it]Train:  22%|██▏       | 70/315 [36:29<2:04:25, 30.47s/it]Train:  23%|██▎       | 71/315 [36:59<2:03:48, 30.44s/it]Train:  23%|██▎       | 72/315 [37:29<2:03:14, 30.43s/it]Train:  23%|██▎       | 73/315 [38:01<2:03:37, 30.65s/it]Train:  23%|██▎       | 74/315 [38:31<2:02:48, 30.58s/it]Train:  24%|██▍       | 75/315 [39:01<2:02:04, 30.52s/it]                                                         Train:  24%|██▍       | 75/315 [39:01<2:02:04, 30.52s/it]Train:  24%|██▍       | 75/315 [39:01<2:02:04, 30.52s/it]Train:  24%|██▍       | 76/315 [39:32<2:01:27, 30.49s/it]Train:  24%|██▍       | 77/315 [40:02<2:00:47, 30.45s/it]Train:  25%|██▍       | 78/315 [40:33<2:00:36, 30.53s/it]Train:  25%|██▌       | 79/315 [41:05<2:01:28, 30.89s/it]Train:  25%|██▌       | 80/315 [41:35<2:00:58, 30.89s/it]                                                         Train:  25%|██▌       | 80/315 [41:35<2:00:58, 30.89s/it]Train:  25%|██▌       | 80/315 [41:35<2:00:58, 30.89s/it]Train:  26%|██▌       | 81/315 [42:06<2:00:32, 30.91s/it]Train:  26%|██▌       | 82/315 [42:37<2:00:03, 30.92s/it]Train:  26%|██▋       | 83/315 [43:08<1:59:25, 30.89s/it]Train:  27%|██▋       | 84/315 [43:39<1:58:54, 30.88s/it]Train:  27%|██▋       | 85/315 [44:10<1:58:20, 30.87s/it]                                                         Train:  27%|██▋       | 85/315 [44:10<1:58:20, 30.87s/it]Train:  27%|██▋       | 85/315 [44:10<1:58:20, 30.87s/it]Train:  27%|██▋       | 86/315 [44:42<1:58:48, 31.13s/it]Train:  28%|██▊       | 87/315 [45:13<1:58:01, 31.06s/it]Train:  28%|██▊       | 88/315 [45:44<1:57:24, 31.03s/it]Train:  28%|██▊       | 89/315 [46:14<1:56:44, 30.99s/it]Train:  29%|██▊       | 90/315 [46:45<1:56:07, 30.96s/it]                                                         Train:  29%|██▊       | 90/315 [46:45<1:56:07, 30.96s/it]Train:  29%|██▊       | 90/315 [46:45<1:56:07, 30.96s/it]Train:  29%|██▉       | 91/315 [47:16<1:55:38, 30.98s/it]Train:  29%|██▉       | 92/315 [47:47<1:55:06, 30.97s/it]Train:  30%|██▉       | 93/315 [48:19<1:55:35, 31.24s/it]Train:  30%|██▉       | 94/315 [48:50<1:54:40, 31.13s/it]Train:  30%|███       | 95/315 [49:21<1:53:55, 31.07s/it]                                                         Train:  30%|███       | 95/315 [49:21<1:53:55, 31.07s/it]Train:  30%|███       | 95/315 [49:21<1:53:55, 31.07s/it]Train:  30%|███       | 96/315 [49:52<1:53:15, 31.03s/it]Train:  31%|███       | 97/315 [50:23<1:52:37, 31.00s/it]Train:  31%|███       | 98/315 [50:54<1:52:01, 30.98s/it]Train:  31%|███▏      | 99/315 [51:25<1:51:51, 31.07s/it]Train:  32%|███▏      | 100/315 [51:56<1:51:36, 31.15s/it]                                                          Train:  32%|███▏      | 100/315 [51:56<1:51:36, 31.15s/it]Train:  32%|███▏      | 100/315 [51:56<1:51:36, 31.15s/it][INFO:swift] Saving model checkpoint to /work/u1501463/stage1_model_full_toolset/v1-20261003-113849/checkpoint-100
+Train:  32%|███▏      | 101/315 [52:29<1:52:42, 31.60s/it]Train:  32%|███▏      | 102/315 [53:00<1:51:29, 31.40s/it]Train:  33%|███▎      | 103/315 [53:31<1:50:29, 31.27s/it]Train:  33%|███▎      | 104/315 [54:02<1:49:35, 31.16s/it]Train:  33%|███▎      | 105/315 [54:09<1:23:58, 23.99s/it]                                                          Train:  33%|███▎      | 105/315 [54:09<1:23:58, 23.99s/it]Train:  33%|███▎      | 105/315 [54:09<1:23:58, 23.99s/it]Train:  34%|███▎      | 106/315 [54:41<1:31:31, 26.27s/it]Train:  34%|███▍      | 107/315 [55:13<1:37:08, 28.02s/it]Train:  34%|███▍      | 108/315 [55:44<1:39:50, 28.94s/it]Train:  35%|███▍      | 109/315 [56:15<1:41:29, 29.56s/it]Train:  35%|███▍      | 110/315 [56:46<1:42:31, 30.01s/it]                                                          Train:  35%|███▍      | 110/315 [56:46<1:42:31, 30.01s/it]Train:  35%|███▍      | 110/315 [56:46<1:42:31, 30.01s/it]Train:  35%|███▌      | 111/315 [57:17<1:43:10, 30.35s/it]Train:  36%|███▌      | 112/315 [57:48<1:43:30, 30.59s/it]Train:  36%|███▌      | 113/315 [58:20<1:43:59, 30.89s/it]Train:  36%|███▌      | 114/315 [58:51<1:44:07, 31.08s/it]Train:  37%|███▋      | 115/315 [59:22<1:43:37, 31.09s/it]                                                          Train:  37%|███▋      | 115/315 [59:24<1:43:37, 31.09s/it]Train:  37%|███▋      | 115/315 [59:24<1:43:37, 31.09s/it]Train:  37%|███▋      | 116/315 [59:55<1:44:22, 31.47s/it]Train:  37%|███▋      | 117/315 [1:00:26<1:43:29, 31.36s/it]Train:  37%|███▋      | 118/315 [1:00:57<1:42:41, 31.27s/it]Train:  38%|███▊      | 119/315 [1:01:28<1:41:55, 31.20s/it]Train:  38%|███▊      | 120/315 [1:02:00<1:42:06, 31.42s/it]                                                            Train:  38%|███▊      | 120/315 [1:02:00<1:42:06, 31.42s/it]Train:  38%|███▊      | 120/315 [1:02:00<1:42:06, 31.42s/it]Train:  38%|███▊      | 121/315 [1:02:31<1:41:07, 31.28s/it]Train:  39%|███▊      | 122/315 [1:03:02<1:40:20, 31.19s/it]Train:  39%|███▉      | 123/315 [1:03:33<1:39:45, 31.17s/it]Train:  39%|███▉      | 124/315 [1:04:04<1:39:09, 31.15s/it]Train:  40%|███▉      | 125/315 [1:04:35<1:38:35, 31.13s/it]                                                            Train:  40%|███▉      | 125/315 [1:04:35<1:38:35, 31.13s/it]Train:  40%|███▉      | 125/315 [1:04:35<1:38:35, 31.13s/it]Train:  40%|████      | 126/315 [1:05:07<1:38:27, 31.26s/it]Train:  40%|████      | 127/315 [1:05:38<1:38:13, 31.35s/it]Train:  41%|████      | 128/315 [1:06:09<1:37:29, 31.28s/it]Train:  41%|████      | 129/315 [1:06:41<1:36:46, 31.22s/it]Train:  41%|████▏     | 130/315 [1:07:12<1:36:06, 31.17s/it]                                                            Train:  41%|████▏     | 130/315 [1:07:12<1:36:06, 31.17s/it]Train:  41%|████▏     | 130/315 [1:07:12<1:36:06, 31.17s/it]slurmstepd-hgpn21: error: *** JOB 369536 ON hgpn21 CANCELLED AT 2026-10-03T12:48:34 DUE TO TIME LIMIT ***

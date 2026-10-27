@@ -37,8 +37,10 @@ Heavy ML tools (`human_voice_enhance`, `super_resolution`, `extract_target`,
 `remove_target`) are never imported into this interpreter -- this registry is
 meant to run in the ms-swift env, which deliberately doesn't carry torch,
 DeepFilterNet, AudioSR, or sam_audio. Instead each call is dispatched
-out-of-process via `tools/tool_batch_execute.py`, run under that tool's own
-conda env (see `_CONDA_ENV_PYTHON`, mirroring `apply_tools.py`'s `TOOL_ENV`).
+out-of-process, run under that tool's own conda env (see `_CONDA_ENV_PYTHON`,
+mirroring `apply_tools.py`'s `TOOL_ENV`) by `heavy_tool_pool`: inside a
+`serve_heavy_tools()` block through one persistent server per env (models loaded
+once), otherwise via a one-shot `tools/tool_batch_execute.py` subprocess per call.
 Availability is therefore probed by checking the target env's python exists
 on disk, not by importing anything.
 """
@@ -46,11 +48,8 @@ on disk, not by importing anything.
 from __future__ import annotations
 
 import importlib
-import json
 import shutil
-import subprocess
 import sys
-import tempfile
 import wave
 from dataclasses import dataclass
 from pathlib import Path
@@ -61,7 +60,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from . import TOOL_NAME_TO_CLASS  # noqa: E402
+from . import TOOL_NAME_TO_CLASS, heavy_tool_pool  # noqa: E402
 from .abstract_tool import ToolValidationError  # noqa: E402
 from .clipping import ClippingTool  # noqa: E402
 from .denoise import DenoiseTool  # noqa: E402
@@ -100,38 +99,28 @@ _HAS_SOUNDFILE = _probe("soundfile")
 # uses. Availability is therefore probed by checking the env's python exists,
 # not by importing anything here.
 _CONDA_ENV_PYTHON: Dict[str, str] = {
-    "human_voice_enhance": "/home/u1501463/miniconda3/envs/deepfilternet/bin/python",
-    "super_resolution": "/home/u1501463/miniconda3/envs/audiosr/bin/python",
-    "extract_target": "/home/u1501463/miniconda3/envs/sam_audio/bin/python",
-    "remove_target": "/home/u1501463/miniconda3/envs/sam_audio/bin/python",
+    "human_voice_enhance": "/home/u1501463/.conda/envs/deepfilternet/bin/python",
+    "super_resolution": "/home/u1501463/.conda/envs/audiosr/bin/python",
+    "extract_target": "/home/u1501463/.conda/envs/sam_audio/bin/python",
+    "remove_target": "/home/u1501463/.conda/envs/sam_audio/bin/python",
 }
 
 
-def _run_tool_subprocess(tool_name: str, params: Dict[str, Any]) -> Dict[str, Any]:
-    """Run one heavy ML tool call out-of-process, in the conda env that owns it."""
-    python_executable = _CONDA_ENV_PYTHON[tool_name]
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        input_path = Path(tmp_dir) / "input.json"
-        output_path = Path(tmp_dir) / "output.json"
-        input_path.write_text(json.dumps([params]), encoding="utf-8")
-        subprocess.run(
-            [
-                python_executable,
-                str(REPO_ROOT / "tools" / "tool_batch_execute.py"),
-                "--tool-name", tool_name,
-                "--input-file", str(input_path),
-                "--output-file", str(output_path),
-            ],
-            check=True,
-        )
-        results = json.loads(output_path.read_text(encoding="utf-8"))
+def _run_tool_subprocess(
+    tool_name: str, params: Dict[str, Any], output_path: Optional[Path] = None
+) -> Dict[str, Any]:
+    """Run one heavy ML tool call out-of-process, in the conda env that owns it.
 
-    if not isinstance(results, list) or len(results) != 1:
-        raise RuntimeError(f"Unexpected batch result for {tool_name}: {results!r}")
-    result = results[0]
-    if result.get("status") not in (None, "success"):
-        raise RuntimeError(f"{tool_name} failed: {result.get('message') or result.get('error')}")
-    return result
+    `output_path` is only injected into the batch item sent to the subprocess (never into
+    `params`, which callers reuse as the ground-truth tool call): human_voice_enhance and
+    super_resolution require it, while extract_target/remove_target pick their own.
+    """
+    batch_item = dict(params)
+    if output_path is not None:
+        batch_item["output_path"] = str(output_path)
+    # Goes through a persistent per-env server when a `serve_heavy_tools()` block is active
+    # (models stay loaded; GPU use is serialized), else a one-shot subprocess per call.
+    return heavy_tool_pool.run_tool(tool_name, _CONDA_ENV_PYTHON[tool_name], batch_item)
 
 
 _HAS_DEEPFILTER = Path(_CONDA_ENV_PYTHON["human_voice_enhance"]).exists()
@@ -185,10 +174,16 @@ def get_duration_seconds(path: Path) -> float:
 
 
 def ensure_wav(path: Path, work_dir: Path) -> Path:
-    """Return a WAV copy of `path`, converting (and resampling to mono) if needed."""
+    """Return a WAV copy of `path`, converting (and resampling to mono) if needed.
+
+    Checks the RIFF header, not just the suffix: several corpora (DCASE 2025 task-5, MMAU
+    test-mini) ship mp3/flac data under a `.wav` name, which the `wave`-based tools reject.
+    """
     path = Path(path)
     if path.suffix.lower() == ".wav":
-        return path
+        with open(path, "rb") as f:
+            if f.read(4) == b"RIFF":
+                return path
 
     if not _HAS_LIBROSA:
         raise RuntimeError(f"librosa is required to convert non-WAV source audio: {path}")
@@ -341,8 +336,8 @@ if _HAS_LIBROSA:
 
 
 # ---------------------------------------------------------------------------
-# Pitch / time-stretch: delegate to a subprocess in a dedicated conda env, so
-# these stay available even though the main interpreter lacks `pedalboard`.
+# Pitch / time-stretch: run in-process via librosa.effects (see pitch_time.py),
+# in whatever env this registry is loaded under -- no subprocess / conda env.
 # ---------------------------------------------------------------------------
 
 @register("pitch_shift", PitchShiftTool.description())
@@ -370,60 +365,50 @@ def _apply_time_stretch(audio_path: Path, output_path: Path, rng: random.Random,
 # `_run_tool_subprocess` above), only registered when that env's python exists.
 # ---------------------------------------------------------------------------
 
-# if _HAS_DEEPFILTER:
-#     @register(
-#         "human_voice_enhance",
-#         "Enhance human voice in an audio file by reducing background noise using DeepFilterNet.",
-#     )
-#     def _apply_human_voice_enhance(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-#         params = {"audio_path": str(audio_path)}
-#         result = _run_tool_subprocess("human_voice_enhance", params)
-#         final_path = _finalize(Path(result["output_path"]), output_path)
-#         return params, final_path
+# Descriptions come from the real Tool classes (the same source `available_tool_schemas()`
+# uses for the system prompt), so the registry can't drift from what the model is shown.
+# To take one of these out of the toolset, comment out its block -- every consumer
+# (training data, benchmark, live agent) reads this one registry.
 
-# if _HAS_AUDIOSR:
-#     @register(
-#         "super_resolution",
-#         "Upsample and restore high-frequency detail of an audio file using the AudioSR "
-#         "latent diffusion model, producing a 48kHz output.",
-#     )
-#     def _apply_super_resolution(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-#         params = {
-#             "audio_path": str(audio_path),
-#             "model_name": rng.choice(["basic", "speech"]),
-#         }
-#         result = _run_tool_subprocess("super_resolution", params)
-#         final_path = _finalize(Path(result["output_path"]), output_path)
-#         return params, final_path
+if _HAS_DEEPFILTER:
+    @register("human_voice_enhance", TOOL_NAME_TO_CLASS["human_voice_enhance"].description())
+    def _apply_human_voice_enhance(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+        params = {"audio_path": str(audio_path)}
+        result = _run_tool_subprocess("human_voice_enhance", params, output_path=output_path)
+        final_path = _finalize(Path(result["output_path"]), output_path)
+        return params, final_path
 
-# if _HAS_SAM_AUDIO:
-#     @register(
-#         "extract_target",
-#         "Extract a specific sound source from a WAV audio segment. "
-#         f"The label must be one of the fixed supported values: {', '.join(_SEPARATION_LABELS)}.",
-#     )
-#     def _apply_extract_target(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-#         params = {
-#             "audio_path": str(audio_path),
-#             "target_description": rng.choice(_SEPARATION_LABELS),
-#         }
-#         result = _run_tool_subprocess("extract_target", params)
-#         final_path = _finalize(Path(result["output_path"]), output_path)
-#         return params, final_path
+if _HAS_AUDIOSR:
+    @register("super_resolution", TOOL_NAME_TO_CLASS["super_resolution"].description())
+    def _apply_super_resolution(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+        params = {
+            "audio_path": str(audio_path),
+            "model_name": rng.choice(["basic", "speech"]),
+        }
+        result = _run_tool_subprocess("super_resolution", params, output_path=output_path)
+        final_path = _finalize(Path(result["output_path"]), output_path)
+        return params, final_path
 
-#     @register(
-#         "remove_target",
-#         "Remove a specific sound source from a WAV audio segment. "
-#         f"The label must be one of the fixed supported values: {', '.join(_SEPARATION_LABELS)}.",
-#     )
-#     def _apply_remove_target(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
-#         params = {
-#             "audio_path": str(audio_path),
-#             "target_description": rng.choice(_SEPARATION_LABELS),
-#         }
-#         result = _run_tool_subprocess("remove_target", params)
-#         final_path = _finalize(Path(result["output_path"]), output_path)
-#         return params, final_path
+if _HAS_SAM_AUDIO:
+    @register("extract_target", TOOL_NAME_TO_CLASS["extract_target"].description())
+    def _apply_extract_target(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+        params = {
+            "audio_path": str(audio_path),
+            "target_description": rng.choice(_SEPARATION_LABELS),
+        }
+        result = _run_tool_subprocess("extract_target", params)
+        final_path = _finalize(Path(result["output_path"]), output_path)
+        return params, final_path
+
+    @register("remove_target", TOOL_NAME_TO_CLASS["remove_target"].description())
+    def _apply_remove_target(audio_path: Path, output_path: Path, rng: random.Random, duration: float):
+        params = {
+            "audio_path": str(audio_path),
+            "target_description": rng.choice(_SEPARATION_LABELS),
+        }
+        result = _run_tool_subprocess("remove_target", params)
+        final_path = _finalize(Path(result["output_path"]), output_path)
+        return params, final_path
 
 
 # ---------------------------------------------------------------------------
@@ -473,6 +458,26 @@ def _apply_time_stretch(audio_path: Path, output_path: Path, rng: random.Random,
 #         result = _ae_insert_event(**params)
 #         params.pop("output_path")
 #         return params, Path(result["output_path"])
+
+
+def heavy_tool_env_pythons() -> list[str]:
+    """Conda-env pythons behind the heavy ML tools that are currently registered."""
+    return sorted({_CONDA_ENV_PYTHON[name] for name in REGISTRY if name in _CONDA_ENV_PYTHON})
+
+
+def heavy_tool_env_python(tool_name: str) -> Optional[str]:
+    """The conda-env python `tool_name` must run under, or None for an in-process tool."""
+    return _CONDA_ENV_PYTHON.get(tool_name)
+
+
+def serve_heavy_tools():
+    """Context manager: keep the registered heavy tools' models loaded in per-env servers.
+
+    Wrap a dataset/benchmark generation run in `with serve_heavy_tools():` -- *before* creating
+    any process/thread pool, so the workers inherit it -- otherwise every heavy call reloads
+    its model in a fresh subprocess (see `heavy_tool_pool`). A no-op when none are registered.
+    """
+    return heavy_tool_pool.serve(heavy_tool_env_pythons())
 
 
 def available_tool_names() -> list[str]:

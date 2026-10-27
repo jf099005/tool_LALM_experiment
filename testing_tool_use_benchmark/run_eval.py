@@ -48,6 +48,7 @@ from interface.protocol import (  # noqa: E402
     render_tool_result_message,
 )
 from official_system_prompt import compose_system_prompt, load_official_system_prompt  # noqa: E402
+from tool_analysis import analyze_per_tool, format_tool_analysis  # noqa: E402
 
 # The SFT training data ends every chain with an explicit stop turn (see
 # build_dataset.to_swift_sample), so it already learned the stop signal
@@ -113,6 +114,142 @@ def resolve_system_prompt(entry: Dict[str, Any], args: argparse.Namespace) -> Op
         return compose_system_prompt(tools_block, base_system_prompt=base)
     # Old-format entry: preserve pre-existing behavior exactly.
     return None if args.adapter_dir else DEFAULT_PROTOCOL_SYSTEM_PROMPT
+
+
+# ---------------------------------------------------------------------------
+# Per-tool parameter-accuracy metrics.
+#
+# Complements the existing name-only tool_name_precision/recall/f1: even when
+# the predicted tool_name matches ground truth, this scores how close the
+# *arguments* were (timestamp offsets for clipping/pre_emphasis/trim_silence,
+# semitone offset for pitch_shift, rate offset for time_stretch, algorithm
+# match + numeric offsets for denoise).
+#
+# ALIGNMENT ASSUMPTION: matches gt_calls[i] against predicted_steps[i] by
+# position. This benchmark is currently single-step only (num_gt_steps == 1
+# everywhere in benchmark.json), so position 0 vs position 0 is unambiguous.
+# If the benchmark grows multi-step chains, positional alignment can silently
+# mismatch a reordered-but-otherwise-correct chain -- revisit with a proper
+# sequence-alignment (e.g. LCS on tool_name) before trusting this on
+# multi-step entries.
+#
+# Shared verbatim by run_eval_parallel.py (imported, not re-implemented) so
+# both scripts score parameters identically -- run_eval_batch.py is deprecated
+# and intentionally NOT updated to call this.
+# ---------------------------------------------------------------------------
+
+def _parse_timestamp(ts: Any) -> Optional[float]:
+    """'HH:MM:SS.mmm' -> seconds. Returns None for anything unparseable
+    (including a missing/None/non-string value) rather than raising, since
+    this is called on model-generated parameters that may be malformed."""
+    if not isinstance(ts, str):
+        return None
+    parts = ts.split(":")
+    if len(parts) != 3:
+        return None
+    try:
+        hh, mm, ss = parts
+        return int(hh) * 3600 + int(mm) * 60 + float(ss)
+    except (ValueError, TypeError):
+        return None
+
+
+def _numeric_diff(pred_val: Any, gt_val: Any) -> Optional[float]:
+    """abs(pred - gt) as float, or None if either side is missing/non-numeric."""
+    if pred_val is None or gt_val is None:
+        return None
+    try:
+        return abs(float(pred_val) - float(gt_val))
+    except (TypeError, ValueError):
+        return None
+
+
+def compute_param_metrics(
+    tool_name: str, gt_params: Dict[str, Any], pred_params: Dict[str, Any]
+) -> Dict[str, Any]:
+    """Parameter-level accuracy for one (gt_call, predicted_step) pair whose
+    tool_name already matches. Only ever set to a value when both sides
+    actually provided the parameter (or, for pitch_shift's bins_per_octave,
+    when the tool schema documents an explicit default) -- absent parameters
+    stay None rather than being scored as a match or a miss.
+    """
+    metrics: Dict[str, Any] = {}
+
+    if tool_name in ("clipping", "pre_emphasis", "trim_silence"):
+        gt_begin = _parse_timestamp(gt_params.get("audio_begin"))
+        pred_begin = _parse_timestamp(pred_params.get("audio_begin"))
+        gt_end = _parse_timestamp(gt_params.get("audio_end"))
+        pred_end = _parse_timestamp(pred_params.get("audio_end"))
+        metrics["audio_begin_offset_sec"] = (
+            abs(pred_begin - gt_begin) if gt_begin is not None and pred_begin is not None else None
+        )
+        metrics["audio_end_offset_sec"] = (
+            abs(pred_end - gt_end) if gt_end is not None and pred_end is not None else None
+        )
+
+    if tool_name == "pre_emphasis":
+        metrics["coef_diff"] = _numeric_diff(pred_params.get("coef"), gt_params.get("coef"))
+
+    if tool_name == "trim_silence":
+        metrics["threshold_db_diff"] = _numeric_diff(pred_params.get("threshold_db"), gt_params.get("threshold_db"))
+        metrics["frame_length_diff"] = _numeric_diff(pred_params.get("frame_length"), gt_params.get("frame_length"))
+        metrics["hop_length_diff"] = _numeric_diff(pred_params.get("hop_length"), gt_params.get("hop_length"))
+
+    if tool_name == "pitch_shift":
+        metrics["n_steps_diff"] = _numeric_diff(pred_params.get("n_steps"), gt_params.get("n_steps"))
+        # Schema documents bins_per_octave's default as 12 -- treat an omitted
+        # value as that default rather than "missing", on both sides.
+        gt_bpo = gt_params.get("bins_per_octave", 12)
+        pred_bpo = pred_params.get("bins_per_octave", 12)
+        metrics["bins_per_octave_diff"] = _numeric_diff(pred_bpo, gt_bpo)
+
+    if tool_name == "time_stretch":
+        metrics["rate_diff"] = _numeric_diff(pred_params.get("rate"), gt_params.get("rate"))
+
+    if tool_name == "denoise":
+        gt_algo = gt_params.get("algorithm")
+        pred_algo = pred_params.get("algorithm")
+        metrics["algorithm_match"] = (
+            (gt_algo == pred_algo) if gt_algo is not None and pred_algo is not None else None
+        )
+        # noise_factor only applies to spectral_subtraction, sensitivity only
+        # to adaptive -- only score them when the GT call actually used them.
+        if gt_params.get("noise_factor") is not None:
+            metrics["noise_factor_diff"] = _numeric_diff(pred_params.get("noise_factor"), gt_params.get("noise_factor"))
+        if gt_params.get("sensitivity") is not None:
+            metrics["sensitivity_diff"] = _numeric_diff(pred_params.get("sensitivity"), gt_params.get("sensitivity"))
+
+    gt_audio_id = gt_params.get("audio_id")
+    pred_audio_id = pred_params.get("audio_id")
+    metrics["audio_id_match"] = (
+        (gt_audio_id == pred_audio_id) if gt_audio_id is not None and pred_audio_id is not None else None
+    )
+
+    return metrics
+
+
+def compute_step_param_metrics(
+    gt_calls: List[Dict[str, Any]], predicted_steps: List[Dict[str, Any]]
+) -> List[Dict[str, Any]]:
+    """Positionally align gt_calls with predicted_steps (see module-level
+    ALIGNMENT ASSUMPTION note above) and compute per-tool parameter metrics
+    wherever the aligned predicted step succeeded and named the right tool."""
+    out: List[Dict[str, Any]] = []
+    for i in range(min(len(gt_calls), len(predicted_steps))):
+        gt_call = gt_calls[i]
+        pred_step = predicted_steps[i]
+        if not pred_step.get("success"):
+            continue
+        if pred_step.get("tool_name") != gt_call.get("tool_name"):
+            continue
+        gt_params = gt_call.get("parameters", {}) or {}
+        pred_params = pred_step.get("parameters", {}) or {}
+        out.append({
+            "step_index": i,
+            "tool_name": gt_call["tool_name"],
+            "metrics": compute_param_metrics(gt_call["tool_name"], gt_params, pred_params),
+        })
+    return out
 
 
 def run_sample(
@@ -280,11 +417,13 @@ def run_sample(
 
     baseline_metrics = compare_audio(audio_a, audio_b)
 
+    step_param_metrics = compute_step_param_metrics(gt_calls, predicted_steps)
 
     return {
         "id": sample_id,
         "num_gt_steps": len(gt_calls),
         "gt_tool_sequence": gt_tool_names,
+        "gt_calls": gt_calls,
         "prompt": messages[0]["content"] if system_prompt else None,
         "predicted_steps": predicted_steps,
         "predicted_attempted_sequence": pred_attempted_names,
@@ -302,6 +441,7 @@ def run_sample(
         "gt_tool_coverage": gt_tool_coverage,
         "used_any_gt_tool": bool(gt_tools_used) if gt_tool_set else None,
         "used_all_gt_tools": (len(gt_tools_missed) == 0) if gt_tool_set else None,
+        "step_param_metrics": step_param_metrics,
         "final_audio_path": str(current_audio),
         "audio_metrics": audio_metrics,
         "baseline_metrics": baseline_metrics,
@@ -345,6 +485,37 @@ def aggregate(results: List[Dict[str, Any]]) -> Dict[str, Any]:
         for k, v in sorted(by_num_steps.items())
     }
 
+    # Per-tool parameter-accuracy aggregation: gather every step-level
+    # metrics dict (already restricted to "predicted the right tool at the
+    # aligned position" -- see compute_step_param_metrics) by tool_name, then
+    # average each numeric/boolean field independently across whatever
+    # entries actually had a non-None value for it. A field's absence from
+    # a given step (e.g. noise_factor_diff for a wiener denoise call) is
+    # simply excluded from that field's average, not treated as 0 or as a
+    # miss.
+    by_tool_fields: Dict[str, Dict[str, List[float]]] = {}
+    by_tool_n: Dict[str, int] = {}
+    for r in results:
+        for entry in r.get("step_param_metrics", []):
+            tool_name = entry["tool_name"]
+            by_tool_n[tool_name] = by_tool_n.get(tool_name, 0) + 1
+            field_bucket = by_tool_fields.setdefault(tool_name, {})
+            for field_name, value in entry["metrics"].items():
+                if value is None:
+                    continue
+                field_bucket.setdefault(field_name, []).append(float(value))
+
+    param_metrics_by_tool = {
+        tool_name: {
+            "n": by_tool_n[tool_name],
+            **{
+                f"mean_{field_name}": (sum(vals) / len(vals))
+                for field_name, vals in fields.items()
+            },
+        }
+        for tool_name, fields in sorted(by_tool_fields.items())
+    }
+
     return {
         "num_samples": n,
         "total_predicted_tool_calls": total_predicted,
@@ -383,7 +554,32 @@ def aggregate(results: List[Dict[str, Any]]) -> Dict[str, Any]:
             1 for r in results if r["num_tag_malformed_valid_content"] > 0
         ),
         "breakdown_by_num_gt_steps": breakdown,
+        "param_metrics_by_tool": param_metrics_by_tool,
+        # Full per-GT-tool breakdown: selection accuracy/P/R/F1, confusion
+        # matrix vs other tools, execution/audio stats, and a direct
+        # parameter-by-parameter comparison against GT (see tool_analysis.py).
+        "per_tool_analysis": analyze_per_tool(results),
     }
+
+
+def write_outputs(output_file: Path, results: List[Dict[str, Any]], summary: Dict[str, Any]) -> None:
+    """Final outputs shared by run_eval.py and run_eval_parallel.py:
+      <out>.json                 per-sample results + summary
+      <out>_summary.json         summary only
+      <out>_tool_analysis.json   per-tool analysis incl. every raw (gt, pred) parameter pair
+      <out>_tool_analysis.txt    human-readable per-tool report (also printed to stderr)
+    """
+    with output_file.open("w", encoding="utf-8") as f:
+        json.dump({"results": results, "summary": summary}, f, indent=2)
+    with (output_file.parent / (output_file.stem + "_summary.json")).open("w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=2)
+    detailed = analyze_per_tool(results, include_pairs=True)
+    with (output_file.parent / (output_file.stem + "_tool_analysis.json")).open("w", encoding="utf-8") as f:
+        json.dump(detailed, f, indent=2)
+    report = format_tool_analysis(detailed)
+    with (output_file.parent / (output_file.stem + "_tool_analysis.txt")).open("w", encoding="utf-8") as f:
+        f.write(report + "\n")
+    print(report, file=sys.stderr)
 
 
 def main() -> None:
@@ -461,8 +657,6 @@ def main() -> None:
     output_file = args.output_file
     output_file = Path(output_file) if isinstance(output_file, str) else output_file
 
-    output_summary_file = output_file.parent / (output_file.stem + "_summary.json")
-    
     if args.backend == "vllm" and args.adapter_dir:
         raise SystemExit("--adapter-dir requires --backend swift; the vLLM backend only runs raw official weights.")
 
@@ -519,11 +713,7 @@ def main() -> None:
 
     summary = aggregate(results)
     print(json.dumps(summary, indent=2))
-    with args.output_file.open("w", encoding="utf-8") as f:
-        json.dump({"results": results, "summary": summary}, f, indent=2)
-
-    with output_summary_file.open("w", encoding="utf-8") as f:
-        json.dump(summary, f, indent=2)
+    write_outputs(output_file, results, summary)
 
 if __name__ == "__main__":
     main()

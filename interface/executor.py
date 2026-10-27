@@ -18,6 +18,7 @@ slipping through.
 
 from __future__ import annotations
 
+import shutil
 import sys
 from pathlib import Path
 from typing import Any, Dict
@@ -27,6 +28,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from tools import TOOL_NAME_TO_CLASS  # noqa: E402
+from tools import heavy_tool_pool  # noqa: E402
 from tools import tools_registry  # noqa: E402
 from tools.abstract_tool import ToolValidationError  # noqa: E402
 
@@ -84,6 +86,9 @@ def run_tool_call(
 
     try:
         cls.validate_parameters(params)
+        heavy_env_python = tools_registry.heavy_tool_env_python(tool_name)
+        if heavy_env_python is not None:
+            return _run_heavy_tool_call(cls, tool_name, heavy_env_python, params, output_dir, step_index)
         if cls.requires_output_path():
             output_dir.mkdir(parents=True, exist_ok=True)
             output_path = str(output_dir / f"step{step_index}_{tool_name}.wav")
@@ -95,6 +100,33 @@ def run_tool_call(
         raise
     except Exception as exc:  # noqa: BLE001 - surface any backend failure as an execution failure
         raise ToolExecutionError(f"{tool_name} raised {type(exc).__name__}: {exc}") from exc
+
+
+def _run_heavy_tool_call(
+    cls, tool_name: str, env_python: str, params: Dict[str, Any], output_dir: Path, step_index: int
+) -> Dict[str, Any]:
+    """Run a DeepFilterNet/AudioSR/SAM-Audio tool in its own conda env.
+
+    These can't be imported into this interpreter (see `tools_registry`), so they go through
+    `heavy_tool_pool` -- a persistent per-env server if the caller wrapped the run in
+    `tools_registry.serve_heavy_tools()`, otherwise a one-shot subprocess per call (correct,
+    but reloads the model every time).
+    """
+    output_dir.mkdir(parents=True, exist_ok=True)
+    if cls.requires_output_path():
+        params["output_path"] = str(output_dir / f"step{step_index}_{tool_name}.wav")
+        return heavy_tool_pool.run_tool(tool_name, env_python, params)
+
+    # extract_target/remove_target write their result next to their *input*; run on a private
+    # copy inside output_dir so evaluation never writes into the source audio's directory
+    # (or collides with a parallel run on the same source).
+    input_path = Path(params["audio_path"])
+    staged = output_dir / f"_in_step{step_index}_{tool_name}{input_path.suffix}"
+    shutil.copy(str(input_path), str(staged))
+    try:
+        return heavy_tool_pool.run_tool(tool_name, env_python, {**params, "audio_path": str(staged)})
+    finally:
+        staged.unlink(missing_ok=True)
 
 
 def extract_audio_outputs(result: Dict[str, Any]) -> Dict[str, str]:

@@ -1,0 +1,37 @@
+=== human_voice_enhance (env: deepfilternet) ===
+Saved batch result to /work/u1501463/dl_env_smoke_test/human_voice_enhance_result.json
+[
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/test.wav",
+    "message": "Denoise operation completed using DeepFilterNet.",
+    "output_path": "/work/u1501463/dl_env_smoke_test/hve_out.wav",
+    "status": "success"
+  }
+]
+=== super_resolution (env: audiosr) ===
+Loading AudioSR: basic
+Loading model on cuda:0
+DiffusionWrapper has 258.20 M params.
+[93m Warning: audio is longer than 10.24 seconds, may degrade the model performance. It's recommand to truncate your audio to 5.12 seconds before input to AudioSR to get the best performance.[00m
+Running DDIM Sampling with 50 timesteps
+Saved batch result to /work/u1501463/dl_env_smoke_test/super_resolution_result.json
+[
+  {
+    "audio_path": "/home/u1501463/tool_use_LALM/test.wav",
+    "message": "Super resolution completed using AudioSR.",
+    "model_name": "basic",
+    "output_path": "/work/u1501463/dl_env_smoke_test/sr_out.wav",
+    "status": "success"
+  }
+]
+=== extract_target (env: sam_audio) ===
+Saved batch result to /work/u1501463/dl_env_smoke_test/extract_target_result.json
+[
+  {
+    "audio_path": "/work/u1501463/dl_env_smoke_test/sam_input.wav",
+    "message": "Source extraction completed using SAMAudio.",
+    "output_path": "/work/u1501463/dl_env_smoke_test/sam_input_vocals_extracted.wav",
+    "status": "success",
+    "target_description": "vocals"
+  }
+]

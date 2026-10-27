@@ -53,8 +53,9 @@ Usage:
 Run under an env with librosa/soundfile/scipy (e.g. the same `Whisper`/`ms-swift` env
 `gen_2nd_stage_data`'s scripts need) for the light tools this script calls in-process;
 heavy ML tools (remove_target/extract_target/human_voice_enhance/super_resolution) are
-disabled by default in tool_config.json and, if enabled, are dispatched to their own conda
-env per-call (see tool_appliers.py) so they don't further constrain this script's own env.
+enabled in tool_config.json and dispatched to their own conda env (see tool_appliers.py) via
+one persistent server per env started around the generation loop, so they don't further
+constrain this script's own env -- but they do need a GPU allocation (submit via sbatch).
 """
 
 from __future__ import annotations
@@ -417,21 +418,23 @@ def main() -> None:
 
     rng = random.Random(args.seed)
     records: List[Dict[str, Any]] = []
-    for idx, item in tqdm(enumerate(sampled, start=1), total=len(sampled)):
-        for attempt in range(args.max_attempts_per_sample):
-            try:
-                record = build_one_sample(
-                    item, args.output_dir, tool_names, tool_weights_list, tool_config, min_tools, max_tools, rng
-                )
-                records.append(record)
-                ops = [step["tool"] for step in record["tool_chain"]]
-                print(f"[{idx}/{len(sampled)}] {item['id']}: applied {ops}", file=sys.stderr)
-                break
-            except Exception:
-                print(f"Attempt {attempt + 1} failed for {item['id']}:", file=sys.stderr)
-                traceback.print_exc(file=sys.stderr)
-        else:
-            print(f"Giving up on {item['id']} after {args.max_attempts_per_sample} attempts.", file=sys.stderr)
+    # Heavy ML tools (if any are enabled) get one persistent server per conda env for the run.
+    with ta.heavy_tool_pool.serve(ta.heavy_env_pythons(tool_config, tool_names)):
+        for idx, item in tqdm(enumerate(sampled, start=1), total=len(sampled)):
+            for attempt in range(args.max_attempts_per_sample):
+                try:
+                    record = build_one_sample(
+                        item, args.output_dir, tool_names, tool_weights_list, tool_config, min_tools, max_tools, rng
+                    )
+                    records.append(record)
+                    ops = [step["tool"] for step in record["tool_chain"]]
+                    print(f"[{idx}/{len(sampled)}] {item['id']}: applied {ops}", file=sys.stderr)
+                    break
+                except Exception:
+                    print(f"Attempt {attempt + 1} failed for {item['id']}:", file=sys.stderr)
+                    traceback.print_exc(file=sys.stderr)
+            else:
+                print(f"Giving up on {item['id']} after {args.max_attempts_per_sample} attempts.", file=sys.stderr)
 
     qa_by_id = {item["id"]: item for item in sampled}
 

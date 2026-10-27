@@ -174,7 +174,8 @@ tool_use_training/, testing_tool_use_benchmark/
   呼叫 `validate_parameters()` + `execute()`。**任何要「執行一個 model 預測出來的
   tool call」的新程式碼都應該呼叫這個函式,不要重新刻一份。**
   已確認的呼叫端：`interface/agent.py`、`testing_tool_use_benchmark/run_eval.py`、
-  `tool_use_training/tool_use_RL_full/reward.py`（`ToolAudioClosenessReward`)。
+  `tool_use_training/tool_use_RL_full/reward.py`（`ToolAudioClosenessReward`)、
+  `tool_use_training/stage3_mcq_rl/audio_tool_agent_loop.py`（stage-3 verl RL rollout)。
 - **`interface/agent.py`**：`ToolCallingAgent.run()`——多輪迴圈本體。
   `engine.generate_turn(messages, audios)` → `protocol.parse_turn()` →
   （是 tool call 就)`executor.run_tool_call()` →
@@ -196,6 +197,7 @@ tool_use_training/, testing_tool_use_benchmark/
 | `testing_tool_use_benchmark/run_eval.py` | 跑一個 checkpoint,對 benchmark 逐輪生成、真的執行、算 metric | `official_system_prompt`、`interface.protocol.parse_turn/render_tool_result_message`、`interface.executor.run_tool_call`、`interface.engine.{SwiftEngine,VLLMEngine}` |
 | `tool_use_training/tool_use_RL_{full,partial}/build_rl_dataset.py` | 產生 stage-2 GRPO 單輪資料——**不是**逐輪 `<tool_call>` 格式,而是要求模型一次輸出整條 `{"tool_calls":[...]}` | `official_system_prompt.compose_system_prompt`（system prompt 共用),但**不用** `tool_call_formats.py`——這是刻意的,見下方 §7 |
 | `tool_use_training/tool_use_RL_{full,partial}/reward.py` | GRPO reward——比對預測 vs 標準答案的 `tool_calls` 序列;`ToolAudioClosenessReward` 還會真的執行、比對音檔相似度 | 自己的 `parse_tool_call_payload()`（解析單發 JSON,含 code fence/推理文字容錯),真正執行時呼叫 `interface.executor.run_tool_call` |
+| `tool_use_training/stage3_mcq_rl/`（`build_mcq_dataset.py`、`audio_tool_agent_loop.py`、`reward.py`) | stage-3：verl-omni GSPO，在 MCQ（AudioMCQ-CompA-R / DCASE'25 / AudioSet 標籤合成；val/eval 用 MMAU test-mini、MMAR）上做**真的多輪工具呼叫** RL，工具輸出音檔餵回模型，reward = 最後一輪 `<answer>` 正確率 | system prompt 與 stage-1 逐字相同（`tools_registry.describe_available_tools` + `official_system_prompt.compose_system_prompt`)、`interface.protocol.parse_turn/render_tool_result_message/audio_tag`、`interface.executor.run_tool_call`、`tools_registry.serve_heavy_tools`/`ensure_wav`；verl 內建 `ToolAgentLoop` 不支援音訊工具輸出，故自訂 agent loop |
 
 - **`tool_use_training/gen_1st_stage_data/cot_templates.py`**（新增)：`build_dataset.py`
   專用、stage-1 資料生成才用得到的一層——每個 `@register` 到 `tools_registry` 的工具

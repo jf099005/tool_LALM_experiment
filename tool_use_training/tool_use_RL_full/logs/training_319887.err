@@ -1,0 +1,1446 @@
+/opt/ohpc/admin/lmod/lmod/init/bash: line 112: conda: command not found
+/opt/ohpc/admin/lmod/lmod/init/bash: line 112: conda: command not found
+/opt/ohpc/admin/lmod/lmod/init/bash: line 112: conda: command not found
+-----------------
+loading CUDA 12.4
+-----------------
+
+[INFO:swift] Successfully registered `/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/dataset/data/dataset_info.json`.
+[INFO:swift] Setting args.remove_unused_columns: False
+[INFO:swift] Setting default gradient_accumulation_steps to 1 for GRPO.
+[INFO:swift] Successfully imported external_plugins: ['reward.py'].
+[INFO:swift] rank: 0, local_rank: 0, world_size: 1, local_world_size: 1
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+[INFO:swift] Setting torch_dtype: torch.bfloat16
+[INFO:swift] Setting args.lazy_tokenize: True
+[INFO:swift] Using deepspeed: {'fp16': {'enabled': 'auto', 'loss_scale': 0, 'loss_scale_window': 1000, 'initial_scale_power': 16, 'hysteresis': 2, 'min_loss_scale': 1}, 'bf16': {'enabled': 'auto'}, 'zero_optimization': {'stage': 3, 'offload_param': {'device': 'cpu', 'pin_memory': True}, 'overlap_comm': False, 'contiguous_gradients': True, 'sub_group_size': 1000000000.0, 'reduce_bucket_size': 'auto', 'stage3_prefetch_bucket_size': 'auto', 'stage3_param_persistence_threshold': 'auto', 'stage3_max_live_parameters': 1000000000.0, 'stage3_max_reuse_distance': 1000000000.0, 'stage3_gather_16bit_weights_on_model_save': True}, 'gradient_accumulation_steps': 'auto', 'gradient_clipping': 'auto', 'steps_per_print': 2000, 'train_batch_size': 'auto', 'train_micro_batch_size_per_gpu': 'auto', 'wall_clock_breakdown': False}
+/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/rlhf_trainers/arguments.py:13: TRLExperimentalWarning: You are importing from 'trl.experimental'. APIs here are unstable and may change or be removed without notice. Silence this warning by setting environment variable TRL_EXPERIMENTAL_SILENCE=1.
+  from trl.experimental.cpo import CPOConfig as HfCPOConfig
+[INFO:swift] Setting args.dataloader_num_workers: 1
+[INFO:swift] output_dir: /home/u1501463/tool_use_LALM/tool_use_training/tool_use_RL_full/output/Qwen3-Omni-30B-A3B-Instruct/v0-20260829-003843
+[INFO:swift] args: RLHFArguments(
+acc_strategy=token,
+accelerator_config={'dispatch_batches': False},
+adalora_beta1=0.85,
+adalora_beta2=0.85,
+adalora_deltaT=1,
+adalora_init_r=12,
+adalora_orth_reg_weight=0.5,
+adalora_target_r=8,
+adalora_tfinal=0,
+adalora_tinit=0,
+adam_beta1=0.9,
+adam_beta2=0.95,
+adam_epsilon=1e-08,
+adapter_act=gelu,
+adapter_length=128,
+adapters=['/work/u1501463/stage1_training/v0-20260814-011059/checkpoint-100'],
+add_non_thinking_prefix=True,
+add_version=True,
+advantage_estimator=grpo,
+agent_template=None,
+aligner_lr=None,
+async_generate=False,
+attn_impl=None,
+auto_find_batch_size=False,
+average_tokens_across_devices=True,
+batch_eval_metrics=False,
+beta=0.04,
+bf16=True,
+bf16_full_eval=False,
+bnb_4bit_compute_dtype=torch.bfloat16,
+bnb_4bit_quant_storage=None,
+bnb_4bit_quant_type=nf4,
+bnb_4bit_use_double_quant=True,
+boft_block_num=0,
+boft_block_size=4,
+boft_dropout=0.0,
+boft_n_butterfly_factor=1,
+cached_dataset=[],
+cached_val_dataset=[],
+callbacks=[],
+center_rewards_coefficient=None,
+check_model=True,
+chord_enable_phi_function=False,
+chord_mu_decay_steps=None,
+chord_mu_peak=None,
+chord_mu_valley=None,
+chord_mu_warmup_steps=None,
+chord_sft_dataset=[],
+chord_sft_per_device_train_batch_size=None,
+cliprange=0.2,
+cliprange_value=0.2,
+columns={},
+completion_length_limit_scope=per_round,
+cosine_max_len=None,
+cosine_max_len_value_correct=0.5,
+cosine_max_len_value_wrong=0.0,
+cosine_min_len_value_correct=1.0,
+cosine_min_len_value_wrong=-0.5,
+cpo_alpha=1.0,
+create_checkpoint_symlink=False,
+custom_dataset_info=[],
+custom_register_path=[],
+data_seed=42,
+dataloader_drop_last=False,
+dataloader_num_workers=None,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+dataset=['/work/u1501463/stage1_qwen3_omni_RL/train.jsonl'],
+dataset_num_proc=1,
+dataset_shuffle=True,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_static_graph=None,
+ddp_timeout=18000000,
+debug=None,
+deepspeed={'fp16': {'enabled': 'auto', 'loss_scale': 0, 'loss_scale_window': 1000, 'initial_scale_power': 16, 'hysteresis': 2, 'min_loss_scale': 1}, 'bf16': {'enabled': 'auto'}, 'zero_optimization': {'stage': 3, 'offload_param': {'device': 'cpu', 'pin_memory': True}, 'overlap_comm': False, 'contiguous_gradients': True, 'sub_group_size': 1000000000.0, 'reduce_bucket_size': 'auto', 'stage3_prefetch_bucket_size': 'auto', 'stage3_param_persistence_threshold': 'auto', 'stage3_max_live_parameters': 1000000000.0, 'stage3_max_reuse_distance': 1000000000.0, 'stage3_gather_16bit_weights_on_model_save': True}, 'gradient_accumulation_steps': 'auto', 'gradient_clipping': 'auto', 'steps_per_print': 2000, 'train_batch_size': 'auto', 'train_micro_batch_size_per_gpu': 'auto', 'wall_clock_breakdown': False},
+deepspeed_autotp_size=None,
+delta=None,
+desirable_weight=1.0,
+device_groups=None,
+device_map=None,
+disable_auto_column_mapping=False,
+disable_ignore_empty_think=False,
+disable_tqdm=None,
+discopop_tau=0.05,
+do_eval=False,
+do_predict=False,
+do_train=False,
+download_mode=reuse_dataset_if_exists,
+ds3_gather_for_generation=True,
+dynamic_sample=False,
+early_stop_interval=None,
+enable_channel_loss=False,
+enable_dft_loss=False,
+enable_flattened_weight_sync=True,
+enable_jit_checkpoint=False,
+enable_npu_model_patch=True,
+enable_thinking=None,
+epsilon=0.2,
+epsilon_high=None,
+eval_accumulation_steps=None,
+eval_dataset=[],
+eval_dataset_args=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_generation_config=None,
+eval_limit=None,
+eval_metric=None,
+eval_on_start=False,
+eval_steps=500,
+eval_strategy=no,
+eval_use_evalscope=False,
+eval_use_gather_object=False,
+experts_impl=None,
+external_plugins=['reward.py'],
+extra_eval_args=None,
+fipo_clip_high_only=True,
+fipo_clip_range=0.2,
+fipo_decay_rate=32.0,
+fipo_safety_threshold=4.0,
+fourier_n_frequency=2000,
+fourier_scaling=300.0,
+fp16=False,
+fp16_full_eval=False,
+freeze_aligner=True,
+freeze_llm=False,
+freeze_parameters=[],
+freeze_parameters_ratio=0.0,
+freeze_parameters_regex=None,
+freeze_vit=True,
+fsdp=[],
+fsdp_config=None,
+full_determinism=False,
+galore_cos_threshold=0.4,
+galore_gamma_proj=2,
+galore_optim_per_parameter=False,
+galore_proj_bits=4,
+galore_proj_group_size=256,
+galore_proj_quant=False,
+galore_proj_type=std,
+galore_quantization=False,
+galore_queue_size=5,
+galore_rank=128,
+galore_scale=1.0,
+galore_target_modules=None,
+galore_update_proj_gap=50,
+galore_with_embedding=False,
+gamma=1.0,
+generation_batch_size=2,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gkd_logits_topk=None,
+gradient_accumulation_steps=1,
+gradient_checkpointing=True,
+gradient_checkpointing_kwargs=None,
+greater_is_better=True,
+group_by_length=False,
+gym_env=None,
+hqq_axis=None,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=None,
+hub_revision=None,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_args_error=False,
+ignore_data_skip=False,
+importance_sampling_level=token,
+include_for_metrics=[],
+include_num_input_tokens_seen=False,
+init_strategy=None,
+init_weights=True,
+interleave_prob=None,
+is_binary_loss_scale=None,
+kl_coef=0.05,
+kl_in_reward=False,
+label_names=None,
+label_smoothing=0,
+label_smoothing_factor=0.0,
+lam=0.95,
+lazy_tokenize=True,
+ld_alpha=None,
+learning_rate=0.0001,
+length_column_name=length,
+liger_kernel_config=None,
+lisa_activated_layers=0,
+lisa_step_interval=20,
+llamapro_num_groups=None,
+llamapro_num_new_blocks=4,
+lmbda=0.5,
+load_args=False,
+load_best_model_at_end=False,
+load_data_args=False,
+load_from_cache_file=False,
+local_rank=0,
+local_repo_path=None,
+local_rollout_forward_batch_size=1,
+log_completions=False,
+log_entropy=False,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+log_rollout_offpolicy_metrics=False,
+logging_dir=/home/u1501463/tool_use_LALM/tool_use_training/tool_use_RL_full/output/Qwen3-Omni-30B-A3B-Instruct/v0-20260829-003843/runs,
+logging_first_step=True,
+logging_nan_inf_filter=True,
+logging_steps=5,
+logging_strategy=steps,
+logprobs=False,
+lora_alpha=32,
+lora_bias=none,
+lora_dropout=0.05,
+lora_dtype=None,
+lora_ga_batch_size=2,
+lora_ga_direction=ArB2r,
+lora_ga_iters=2,
+lora_ga_max_length=1024,
+lora_ga_scale=stable,
+lora_ga_stable_gamma=16,
+lora_rank=8,
+lorap_lr_ratio=None,
+loss_scale=last_round,
+loss_type=grpo,
+loss_weights=None,
+lr_scheduler_kwargs=None,
+lr_scheduler_type=cosine,
+max_completion_length=512,
+max_epochs=None,
+max_grad_norm=1.0,
+max_length=4096,
+max_memory={},
+max_model_len=None,
+max_new_tokens=512,
+max_pixels=None,
+max_resample_times=3,
+max_shard_size=5GB,
+max_steps=-1,
+max_turns=None,
+metric_for_best_model=reward,
+missing_eos_penalty=None,
+model=/work/u1501463/Qwen3-Omni-30B-A3B-Instruct/,
+model_author=None,
+model_kwargs={},
+model_name=None,
+model_revision=None,
+model_type=qwen3_omni_moe,
+modules_to_save=[],
+move_model_batches=None,
+multi_turn_scheduler=None,
+neftune_noise_alpha=None,
+new_special_tokens=[],
+norm_bbox=None,
+num_beams=1,
+num_generations=2,
+num_generations_eval=None,
+num_iterations=1,
+num_labels=None,
+num_mini_batches=1,
+num_ppo_epochs=4,
+num_sample_generations=10,
+num_train_epochs=3.0,
+off_policy_sequence_mask_delta=None,
+offload_model=False,
+offload_optimizer=False,
+offload_teacher_model=False,
+optim=adamw_torch,
+optim_args=None,
+optim_target_modules=None,
+optimizer=None,
+output_dir=/home/u1501463/tool_use_LALM/tool_use_training/tool_use_RL_full/output/Qwen3-Omni-30B-A3B-Instruct/v0-20260829-003843,
+overlong_filter=False,
+packing=False,
+packing_length=None,
+packing_num_proc=1,
+padding_free=False,
+padding_side=right,
+parallelism_config=None,
+per_device_eval_batch_size=1,
+per_device_train_batch_size=1,
+predict_with_generate=False,
+prediction_loss_only=False,
+preserve_thinking=None,
+problem_type=None,
+project=huggingface,
+push_to_hub=False,
+quant_bits=4,
+quant_method=bnb,
+ray_exp_name=None,
+real_tau=0.5,
+ref_adapters=[],
+ref_model=None,
+ref_model_mixup_alpha=0.6,
+ref_model_revision=None,
+ref_model_sync_steps=512,
+ref_model_type=None,
+reft_args=None,
+reft_intervention_type=LoreftIntervention,
+reft_layer_key=None,
+reft_layers=None,
+reft_rank=4,
+remove_unused_columns=False,
+repetition_max_penalty=-1.0,
+repetition_n_grams=3,
+repetition_penalty=1.0,
+report_to=['tensorboard'],
+response_length=512,
+response_prefix=None,
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+resume_only_model=False,
+reward_adapters=[],
+reward_funcs=['tool_format', 'tool_accuracy', 'tool_audio_closeness'],
+reward_model=None,
+reward_model_plugin=None,
+reward_model_revision=None,
+reward_model_type=None,
+reward_template=None,
+reward_weights=[0.2, 0.5, 0.3],
+rlhf_type=grpo,
+rollout_importance_sampling_mode=None,
+rollout_importance_sampling_threshold=2.0,
+rope_scaling=None,
+router_aux_loss_coef=0.0,
+rpo_alpha=None,
+run_name=/home/u1501463/tool_use_LALM/tool_use_training/tool_use_RL_full/output/Qwen3-Omni-30B-A3B-Instruct/v0-20260829-003843,
+safe_serialization=True,
+save_on_each_node=False,
+save_only_model=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+scale_rewards=group,
+seed=42,
+seq_kd=False,
+sequence_parallel_size=1,
+sft_alpha=0,
+shuffle_buffer_size=1000,
+simpo_gamma=1,
+skip_memory_metrics=True,
+sleep_level=0,
+soft_cache_length=None,
+soft_max_length=None,
+sortish_sampler=False,
+split_dataset_ratio=0.0,
+steps_per_generation=None,
+stop_words=[],
+stopping_strategy=first_exhausted,
+stream=False,
+streaming=False,
+strict=False,
+structured_outputs_regex=None,
+swanlab_email_language=zh,
+swanlab_exp_name=None,
+swanlab_mode=cloud,
+swanlab_notification_method=None,
+swanlab_project=ms-swift,
+swanlab_receiver_email=None,
+swanlab_secret=None,
+swanlab_sender_email=None,
+swanlab_smtp_port=None,
+swanlab_smtp_server=None,
+swanlab_token=<SWANLAB_TOKEN>,
+swanlab_webhook_url=None,
+swanlab_workspace=None,
+sync_ref_model=False,
+system=None,
+target_modules=['all-linear'],
+target_parameters=None,
+target_regex=None,
+task_type=causal_lm,
+tau_neg=1.05,
+tau_pos=1.0,
+teacher_adapters=[],
+teacher_deepspeed=None,
+teacher_model=None,
+teacher_model_revision=None,
+teacher_model_server=None,
+teacher_model_type=None,
+temperature=0.9,
+template=qwen2_5_omni,
+template_backend=swift,
+tf32=None,
+top_entropy_quantile=1.0,
+top_k=-1,
+top_logprobs=None,
+top_p=1.0,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_dtype=torch.bfloat16,
+torch_empty_cache_steps=None,
+trackio_bucket_id=None,
+trackio_space_id=None,
+trackio_static_space_id=None,
+train_dataloader_shuffle=True,
+train_sampling_strategy=random,
+trainable_parameters=[],
+trainable_parameters_regex=None,
+truncation_strategy=left,
+tuner_backend=peft,
+tuner_type=lora,
+undesirable_weight=1.0,
+use_cache=False,
+use_chat_template=True,
+use_cpu=False,
+use_dora=False,
+use_flash_ckpt=False,
+use_galore=False,
+use_gym_env=None,
+use_hf=False,
+use_liger_kernel=False,
+use_logits_to_keep=None,
+use_ray=False,
+use_rslora=False,
+use_swift_lora=False,
+use_vllm=False,
+val_dataset=[],
+val_dataset_shuffle=False,
+vera_d_initial=0.1,
+vera_dropout=0.0,
+vera_projection_prng_key=0,
+vera_rank=256,
+vf_coef=0.1,
+vit_gradient_checkpointing=False,
+vit_lr=None,
+vllm_data_parallel_size=1,
+vllm_disable_cascade_attn=False,
+vllm_disable_custom_all_reduce=True,
+vllm_enable_expert_parallel=False,
+vllm_enable_lora=False,
+vllm_enable_prefix_caching=True,
+vllm_enforce_eager=False,
+vllm_engine_kwargs={},
+vllm_gpu_memory_utilization=0.9,
+vllm_limit_mm_per_prompt=None,
+vllm_max_lora_rank=16,
+vllm_max_model_len=None,
+vllm_max_num_seqs=None,
+vllm_mm_processor_cache_gb=None,
+vllm_mode=None,
+vllm_pipeline_parallel_size=1,
+vllm_quantization=None,
+vllm_reasoning_parser=None,
+vllm_server_base_url=None,
+vllm_server_group_port=None,
+vllm_server_host=None,
+vllm_server_pass_dataset=False,
+vllm_server_port=[8000],
+vllm_server_timeout=240.0,
+vllm_speculative_config=None,
+vllm_tensor_parallel_size=1,
+vllm_use_async_engine=None,
+wandb_log_unique_prompts=None,
+warmup_ratio=None,
+warmup_steps=0,
+weight_decay=0.1,
+whiten_rewards=False,
+zero_hpz_partition_size=None,
+)
+[INFO:swift] Global seed set to 42
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[INFO:swift] Using environment variable `ENABLE_AUDIO_OUTPUT`, Setting ENABLE_AUDIO_OUTPUT: False.
+[transformers] Unrecognized keys in `rope_parameters` for 'rope_type'='default': {'interleaved', 'mrope_section'}
+[INFO:swift] Setting max_ratio: 200. You can adjust this hyperparameter through the environment variable: `MAX_RATIO`.
+[INFO:swift] Setting frame_factor: 2. You can adjust this hyperparameter through the environment variable: `FRAME_FACTOR`.
+[INFO:swift] Setting fps: 2.0. You can adjust this hyperparameter through the environment variable: `FPS`.
+[INFO:swift] Setting fps_min_frames: 4. You can adjust this hyperparameter through the environment variable: `FPS_MIN_FRAMES`.
+[INFO:swift] Setting fps_max_frames: 768. You can adjust this hyperparameter through the environment variable: `FPS_MAX_FRAMES`.
+[INFO:swift] Setting image_max_token_num: 16384. You can adjust this hyperparameter through the environment variable: `IMAGE_MAX_TOKEN_NUM`.
+[INFO:swift] Setting image_min_token_num: 4. You can adjust this hyperparameter through the environment variable: `IMAGE_MIN_TOKEN_NUM`.
+[INFO:swift] Setting spatial_merge_size: 2. You can adjust this hyperparameter through the environment variable: `SPATIAL_MERGE_SIZE`.
+[INFO:swift] Setting video_max_token_num: 768. You can adjust this hyperparameter through the environment variable: `VIDEO_MAX_TOKEN_NUM`.
+[INFO:swift] Setting video_min_token_num: 128. You can adjust this hyperparameter through the environment variable: `VIDEO_MIN_TOKEN_NUM`.
+[INFO:swift] model_kwargs: {'device_map': None, 'quantization_config': BitsAndBytesConfig {
+  "_load_in_4bit": true,
+  "_load_in_8bit": false,
+  "bnb_4bit_compute_dtype": "bfloat16",
+  "bnb_4bit_quant_storage": "uint8",
+  "bnb_4bit_quant_type": "nf4",
+  "bnb_4bit_use_double_quant": true,
+  "llm_int8_enable_fp32_cpu_offload": false,
+  "llm_int8_has_fp16_weight": false,
+  "llm_int8_skip_modules": [
+    "mlp.gate",
+    "mlp.shared_expert_gate",
+    "thinker.audio_tower",
+    "thinker.visual",
+    "thinker.audio_tower.proj1",
+    "thinker.audio_tower.proj2",
+    "thinker.visual.merger",
+    "thinker.visual.merger_list",
+    "lm_head"
+  ],
+  "llm_int8_threshold": 6.0,
+  "load_in_4bit": true,
+  "load_in_8bit": false,
+  "quant_method": "bitsandbytes"
+}
+, 'dtype': torch.bfloat16}
+Loading weights:   0%|          | 0/1407 [00:00<?, ?it/s]Loading weights:  13%|█▎        | 187/1407 [00:00<00:00, 1860.13it/s]Loading weights:  27%|██▋       | 384/1407 [00:00<00:00, 1924.38it/s]Loading weights:  41%|████      | 577/1407 [00:01<00:02, 281.35it/s] Loading weights:  49%|████▉     | 688/1407 [00:03<00:05, 126.29it/s]Loading weights:  54%|█████▍    | 758/1407 [00:05<00:06, 100.15it/s]Loading weights:  57%|█████▋    | 805/1407 [00:06<00:07, 84.14it/s] Loading weights:  60%|█████▉    | 838/1407 [00:06<00:07, 77.91it/s]Loading weights:  61%|██████▏   | 862/1407 [00:07<00:07, 74.65it/s]Loading weights:  63%|██████▎   | 880/1407 [00:07<00:06, 75.60it/s]Loading weights:  64%|██████▎   | 895/1407 [00:07<00:07, 66.96it/s]Loading weights:  64%|██████▍   | 907/1407 [00:07<00:07, 65.70it/s]Loading weights:  65%|██████▌   | 917/1407 [00:08<00:07, 62.84it/s]Loading weights:  66%|██████▌   | 926/1407 [00:08<00:08, 59.22it/s]Loading weights:  67%|██████▋   | 937/1407 [00:08<00:08, 57.89it/s]Loading weights:  67%|██████▋   | 948/1407 [00:08<00:08, 56.80it/s]Loading weights:  68%|██████▊   | 959/1407 [00:08<00:08, 55.94it/s]Loading weights:  69%|██████▉   | 970/1407 [00:09<00:07, 55.23it/s]Loading weights:  70%|██████▉   | 981/1407 [00:09<00:07, 54.64it/s]Loading weights:  71%|███████   | 992/1407 [00:09<00:07, 54.29it/s]Loading weights:  71%|███████▏  | 1003/1407 [00:09<00:07, 53.95it/s]Loading weights:  72%|███████▏  | 1014/1407 [00:09<00:07, 53.75it/s]Loading weights:  73%|███████▎  | 1025/1407 [00:10<00:07, 53.42it/s]Loading weights:  74%|███████▎  | 1036/1407 [00:10<00:06, 53.38it/s]Loading weights:  74%|███████▍  | 1047/1407 [00:10<00:06, 53.29it/s]Loading weights:  89%|████████▉ | 1252/1407 [00:10<00:00, 391.94it/s]Loading weights: 100%|██████████| 1407/1407 [00:10<00:00, 130.04it/s]
+[transformers] [1mQwen3OmniMoeForConditionalGeneration LOAD REPORT[0m from: /work/u1501463/Qwen3-Omni-30B-A3B-Instruct
+Key                                                                                      | Status     |  | 
+-----------------------------------------------------------------------------------------+------------+--+-
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.conv2.conv.weight                          | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.mlp.down_proj.weight            | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.k_proj.weight                                     | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.conv1.conv.bias                            | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.shared_expert.up_proj.weight                            | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.mlp.down_proj.weight                  | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.o_proj.weight                                     | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.q_proj.weight               | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.post_attention_layernorm.weight | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.1.conv.weight                                        | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.act1.alpha                                 | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.experts.down_proj                                       | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.input_layernorm.weight                | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.gate.weight                                             | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.conv1.conv.weight                          | UNEXPECTED |  | 
+talker.model.layers.{0...19}.post_attention_layernorm.weight                             | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.mlp.up_proj.weight                    | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.q_proj.weight                                     | UNEXPECTED |  | 
+code2wav.decoder.{0, 6}.conv.weight                                                      | UNEXPECTED |  | 
+talker.code_predictor.lm_head.{0...14}.weight                                            | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.q_norm.weight                                     | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.act2.alpha                                 | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.input_layernorm.weight          | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.v_proj.weight                                     | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.k_proj.weight               | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.shared_expert_gate.weight                               | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.shared_expert.gate_proj.weight                          | UNEXPECTED |  | 
+talker.code_predictor.model.codec_embedding.{0...14}.weight                              | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.shared_expert.down_proj.weight                          | UNEXPECTED |  | 
+code2wav.decoder.5.beta                                                                  | UNEXPECTED |  | 
+talker.model.layers.{0...19}.self_attn.k_norm.weight                                     | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.0.beta                                               | UNEXPECTED |  | 
+talker.model.layers.{0...19}.input_layernorm.weight                                      | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.q_norm.weight               | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.act1.beta                                  | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.conv2.conv.bias                            | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.mlp.gate_proj.weight            | UNEXPECTED |  | 
+talker.codec_head.weight                                                                 | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.post_attention_layernorm.weight       | UNEXPECTED |  | 
+talker.code_predictor.model.norm.weight                                                  | UNEXPECTED |  | 
+code2wav.decoder.{0, 6}.conv.bias                                                        | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.self_attn.q_proj.weight         | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.{2, 3, 4}.act2.beta                                  | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.o_proj.weight               | UNEXPECTED |  | 
+talker.model.layers.{0...19}.mlp.experts.gate_up_proj                                    | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.mlp.up_proj.weight              | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.self_attn.o_proj.weight         | UNEXPECTED |  | 
+talker.text_projection.linear_fc1.weight                                                 | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.dwconv.conv.bias                                              | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.self_attn.v_proj.weight         | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.mlp.gate_proj.weight                  | UNEXPECTED |  | 
+talker.text_projection.linear_fc2.bias                                                   | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.v_proj.weight               | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.1.conv.bias                                          | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.mlp_layer_scale.scale           | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.0.conv.weight                                                   | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.self_attn.k_proj.weight         | UNEXPECTED |  | 
+talker.text_projection.linear_fc2.weight                                                 | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.pwconv2.weight                                                | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.pwconv2.bias                                                  | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.gamma                                                         | UNEXPECTED |  | 
+talker.hidden_projection.linear_fc1.weight                                               | UNEXPECTED |  | 
+talker.model.codec_embedding.weight                                                      | UNEXPECTED |  | 
+talker.hidden_projection.linear_fc2.weight                                               | UNEXPECTED |  | 
+code2wav.code_embedding.weight                                                           | UNEXPECTED |  | 
+code2wav.pre_transformer.layers.{0, 1, 2, 3, 4, 5, 6, 7}.self_attn_layer_scale.scale     | UNEXPECTED |  | 
+code2wav.decoder.{1, 2, 3, 4}.block.0.alpha                                              | UNEXPECTED |  | 
+talker.code_predictor.model.layers.{0, 1, 2, 3, 4}.self_attn.k_norm.weight               | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.norm.bias                                                     | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.0.conv.bias                                                     | UNEXPECTED |  | 
+code2wav.pre_transformer.norm.weight                                                     | UNEXPECTED |  | 
+talker.text_projection.linear_fc1.bias                                                   | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.pwconv1.bias                                                  | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.dwconv.conv.weight                                            | UNEXPECTED |  | 
+code2wav.decoder.5.alpha                                                                 | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.norm.weight                                                   | UNEXPECTED |  | 
+talker.hidden_projection.linear_fc2.bias                                                 | UNEXPECTED |  | 
+code2wav.upsample.{0, 1}.1.pwconv1.weight                                                | UNEXPECTED |  | 
+talker.hidden_projection.linear_fc1.bias                                                 | UNEXPECTED |  | 
+talker.model.norm.weight                                                                 | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+[INFO:swift] Setting z3_leaf_modules: [<class 'transformers.models.qwen3_omni_moe.modeling_qwen3_omni_moe.Qwen3OmniMoeThinkerTextSparseMoeBlock'>]
+[INFO:swift] model_info: ModelInfo(model_type='qwen3_omni_moe', model_dir='/work/u1501463/Qwen3-Omni-30B-A3B-Instruct', torch_dtype=torch.bfloat16, max_model_len=65536, quant_method='bnb', quant_bits=4, rope_scaling=None, is_moe_model=True, is_multimodal=True, config=Qwen3OmniMoeConfig {
+  "architectures": [
+    "Qwen3OmniMoeForConditionalGeneration"
+  ],
+  "assistant_token_id": 77091,
+  "code2wav_config": {
+    "attention_bias": false,
+    "attention_dropout": 0.0,
+    "codebook_dim": 512,
+    "codebook_size": 2048,
+    "decoder_dim": 1536,
+    "hidden_act": "silu",
+    "hidden_size": 1024,
+    "initializer_range": 0.02,
+    "intermediate_size": 3072,
+    "layer_scale_initial_scale": 0.01,
+    "max_position_embeddings": 8000,
+    "model_type": "",
+    "num_attention_heads": 16,
+    "num_hidden_layers": 8,
+    "num_key_value_heads": 16,
+    "num_quantizers": 16,
+    "num_semantic_quantizers": 1,
+    "rms_norm_eps": 1e-05,
+    "rope_parameters": {
+      "rope_theta": 10000,
+      "rope_type": "default"
+    },
+    "semantic_codebook_size": 4096,
+    "sliding_window": 72,
+    "upsample_rates": [
+      8,
+      5,
+      4,
+      3
+    ],
+    "upsampling_ratios": [
+      2,
+      2
+    ],
+    "vector_quantization_hidden_dimension": 512
+  },
+  "dtype": "bfloat16",
+  "enable_audio_output": false,
+  "hidden_size": 2048,
+  "im_end_token_id": 151645,
+  "im_start_token_id": 151644,
+  "initializer_range": 0.02,
+  "model_type": "qwen3_omni_moe",
+  "system_token_id": 8948,
+  "talker_config": {
+    "accept_hidden_layer": 24,
+    "audio_end_token_id": 151670,
+    "audio_start_token_id": 151669,
+    "audio_token_id": 151675,
+    "code_predictor_config": {
+      "_name_or_path": "",
+      "add_cross_attention": false,
+      "architectures": null,
+      "attention_bias": false,
+      "attention_dropout": 0,
+      "bos_token_id": null,
+      "chunk_size_feed_forward": 0,
+      "cross_attention_hidden_size": null,
+      "decoder_start_token_id": null,
+      "dtype": null,
+      "eos_token_id": null,
+      "finetuning_task": null,
+      "head_dim": 128,
+      "hidden_act": "silu",
+      "hidden_size": 1024,
+      "id2label": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "initializer_range": 0.02,
+      "intermediate_size": 3072,
+      "is_decoder": false,
+      "is_encoder_decoder": false,
+      "label2id": {
+        "LABEL_0": 0,
+        "LABEL_1": 1
+      },
+      "layer_types": [
+        "full_attention",
+        "full_attention",
+        "full_attention",
+        "full_attention",
+        "full_attention"
+      ],
+      "max_position_embeddings": 32768,
+      "max_window_layers": 28,
+      "model_type": "qwen3_omni_moe_talker_code_predictor",
+      "num_attention_heads": 16,
+      "num_code_groups": 16,
+      "num_hidden_layers": 5,
+      "num_key_value_heads": 8,
+      "output_attentions": false,
+      "output_hidden_states": false,
+      "pad_token_id": null,
+      "prefix": null,
+      "problem_type": null,
+      "pruned_heads": {},
+      "return_dict": true,
+      "rms_norm_eps": 1e-06,
+      "rope_parameters": {
+        "rope_theta": 1000000,
+        "rope_type": "default"
+      },
+      "sep_token_id": null,
+      "sliding_window": null,
+      "task_specific_params": null,
+      "tf_legacy_loss": false,
+      "tie_encoder_decoder": false,
+      "tie_word_embeddings": false,
+      "tokenizer_class": null,
+      "torchscript": false,
+      "use_bfloat16": false,
+      "use_cache": true,
+      "use_sliding_window": false,
+      "vocab_size": 2048
+    },
+    "codec_bos_id": 2149,
+    "codec_eos_token_id": 2150,
+    "codec_nothink_id": 2155,
+    "codec_pad_id": 2148,
+    "codec_think_bos_id": 2156,
+    "codec_think_eos_id": 2157,
+    "image_token_id": 151655,
+    "initializer_range": 0.02,
+    "model_type": "",
+    "num_code_groups": 16,
+    "output_router_logits": false,
+    "position_id_per_seconds": 13,
+    "seconds_per_chunk": 2,
+    "spatial_merge_size": 2,
+    "speaker_id": {
+      "aiden": 2303,
+      "chelsie": 2301,
+      "ethan": 2302
+    },
+    "text_config": {
+      "_name_or_path": "",
+      "architectures": null,
+      "attention_bias": false,
+      "attention_dropout": 0,
+      "bos_token_id": null,
+      "chunk_size_feed_forward": 0,
+      "decoder_sparse_step": 1,
+      "dtype": null,
+      "eos_token_id": null,
+      "head_dim": 128,
+      "hidden_act": "silu",
+      "hidden_size": 1024,
+      "id2label": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "initializer_range": 0.02,
+      "intermediate_size": 2048,
+      "is_encoder_decoder": false,
+      "label2id": {
+        "LABEL_0": 0,
+        "LABEL_1": 1
+      },
+      "max_position_embeddings": 65536,
+      "mlp_only_layers": [],
+      "model_type": "qwen3_omni_moe_talker_text",
+      "moe_intermediate_size": 384,
+      "norm_topk_prob": true,
+      "num_attention_heads": 16,
+      "num_experts_per_tok": 6,
+      "num_hidden_layers": 20,
+      "num_key_value_heads": 2,
+      "num_local_experts": 128,
+      "output_attentions": false,
+      "output_hidden_states": false,
+      "output_router_logits": false,
+      "pad_token_id": null,
+      "problem_type": null,
+      "return_dict": true,
+      "rms_norm_eps": 1e-06,
+      "rope_parameters": {
+        "interleaved": true,
+        "mrope_section": [
+          24,
+          20,
+          20
+        ],
+        "rope_theta": 1000000,
+        "rope_type": "default",
+        "type": "default"
+      },
+      "router_aux_loss_coef": 0.001,
+      "shared_expert_intermediate_size": 768,
+      "sliding_window": null,
+      "tie_word_embeddings": false,
+      "use_cache": true,
+      "use_sliding_window": false,
+      "vocab_size": 3072
+    },
+    "thinker_hidden_size": 2048,
+    "tie_word_embeddings": false,
+    "video_token_id": 151656,
+    "vision_start_token_id": 151652
+  },
+  "thinker_config": {
+    "audio_config": {
+      "_name_or_path": "",
+      "activation_dropout": 0,
+      "activation_function": "gelu",
+      "add_cross_attention": false,
+      "architectures": null,
+      "attention_dropout": 0,
+      "bos_token_id": null,
+      "chunk_size_feed_forward": 0,
+      "conv_chunksize": 500,
+      "cross_attention_hidden_size": null,
+      "d_model": 1280,
+      "decoder_start_token_id": null,
+      "downsample_hidden_size": 480,
+      "dropout": 0,
+      "dtype": "bfloat16",
+      "encoder_attention_heads": 20,
+      "encoder_ffn_dim": 5120,
+      "encoder_layers": 32,
+      "eos_token_id": null,
+      "finetuning_task": null,
+      "id2label": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "initializer_range": 0.02,
+      "is_decoder": false,
+      "is_encoder_decoder": false,
+      "label2id": {
+        "LABEL_0": 0,
+        "LABEL_1": 1
+      },
+      "max_source_positions": 1500,
+      "model_type": "qwen3_omni_moe_audio_encoder",
+      "n_window": 50,
+      "n_window_infer": 800,
+      "num_mel_bins": 128,
+      "output_attentions": false,
+      "output_dim": 2048,
+      "output_hidden_states": false,
+      "pad_token_id": null,
+      "prefix": null,
+      "problem_type": null,
+      "pruned_heads": {},
+      "return_dict": true,
+      "scale_embedding": false,
+      "sep_token_id": null,
+      "task_specific_params": null,
+      "tf_legacy_loss": false,
+      "tie_encoder_decoder": false,
+      "tie_word_embeddings": true,
+      "tokenizer_class": null,
+      "torchscript": false,
+      "use_bfloat16": false
+    },
+    "audio_end_token_id": 151670,
+    "audio_start_token_id": 151669,
+    "audio_token_id": 151675,
+    "dtype": "bfloat16",
+    "image_token_id": 151655,
+    "initializer_range": 0.02,
+    "model_type": "qwen3_omni_moe_thinker",
+    "position_id_per_seconds": 13,
+    "seconds_per_chunk": 2,
+    "text_config": {
+      "_name_or_path": "",
+      "add_cross_attention": false,
+      "architectures": null,
+      "attention_bias": false,
+      "attention_dropout": 0.0,
+      "bos_token_id": null,
+      "chunk_size_feed_forward": 0,
+      "cross_attention_hidden_size": null,
+      "decoder_sparse_step": 1,
+      "decoder_start_token_id": null,
+      "dtype": "bfloat16",
+      "eos_token_id": null,
+      "finetuning_task": null,
+      "head_dim": 128,
+      "hidden_act": "silu",
+      "hidden_size": 2048,
+      "id2label": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "initializer_range": 0.02,
+      "intermediate_size": 768,
+      "is_decoder": false,
+      "is_encoder_decoder": false,
+      "label2id": {
+        "LABEL_0": 0,
+        "LABEL_1": 1
+      },
+      "max_position_embeddings": 65536,
+      "mlp_only_layers": [],
+      "model_type": "qwen3_omni_moe_text",
+      "moe_intermediate_size": 768,
+      "norm_topk_prob": true,
+      "num_attention_heads": 32,
+      "num_experts": 128,
+      "num_experts_per_tok": 8,
+      "num_hidden_layers": 48,
+      "num_key_value_heads": 4,
+      "output_attentions": false,
+      "output_hidden_states": false,
+      "output_router_logits": false,
+      "pad_token_id": null,
+      "prefix": null,
+      "problem_type": null,
+      "pruned_heads": {},
+      "return_dict": true,
+      "rms_norm_eps": 1e-06,
+      "rope_parameters": {
+        "interleaved": true,
+        "mrope_interleaved": true,
+        "mrope_section": [
+          24,
+          20,
+          20
+        ],
+        "rope_theta": 1000000,
+        "rope_type": "default",
+        "type": "default"
+      },
+      "router_aux_loss_coef": 0.001,
+      "sep_token_id": null,
+      "shared_expert_intermediate_size": 0,
+      "sliding_window": null,
+      "task_specific_params": null,
+      "tf_legacy_loss": false,
+      "tie_encoder_decoder": false,
+      "tie_word_embeddings": false,
+      "tokenizer_class": null,
+      "torchscript": false,
+      "use_bfloat16": false,
+      "use_cache": true,
+      "use_qk_norm": true,
+      "use_sliding_window": false,
+      "vocab_size": 152064
+    },
+    "tie_word_embeddings": false,
+    "user_token_id": 872,
+    "video_token_id": 151656,
+    "vision_config": {
+      "_name_or_path": "",
+      "add_cross_attention": false,
+      "apply_vit_abs_pos_embed": true,
+      "architectures": null,
+      "bos_token_id": null,
+      "chunk_size_feed_forward": 0,
+      "cross_attention_hidden_size": null,
+      "decoder_start_token_id": null,
+      "deepstack_visual_indexes": [
+        8,
+        16,
+        24
+      ],
+      "depth": 27,
+      "dtype": "bfloat16",
+      "eos_token_id": null,
+      "finetuning_task": null,
+      "hidden_act": "gelu_pytorch_tanh",
+      "hidden_size": 1152,
+      "id2label": {
+        "0": "LABEL_0",
+        "1": "LABEL_1"
+      },
+      "image_size": 768,
+      "in_channels": 3,
+      "in_chans": 3,
+      "initializer_range": 0.02,
+      "intermediate_size": 4304,
+      "is_decoder": false,
+      "is_encoder_decoder": false,
+      "label2id": {
+        "LABEL_0": 0,
+        "LABEL_1": 1
+      },
+      "model_type": "qwen3_omni_moe_vision_encoder",
+      "num_heads": 16,
+      "num_position_embeddings": 2304,
+      "out_hidden_size": 2048,
+      "output_attentions": false,
+      "output_hidden_states": false,
+      "pad_token_id": null,
+      "patch_size": 16,
+      "prefix": null,
+      "problem_type": null,
+      "pruned_heads": {},
+      "return_dict": true,
+      "sep_token_id": null,
+      "spatial_merge_size": 2,
+      "spatial_patch_size": 16,
+      "task_specific_params": null,
+      "temporal_patch_size": 2,
+      "tf_legacy_loss": false,
+      "tie_encoder_decoder": false,
+      "tie_word_embeddings": true,
+      "tokenizer_class": null,
+      "tokens_per_second": 2,
+      "torchscript": false,
+      "use_bfloat16": false
+    },
+    "vision_end_token_id": 151653,
+    "vision_start_token_id": 151652
+  },
+  "transformers_version": "5.12.1",
+  "tts_bos_token_id": 151672,
+  "tts_eos_token_id": 151673,
+  "tts_pad_token_id": 151671,
+  "user_token_id": 872
+}
+, task_type='causal_lm', num_labels=None)
+[INFO:swift] model.generation_config: GenerationConfig {
+  "do_sample": true,
+  "eos_token_id": 151645,
+  "length_penalty": 1.0,
+  "max_new_tokens": 512,
+  "num_beams": 1,
+  "pad_token_id": 151643,
+  "repetition_penalty": 1.0,
+  "talker_max_new_tokens": 4096,
+  "talker_repetition_penalty": 1.05,
+  "talker_temperature": 0.9,
+  "talker_top_k": 50,
+  "talker_top_p": 1.0,
+  "temperature": 0.9,
+  "top_p": 1.0
+}
+
+[INFO:swift] default_system: 'You are a helpful assistant.'
+[INFO:swift] max_length: 4096
+[INFO:swift] response_prefix: None
+[INFO:swift] agent_template: hermes
+[INFO:swift] norm_bbox: none
+[INFO:swift] Setting ROOT_IMAGE_DIR: None. You can adjust this hyperparameter through the environment variable: `ROOT_IMAGE_DIR`.
+[INFO:swift] Setting QWENVL_BBOX_FORMAT: legacy. You can adjust this hyperparameter through the environment variable: `QWENVL_BBOX_FORMAT`.
+[INFO:swift] Setting use_audio_in_video: False. You can adjust this hyperparameter through the environment variable: `USE_AUDIO_IN_VIDEO`.
+[INFO:swift] Setting sampling_rate: 16000. You can adjust this hyperparameter through the environment variable: `SAMPLING_RATE`.
+[INFO:swift] Start time of running main: 2026-08-29 00:38:58.341231
+[INFO:swift] swift.__version__: 4.3.1
+Map (num_proc=1): 100%|██████████| 5000/5000 [00:00<?, ? examples/s]Map (num_proc=1): 6000 examples [00:00, 7382.83 examples/s]         Map (num_proc=1): 8000 examples [00:00, 12868.56 examples/s]Map (num_proc=1): 10000 examples [00:00, 15350.91 examples/s]Map (num_proc=1): 10000 examples [00:00, 10666.83 examples/s]
+[INFO:swift] train_dataset: Dataset({
+    features: ['messages', 'audios'],
+    num_rows: 5000
+})
+[INFO:swift] val_dataset: None
+[INFO:swift] The RLHFArguments will be saved in: /home/u1501463/tool_use_LALM/tool_use_training/tool_use_RL_full/output/Qwen3-Omni-30B-A3B-Instruct/v0-20260829-003843/args.json
+[WARNING:swift] Unexpected LoRA keys found in checkpoint `/work/u1501463/stage1_training/v0-20260814-011059/checkpoint-100`, len(unexpected_keys): 344, unexpected_keys[:10]: ['base_model.model.code2wav.pre_transformer.layers.0.self_attn.k_proj.lora_A.default.weight', 'base_model.model.code2wav.pre_transformer.layers.0.self_attn.k_proj.lora_B.default.weight', 'base_model.model.code2wav.pre_transformer.layers.0.self_attn.o_proj.lora_A.default.weight', 'base_model.model.code2wav.pre_transformer.layers.0.self_attn.o_proj.lora_B.default.weight', 'base_model.model.code2wav.pre_transformer.layers.0.self_attn.q_proj.lora_A.default.weight', 'base_model.model.code2wav.pre_transformer.layers.0.self_attn.q_proj.lora_B.default.weight', 'base_model.model.code2wav.pre_transformer.layers.0.self_attn.v_proj.lora_A.default.weight', 'base_model.model.code2wav.pre_transformer.layers.0.self_attn.v_proj.lora_B.default.weight', 'base_model.model.code2wav.pre_transformer.layers.1.self_attn.k_proj.lora_A.default.weight', 'base_model.model.code2wav.pre_transformer.layers.1.self_attn.k_proj.lora_B.default.weight'].
+[INFO:swift] model: PeftModelForCausalLM(
+  (base_model): LoraModel(
+    (model): Qwen3OmniMoeForConditionalGeneration(
+      (thinker): Qwen3OmniMoeThinkerForConditionalGeneration(
+        (audio_tower): Qwen3OmniMoeAudioEncoder(
+          (positional_embedding): SinusoidsPositionEmbedding()
+          (layers): ModuleList(
+            (0-31): 32 x Qwen3OmniMoeAudioEncoderLayer(
+              (self_attn): Qwen3OmniMoeAudioAttention(
+                (k_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1280, out_features=1280, bias=True)
+                  (lora_dropout): ModuleDict(
+                    (default): Identity()
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1280, out_features=32, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=32, out_features=1280, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (v_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1280, out_features=1280, bias=True)
+                  (lora_dropout): ModuleDict(
+                    (default): Identity()
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1280, out_features=32, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=32, out_features=1280, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (q_proj): lora.Linear(
+                  (base_layer): Linear(in_features=1280, out_features=1280, bias=True)
+                  (lora_dropout): ModuleDict(
+                    (default): Identity()
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=1280, out_features=32, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=32, out_features=1280, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (out_proj): Linear(in_features=1280, out_features=1280, bias=True)
+              )
+              (self_attn_layer_norm): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+              (activation_fn): GELUActivation()
+              (fc1): Linear(in_features=1280, out_features=5120, bias=True)
+              (fc2): Linear(in_features=5120, out_features=1280, bias=True)
+              (final_layer_norm): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+            )
+          )
+          (ln_post): LayerNorm((1280,), eps=1e-05, elementwise_affine=True)
+          (conv2d1): Conv2d(1, 480, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+          (conv2d2): Conv2d(480, 480, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+          (conv2d3): Conv2d(480, 480, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+          (conv_out): Linear(in_features=7680, out_features=1280, bias=False)
+          (proj1): Linear(in_features=1280, out_features=1280, bias=True)
+          (act): GELUActivation()
+          (proj2): Linear(in_features=1280, out_features=2048, bias=True)
+        )
+        (visual): Qwen3OmniMoeVisionEncoder(
+          (merger_list): ModuleList(
+            (0-2): 3 x Qwen3OmniMoeVisionPatchMerger(
+              (ln_q): LayerNorm((4608,), eps=1e-06, elementwise_affine=True)
+              (mlp): ModuleList(
+                (0): Linear(in_features=4608, out_features=4608, bias=True)
+                (1): GELU(approximate='none')
+                (2): Linear(in_features=4608, out_features=2048, bias=True)
+              )
+            )
+          )
+          (patch_embed): Qwen3OmniMoeVisionPatchEmbed(
+            (proj): Conv3d(3, 1152, kernel_size=(2, 16, 16), stride=(2, 16, 16))
+          )
+          (pos_embed): Embedding(2304, 1152)
+          (rotary_pos_emb): Qwen3OmniMoeVisionRotaryEmbedding()
+          (blocks): ModuleList(
+            (0-26): 27 x Qwen3OmniMoeVisionBlock(
+              (norm1): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+              (norm2): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+              (attn): Qwen3OmniMoeVisionAttention(
+                (qkv): Linear(in_features=1152, out_features=3456, bias=True)
+                (proj): Linear(in_features=1152, out_features=1152, bias=True)
+              )
+              (mlp): Qwen3OmniMoeVisionMLP(
+                (linear_fc1): Linear(in_features=1152, out_features=4304, bias=True)
+                (linear_fc2): Linear(in_features=4304, out_features=1152, bias=True)
+                (act_fn): GELUTanh()
+              )
+            )
+          )
+          (merger): Qwen3OmniMoeVisionPatchMerger(
+            (ln_q): LayerNorm((1152,), eps=1e-06, elementwise_affine=True)
+            (mlp): ModuleList(
+              (0): Linear(in_features=4608, out_features=4608, bias=True)
+              (1): GELU(approximate='none')
+              (2): Linear(in_features=4608, out_features=2048, bias=True)
+            )
+          )
+        )
+        (model): Qwen3OmniMoeThinkerTextModel(
+          (embed_tokens): Embedding(152064, 2048)
+          (layers): ModuleList(
+            (0-47): 48 x Qwen3OmniMoeThinkerTextDecoderLayer(
+              (self_attn): Qwen3OmniMoeThinkerTextAttention(
+                (q_proj): lora.Linear4bit(
+                  (base_layer): Linear4bit(in_features=2048, out_features=4096, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Identity()
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=2048, out_features=32, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=32, out_features=4096, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (k_proj): lora.Linear4bit(
+                  (base_layer): Linear4bit(in_features=2048, out_features=512, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Identity()
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=2048, out_features=32, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=32, out_features=512, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (v_proj): lora.Linear4bit(
+                  (base_layer): Linear4bit(in_features=2048, out_features=512, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Identity()
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=2048, out_features=32, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=32, out_features=512, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (o_proj): lora.Linear4bit(
+                  (base_layer): Linear4bit(in_features=4096, out_features=2048, bias=False)
+                  (lora_dropout): ModuleDict(
+                    (default): Identity()
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=4096, out_features=32, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=32, out_features=2048, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (q_norm): Qwen3OmniMoeThinkerTextRMSNorm((128,), eps=1e-06)
+                (k_norm): Qwen3OmniMoeThinkerTextRMSNorm((128,), eps=1e-06)
+              )
+              (mlp): Qwen3OmniMoeThinkerTextSparseMoeBlock(
+                (experts): lora.ParamWrapper(
+                  parameter_name='down_proj',
+                  (base_layer): lora.ParamWrapper(
+                    parameter_name='gate_up_proj',
+                    (base_layer): Qwen3OmniMoeThinkerTextExperts(
+                      (act_fn): SiLUActivation()
+                    )
+                    (lora_dropout): ModuleDict(
+                      (default): Identity()
+                    )
+                    (lora_A): ModuleDict(
+                      (default): Linear(in_features=2048, out_features=8192, bias=False)
+                    )
+                    (lora_B): ModuleDict(
+                      (default): Linear(in_features=8192, out_features=1536, bias=False)
+                    )
+                    (lora_embedding_A): ParameterDict()
+                    (lora_embedding_B): ParameterDict()
+                    (lora_magnitude_vector): ModuleDict()
+                  )
+                  (lora_dropout): ModuleDict(
+                    (default): Identity()
+                  )
+                  (lora_A): ModuleDict(
+                    (default): Linear(in_features=768, out_features=4096, bias=False)
+                  )
+                  (lora_B): ModuleDict(
+                    (default): Linear(in_features=4096, out_features=2048, bias=False)
+                  )
+                  (lora_embedding_A): ParameterDict()
+                  (lora_embedding_B): ParameterDict()
+                  (lora_magnitude_vector): ModuleDict()
+                )
+                (gate): Qwen3OmniMoeThinkerTextTopKRouter()
+              )
+              (input_layernorm): Qwen3OmniMoeThinkerTextRMSNorm((2048,), eps=1e-06)
+              (post_attention_layernorm): Qwen3OmniMoeThinkerTextRMSNorm((2048,), eps=1e-06)
+            )
+          )
+          (norm): Qwen3OmniMoeTextRMSNorm((2048,), eps=1e-06)
+          (rotary_emb): Qwen3OmniMoeThinkerTextRotaryEmbedding()
+        )
+        (lm_head): Linear(in_features=2048, out_features=152064, bias=False)
+      )
+    )
+  )
+)
+[INFO:swift] model_parameter_info: PeftModelForCausalLM: 33263.7579M Params (1997.5373M Trainable [6.0051%]), 1.9201M Buffers.
+[RANK 0] Detected kernel version 4.18.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+[INFO:swift] use_reentrant: True
+[INFO:swift] The logging file will be saved in: /home/u1501463/tool_use_LALM/tool_use_training/tool_use_RL_full/output/Qwen3-Omni-30B-A3B-Instruct/v0-20260829-003843/logging.jsonl
+[INFO:swift] Successfully registered post_encode hook: ['PeftModelForCausalLM'].
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 151645, 'pad_token_id': 151643}.
+Train:   0%|          | 0/30000 [00:00<?, ?it/s][INFO:swift] last_model_checkpoint: None
+[INFO:swift] best_model_checkpoint: None
+[INFO:swift] images_dir: /home/u1501463/tool_use_LALM/tool_use_training/tool_use_RL_full/output/Qwen3-Omni-30B-A3B-Instruct/v0-20260829-003843/images
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/cli/rlhf.py", line 7, in <module>
+[rank0]:     rlhf_main()
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/pipelines/train/rlhf.py", line 246, in rlhf_main
+[rank0]:     return SwiftRLHF(args).main()
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/pipelines/base.py", line 52, in main
+[rank0]:     result = self.run()
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/ray_utils/base.py", line 168, in wrapper
+[rank0]:     return func(self, *args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/pipelines/train/sft.py", line 184, in run
+[rank0]:     return self.train(trainer)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/pipelines/train/sft.py", line 258, in train
+[rank0]:     trainer.train(resume_checkpoint)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/trainers/mixin.py", line 914, in train
+[rank0]:     res = super().train(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/trainer.py", line 1433, in train
+[rank0]:     return inner_training_loop(
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/trainer.py", line 1515, in _inner_training_loop
+[rank0]:     self._run_epoch(
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/trainer.py", line 1743, in _run_epoch
+[rank0]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/rlhf_trainers/grpo_trainer.py", line 1945, in training_step
+[rank0]:     return super().training_step(model, inputs, num_items_in_batch)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/trl/trainer/grpo_trainer.py", line 1085, in training_step
+[rank0]:     output = super().training_step(model, inputs, num_items_in_batch)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/trainer.py", line 1909, in training_step
+[rank0]:     inputs = self._prepare_inputs(inputs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/rlhf_trainers/utils.py", line 619, in wrapper
+[rank0]:     return func(self, *args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/rlhf_trainers/grpo_trainer.py", line 207, in _prepare_inputs
+[rank0]:     generation_batch = self._generate_and_score_completions(generation_batch)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/rlhf_trainers/utils.py", line 619, in wrapper
+[rank0]:     return func(self, *args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/rlhf_trainers/grpo_trainer.py", line 239, in _generate_and_score_completions
+[rank0]:     inputs = self._generate_completions(inputs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/rlhf_trainers/grpo_trainer.py", line 225, in _generate_completions
+[rank0]:     results = self._infer_single_or_multi_turn(inputs, self.request_config)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/rlhf_trainers/rollout_mixin.py", line 918, in _infer_single_or_multi_turn
+[rank0]:     rollout_outputs: List[RolloutOutput] = self._rollout(inputs, request_config, is_global_inputs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/rlhf_trainers/rollout_mixin.py", line 882, in _rollout
+[rank0]:     rollout_outputs = self._colocate_rollout(inputs, request_config)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/rlhf_trainers/rollout_mixin.py", line 1090, in _colocate_rollout
+[rank0]:     outputs: List[RolloutOutput] = self._engine_infer(infer_requests=inputs, request_config=request_config)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/rlhf_trainers/rollout_mixin.py", line 1111, in _engine_infer
+[rank0]:     res = self.engine.infer(infer_requests, request_config, use_tqdm=use_tqdm)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/infer_engine/transformers_engine.py", line 589, in infer
+[rank0]:     res += self._infer(infer_requests_samples, request_config, adapter_request=adapter_request)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/infer_engine/transformers_engine.py", line 558, in _infer
+[rank0]:     res = infer_func(**kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/infer_engine/transformers_engine.py", line 409, in _infer_full
+[rank0]:     output = dict(self.template.generate(self.model, **generate_kwargs))
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/template/templates/qwen.py", line 986, in generate
+[rank0]:     return super().generate(model, *args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/template/base.py", line 769, in generate
+[rank0]:     return model.generate(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/peft/peft_model.py", line 2223, in generate
+[rank0]:     outputs = self.base_model.generate(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/model/utils.py", line 101, in _new_func
+[rank0]:     res = _old_func(submodel, *args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/generation/utils.py", line 2584, in generate
+[rank0]:     result = decoding_method(
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/generation/utils.py", line 2798, in _sample
+[rank0]:     outputs = model_forward(**model_inputs, return_dict=True)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/model/utils.py", line 101, in _new_func
+[rank0]:     res = _old_func(submodel, *args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/utils/generic.py", line 907, in wrapper
+[rank0]:     output = func(self, *args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/model/models/qwen.py", line 1629, in forward
+[rank0]:     outputs = self.model(
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/utils/generic.py", line 1036, in wrapper
+[rank0]:     output = func(self, *args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/utils/output_capturing.py", line 252, in wrapper
+[rank0]:     outputs = func(self, *args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/models/qwen3_omni_moe/modeling_qwen3_omni_moe.py", line 1755, in forward
+[rank0]:     layer_outputs = decoder_layer(
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/modeling_layers.py", line 93, in __call__
+[rank0]:     return super().__call__(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/models/qwen3_omni_moe/modeling_qwen3_omni_moe.py", line 1589, in forward
+[rank0]:     hidden_states, _ = self.self_attn(
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/models/qwen3_omni_moe/modeling_qwen3_omni_moe.py", line 1529, in forward
+[rank0]:     attn_output, attn_weights = attention_interface(
+[rank0]:   File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/transformers/integrations/sdpa_attention.py", line 92, in sdpa_attention_forward
+[rank0]:     attn_output = torch.nn.functional.scaled_dot_product_attention(
+[rank0]: RuntimeError: Expected size for first two dimensions of batch2 tensor to be: [64, 3035] but got: [64, 1518].
+Train:   0%|          | 0/30000 [00:04<?, ?it/s]
+E0829 00:40:13.075000 3050959 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 3051056) of binary: /home/u1501463/.conda/envs/RL/bin/python3.10
+Traceback (most recent call last):
+  File "/home/u1501463/.conda/envs/RL/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/home/u1501463/.conda/envs/RL/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/distributed/run.py", line 922, in <module>
+    main()
+  File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/home/u1501463/.conda/envs/RL/lib/python3.10/site-packages/swift/cli/rlhf.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-08-29_00:40:13
+  host      : hgpn02
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 3051056)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

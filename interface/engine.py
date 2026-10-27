@@ -110,6 +110,7 @@ class SwiftEngine:
         model_type: Optional[str] = None,
         torch_dtype=None,
         device_map: Optional[Any] = None,
+        max_batch_size: int = 32,
     ):
         # ms-swift's real package lives at site-packages/swift; some envs also have
         # an unrelated `swift` package shadowing it via ~/.local/lib -- drop that.
@@ -124,8 +125,17 @@ class SwiftEngine:
         # a single 7B-class model no longer fits on one GPU -- `device_map="auto"`
         # (the run_eval.py default) shards the model across all visible GPUs via
         # accelerate instead of requiring the caller to fit it on one device.
+        #
+        # `TransformersEngine.infer()` re-chunks whatever request list it's given into
+        # groups of `max_batch_size` before each real forward pass (see
+        # transformers_engine.py's `infer`/`_infer`) -- its own default for that
+        # parameter is 1, which would silently serialize `generate_turns`' batch back
+        # into one-sample-at-a-time decoding no matter how many requests
+        # run_eval_batch.py hands it. Passing it explicitly here is what makes a
+        # `generate_turns` call actually become one batched forward pass.
         self.engine = TransformersEngine(
             model, adapters=adapters, model_type=model_type, torch_dtype=torch_dtype, device_map=device_map,
+            max_batch_size=max_batch_size,
         )
         _suppress_padding_vocab_ids(self.engine)
         # `return_details=True` is what makes ms-swift populate `choice.token_ids` with

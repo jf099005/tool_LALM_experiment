@@ -1,5 +1,5 @@
 {
-  "_comment": "Controls which tools build_dataset.py may draw from and each tool's parameter ranges. `weight` is a relative sampling probability among enabled tools (not required to sum to 1). Each param spec's `kind` is one of: choice (uniform pick from `values`), uniform (rng.uniform(min, max), optionally rounded via `round`), randint (rng.randint(min, max)), fixed (always `value`). A param can carry `only_if: {\"param\": <name>, \"values\": [...]}` to only be drawn when an earlier-drawn param (same tool, dict order) matched one of those values -- e.g. denoise's `noise_factor` only applies when `algorithm` came out as `spectral_subtraction`. `clipping`'s `clip_fraction` and every full-segment tool's audio_begin/audio_end are computed by build_dataset.py from the clip's real duration, not drawn from here. Heavy ML tools (remove_target/extract_target/human_voice_enhance/super_resolution) are disabled by default since they need their own conda env (`env`, mirroring gen_2nd_stage_data/disturb_recover.py's TOOL_ENV) -- flip `enabled` once that env is available on this machine.",
+  "_comment": "Controls which tools build_dataset.py may draw from and each tool's parameter ranges. `weight` is a relative sampling probability among enabled tools (not required to sum to 1). Each param spec's `kind` is one of: choice (uniform pick from `values`), uniform (rng.uniform(min, max), optionally rounded via `round`), randint (rng.randint(min, max)), fixed (always `value`). A param can carry `only_if: {\"param\": <name>, \"values\": [...]}` to only be drawn when an earlier-drawn param (same tool, dict order) matched one of those values -- e.g. denoise's `noise_factor` only applies when `algorithm` came out as `spectral_subtraction`. `clipping`'s `clip_fraction` and every full-segment tool's audio_begin/audio_end are computed by build_dataset.py from the clip's real duration, not drawn from here. Heavy ML tools (remove_target/extract_target/human_voice_enhance/super_resolution) run in their own conda env (`env`, mirroring apply_tools.py's TOOL_ENV; a tool is skipped automatically if that python doesn't exist) through persistent per-env servers that build_dataset*.py start up front, so they need a GPU allocation -- set `enabled` to false to leave one out. `target_description` must stay within extract_target/remove_target's fixed label set.",
 
   "min_tools": 1,
   "max_tools": 1,
@@ -112,6 +112,40 @@
       "weight": 0.5,
       "params": {
         "coef": {"kind": "choice", "values": [0.9, 0.95, 0.97, 0.99]}
+      }
+    },
+
+    "human_voice_enhance": {
+      "enabled": true,
+      "weight": 0.5,
+      "env": "/home/u1501463/.conda/envs/deepfilternet/bin/python",
+      "params": {}
+    },
+
+    "super_resolution": {
+      "enabled": true,
+      "weight": 0.5,
+      "env": "/home/u1501463/.conda/envs/audiosr/bin/python",
+      "params": {
+        "model_name": {"kind": "choice", "values": ["basic", "speech"]}
+      }
+    },
+
+    "extract_target": {
+      "enabled": true,
+      "weight": 0.5,
+      "env": "/home/u1501463/.conda/envs/sam_audio/bin/python",
+      "params": {
+        "target_description": {"kind": "choice", "values": ["vocals", "background sound", "background music", "noise"]}
+      }
+    },
+
+    "remove_target": {
+      "enabled": true,
+      "weight": 0.5,
+      "env": "/home/u1501463/.conda/envs/sam_audio/bin/python",
+      "params": {
+        "target_description": {"kind": "choice", "values": ["vocals", "background sound", "background music", "noise"]}
       }
     }
   }

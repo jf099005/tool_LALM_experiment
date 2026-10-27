@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# --dataset below must be regenerated (build_rl_dataset.py) whenever
+# gen_1st_stage_data's raw JSON changes -- e.g. after moving the tool
+# catalogue into the system prompt:
+#   python build_rl_dataset.py \
+#       --input /work/u1501463/stage1_RL/tool_usage_qa_audioset.json \
+#       --output /work/u1501463/stage1_RL/train_rl_singleturn.jsonl \
+#       --system-prompt-model-dir /work/u1501463/model_qwen_25 \
+#       --system-prompt-model-type qwen2_5_omni
+
+model_dir=/work/u1501463/Qwen3-Omni-30B-A3B-Instruct/
+adapter_path=/work/u1501463/stage1_training/v0-20260814-011059/checkpoint-100/
+
+swift rlhf \
+    --rlhf_type grpo \
+    --model ${model_dir} \
+    --adapters ${adapter_path} \
+    --template qwen2_5_omni \
+    --target_modules all-linear \
+    --lora_rank 8 \
+    --lora_alpha 32 \
+    --dataset  /work/u1501463/stage1_qwen3_omni_RL/train.jsonl \
+    --external_plugins reward.py \
+    --reward_funcs tool_format tool_accuracy tool_audio_closeness \
+    --reward_weights 0.2 0.5 0.3 \
+    --num_generations 4 \
+    --generation_batch_size 4 \
+    --max_length 4096

@@ -84,6 +84,42 @@ $SWIFT_PY run_eval.py \
 mean audio-closeness metrics, and a breakdown by ground-truth chain length).
 Re-running prints the same `summary` dict to stdout.
 
+### Per-tool analysis
+
+`summary.per_tool_analysis` (from `tool_analysis.py`) breaks results down by
+ground-truth tool, and two more files are written next to the results file:
+`<out>_tool_analysis.json` holds the same data plus every raw (gt, pred)
+parameter pair, and `<out>_tool_analysis.txt` is a readable report that is
+also printed to stderr. For each tool it reports:
+
+- **Tool selection:** accuracy, precision, recall, F1, `<no_call>` rate and
+  the tools it is most often confused with. A confusion matrix covers all
+  tools: rows are the GT tool, columns are the predicted tool at the same
+  step, `<no_call>` means the model emitted no call and `<no_gt>` means an
+  extra call past the end of the GT chain.
+- **Execution and audio:** execution success rate when the right tool is
+  chosen, stop reasons, extra calls, and closeness / gain over baseline,
+  split by whether the sequence was correct.
+- **Parameters:** only for calls where the predicted tool matches the GT
+  tool. Each parameter is compared with its GT value:
+  - numeric and `HH:MM:SS.mmm` timestamp parameters get MAE, median, max,
+    RMSE, bias (mean of pred − gt), exact-match rate and tolerance rates
+    (0.05/0.1/0.5 s for timestamps; 5%/10% relative error otherwise);
+  - categorical parameters (`algorithm`, `target_description`, `audio_id`,
+    ...) get accuracy and a table of GT value → predicted value;
+  - every parameter also gets missing and extra counts;
+  - each tool gets an "all params exact" rate.
+
+To analyze an existing results file again without running the model:
+
+```bash
+python analyze_results.py results.json --benchmark-file benchmark.json
+```
+
+Results files written before `gt_calls` was stored for each sample need
+`--benchmark-file` for the parameter comparison. GT parameters are looked
+up by sample id.
+
 ### Backends and zero-shot vs. fine-tuned
 
 - `--backend swift` (default) drives `swift.infer_engine.TransformersEngine`.

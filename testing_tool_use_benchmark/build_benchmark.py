@@ -7,10 +7,12 @@ output schema is eval-oriented: it keeps the per-step ground-truth tool calls
 own predicted tool calls execute, and (b) compare the model's reconstructed
 audio against the ground-truth intermediate/final audio.
 
-Run this under the `ms-swift` conda env (it has librosa/soundfile/numpy/scipy,
-which is enough for every tool except the heavy ML-backed ones that depend on
-deepfilternet/audiosr/sam_audio -- those are simply absent from the toolset if
-unavailable, same as build_dataset.py).
+Run this under the `swift-qwen3`/`ms-swift` conda env (it has librosa/soundfile/numpy/scipy,
+which is enough for the light tools). The heavy ML-backed tools (human_voice_enhance /
+super_resolution / extract_target / remove_target) are part of the toolset whenever their
+`deepfilternet`/`audiosr`/`sam_audio` conda env exists (same as build_dataset.py) and are run
+in those envs through persistent servers started by `__main__` -- so this needs a GPU
+allocation: submit `construct.sbatch`, don't run it on a login node.
 
 Usage:
     ~/miniconda3/envs/ms-swift/bin/python build_benchmark.py \
@@ -133,4 +135,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    with tool_registry.serve_heavy_tools():
+        main()
