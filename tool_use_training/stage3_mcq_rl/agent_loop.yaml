@@ -1,0 +1,5 @@
+# Loaded via actor_rollout_ref.rollout.agent.agent_loop_config_path; the dataset's
+# `agent_name` column (build_mcq_dataset.AGENT_NAME) selects this loop per sample.
+# The module must be importable by Ray workers: run_grpo.sh puts this directory on PYTHONPATH.
+- name: audio_tool_mcq_agent
+  _target_: audio_tool_agent_loop.AudioToolMCQAgentLoop
