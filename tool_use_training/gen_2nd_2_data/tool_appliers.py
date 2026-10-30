@@ -3,7 +3,7 @@ disturbance ops -- see build_dataset.py's module docstring for how this differs 
 gen_2nd_stage_data's disturb -> recover strategy).
 
 Each tool gets one applier function of the shape used throughout this repo's dataset
-generators (`tools/synthetic_registry.py`, `gen_2nd_stage_data/disturb_recover.py`):
+generators (`tools/tools_registry.py`, `gen_2nd_stage_data/disturb_recover.py`):
 
     params, output_path = APPLIERS[name](tool_cfg, audio_path, output_path, rng, duration)
 
@@ -17,12 +17,13 @@ from the real duration, not drawn from config, since they depend on the specific
 Light tools (clipping/denoise/pitch_shift/time_stretch/the normalize family) run in-process
 -- this module needs the same librosa/soundfile/scipy env `gen_2nd_stage_data`'s scripts
 require. Heavy ML tools (remove_target/extract_target/human_voice_enhance/super_resolution)
-are dispatched one call at a time via `tools/tool_batch_execute.py` in that tool's own conda
-env (`tool_cfg["env"]`), same split as `synthetic_registry._run_tool_subprocess` -- unlike
+are dispatched one call at a time through `tools/heavy_tool_pool.py` in that tool's own conda
+env (`tool_cfg["env"]`), same split as `tools_registry._run_tool_subprocess` -- unlike
 `build_by_disturb.py`'s recovery-chain execution, calls here are not batched across samples,
 since this strategy applies one independent tool per sample rather than a shared multi-turn
-chain (heavy tools are disabled by default in tool_config.json for exactly this reason: turn
-them on only once the target conda env is confirmed present).
+chain. Inside `heavy_tool_pool.serve(...)` (which build_dataset*.py wrap their generation loop
+in) each call goes to a persistent per-env server so the model loads once; outside it, each
+call is a one-shot `tool_batch_execute.py` subprocess that reloads the model.
 """
 
 from __future__ import annotations
@@ -30,17 +31,16 @@ from __future__ import annotations
 import json
 import random
 import shutil
-import subprocess
 import sys
-import tempfile
 import wave
 from pathlib import Path
-from typing import Any, Callable, Dict, Tuple
+from typing import Any, Callable, Dict, Optional, Tuple
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from tools import heavy_tool_pool  # noqa: E402
 from tools.clipping import ClippingTool  # noqa: E402
 from tools.denoise import DenoiseTool  # noqa: E402
 from tools.normalize import (  # noqa: E402
@@ -55,7 +55,7 @@ from tools.pitch_time import PitchShiftTool, TimeStretchTool  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
-# Shared helpers (duplicated, rather than imported, from tools/synthetic_registry.py
+# Shared helpers (duplicated, rather than imported, from tools/tools_registry.py
 # and gen_2nd_stage_data/disturb_recover.py -- kept local so this stage's directory
 # stays self-contained, matching how those two already duplicate the same helpers
 # rather than cross-importing).
@@ -188,33 +188,19 @@ def draw_params(tool_cfg: Dict[str, Any], rng: random.Random) -> Dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
-# Heavy-tool subprocess dispatch (mirrors synthetic_registry._run_tool_subprocess).
+# Heavy-tool subprocess dispatch (mirrors tools_registry._run_tool_subprocess).
 # ---------------------------------------------------------------------------
 
 def _run_tool_subprocess(tool_name: str, env_python: str, params: Dict[str, Any]) -> Dict[str, Any]:
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        input_path = Path(tmp_dir) / "input.json"
-        output_path = Path(tmp_dir) / "output.json"
-        input_path.write_text(json.dumps([params]), encoding="utf-8")
-        subprocess.run(
-            [
-                env_python,
-                str(REPO_ROOT / "tools" / "tool_batch_execute.py"),
-                "--tool-name", tool_name,
-                "--input-file", str(input_path),
-                "--output-file", str(output_path),
-            ],
-            check=True,
-            cwd=str(REPO_ROOT),
-        )
-        results = json.loads(output_path.read_text(encoding="utf-8"))
+    # Persistent per-env server when build_dataset*.py's `heavy_tool_pool.serve(...)` is
+    # active (model loaded once, GPU calls serialized); one-shot subprocess otherwise.
+    return heavy_tool_pool.run_tool(tool_name, env_python, params)
 
-    if not isinstance(results, list) or len(results) != 1:
-        raise RuntimeError(f"Unexpected batch result for {tool_name}: {results!r}")
-    result = results[0]
-    if result.get("status") not in (None, "success"):
-        raise RuntimeError(f"{tool_name} failed: {result.get('message') or result.get('error')}")
-    return result
+
+def heavy_env_pythons(tool_config: Dict[str, Any], tool_names: list[str]) -> list[str]:
+    """Conda-env pythons of the heavy tools among `tool_names` (for `heavy_tool_pool.serve`)."""
+    tools_cfg = tool_config.get("tools", {})
+    return sorted({tools_cfg[name]["env"] for name in tool_names if tools_cfg.get(name, {}).get("env")})
 
 
 # ---------------------------------------------------------------------------
@@ -283,10 +269,24 @@ def _make_heavy_applier(tool_name: str):
         drawn = draw_params(tool_cfg, rng)
         env_python = tool_cfg["env"]
         params = {"audio_path": str(audio_path), **drawn}
+        call_params = dict(params)
+        staged: Optional[Path] = None
         if tool_name in _HEAVY_TOOLS_REQUIRING_OUTPUT_PATH:
-            params["output_path"] = str(output_path)
-        result = _run_tool_subprocess(tool_name, env_python, params)
-        params.pop("output_path", None)
+            call_params["output_path"] = str(output_path)
+        else:
+            # extract_target/remove_target write their result next to their *input*. At chain
+            # step 1 that input is the original corpus file, so run on a private copy in this
+            # sample's own directory instead of writing into (possibly read-only, shared) source
+            # dirs -- and so concurrent samples that draw the same source can't collide.
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            staged = output_path.parent / f"_in_{output_path.stem}{Path(audio_path).suffix}"
+            shutil.copy(str(audio_path), str(staged))
+            call_params["audio_path"] = str(staged)
+        try:
+            result = _run_tool_subprocess(tool_name, env_python, call_params)
+        finally:
+            if staged is not None:
+                staged.unlink(missing_ok=True)
         final_path = _finalize(Path(result["output_path"]), output_path)
         return params, final_path
 
@@ -314,8 +314,17 @@ APPLIERS: Dict[str, ApplierFn] = {
 
 
 def load_tool_config(path: Path) -> Dict[str, Any]:
+    """Load tool_config.json; a heavy tool's `env` may use environment variables
+    (e.g. "${DATA_ROOT}/conda_envs/sam_audio/bin/python" on the local PC, whose data-disk
+    mount point isn't fixed)."""
+    import os
+
     with Path(path).open("r", encoding="utf-8") as handle:
-        return json.load(handle)
+        config = json.load(handle)
+    for cfg in config.get("tools", {}).values():
+        if cfg.get("env"):
+            cfg["env"] = os.path.expandvars(cfg["env"])
+    return config
 
 
 def available_tool_names(tool_config: Dict[str, Any]) -> list[str]:
@@ -329,6 +338,8 @@ def available_tool_names(tool_config: Dict[str, Any]) -> list[str]:
             continue
         env_python = cfg.get("env")
         if env_python and not Path(env_python).exists():
+            print(f"WARNING: skipping enabled tool {name!r}: its env python {env_python} does not exist",
+                  file=sys.stderr)
             continue
         names.append(name)
     return sorted(names)

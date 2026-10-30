@@ -23,6 +23,53 @@ except ImportError:  # pragma: no cover
 # SEPARATION_LABELS = ["vocals", "drums", "bass", "guitar", "piano", "other", "major speech", "minor speech", "singing", "rapping", "noisy environment", "quiet environment"] 
 SEPARATION_LABELS = ["vocals", 'background sound', 'background music', 'noise'] 
 
+
+class _Separated:
+    def __init__(self, target, residual):
+        self.target = target
+        self.residual = residual
+
+
+def _separate_chunked(model, processor, device, label: str, waveform) -> "_Separated":
+    """SAM-Audio separation of a mono (1, T) waveform at the processor's rate.
+
+    GPU memory grows with clip length (sam-audio-large fp16: ~8.7 GB peak at 10 s; a 30 s
+    clip OOMs on a 12 GB card), so clips longer than SAM_AUDIO_CHUNK_SECONDS (default 10)
+    are separated chunk by chunk and concatenated. Each chunk's output is trimmed/padded to
+    the chunk's input length so the result stays aligned with the input timeline.
+    """
+    import os
+
+    sr = processor.audio_sampling_rate
+    chunk_len = int(float(os.environ.get("SAM_AUDIO_CHUNK_SECONDS", "10")) * sr)
+    total = waveform.shape[-1]
+    # Chunk boundaries; a final remainder under 1 s is merged into the previous chunk, since
+    # SAM-Audio's codec reflect-pads its input and fails on very short chunks ("Padding size
+    # should be less than the corresponding input dimension").
+    bounds = list(range(0, total, chunk_len)) + [total]
+    if len(bounds) > 2 and bounds[-1] - bounds[-2] < sr:
+        bounds.pop(-2)
+    targets, residuals = [], []
+    for start, end in zip(bounds[:-1], bounds[1:]):
+        chunk = waveform[..., start:end]
+        batch = processor([label], [chunk]).to(device)
+        if device.type == "cuda":
+            batch.audios = batch.audios.half()
+        with torch.inference_mode():
+            result = model.separate(batch, predict_spans=False, reranking_candidates=1)
+        if len(result.target) != 1 or len(result.residual) != 1:
+            raise ToolValidationError("Unexpected separation result shape.")
+        n = chunk.shape[-1]
+        for out, acc in ((result.target[0], targets), (result.residual[0], residuals)):
+            out = out.detach().float().reshape(-1)[:n].cpu()
+            if out.shape[0] < n:
+                out = torch.nn.functional.pad(out, (0, n - out.shape[0]))
+            acc.append(out)
+        del batch, result
+        if device.type == "cuda":
+            torch.cuda.empty_cache()
+    return _Separated(torch.cat(targets), torch.cat(residuals))
+
 class ExtractTargetTool(SourceSeparationTool):
     @classmethod
     def name(cls) -> str:
@@ -100,23 +147,12 @@ class ExtractTargetTool(SourceSeparationTool):
             waveform = waveform.mean(dim=0, keepdim=True)
         if sr != processor.audio_sampling_rate:
             waveform = torchaudio.functional.resample(waveform, sr, processor.audio_sampling_rate)
-        audio_tensor = waveform
+        result = _separate_chunked(model, processor, device, label, waveform)
 
-        batch = processor([label], [audio_tensor])
-        batch = batch.to(device)
-
-        if device.type == "cuda":
-            batch.audios = batch.audios.half()
-
-        with torch.inference_mode():
-            result = model.separate(batch, predict_spans=False, reranking_candidates=1)
-
-        if len(result.target) != 1:
-            raise ToolValidationError("Unexpected separation result shape.")
 
         label_suffix = label.replace(" ", "_")
         output_path = audio_path.parent / f"{audio_path.stem}_{label_suffix}_extracted.wav"
-        cls._save_wav(output_path, result.target[0], processor.audio_sampling_rate)
+        cls._save_wav(output_path, result.target, processor.audio_sampling_rate)
 
         return {
             "audio_path": str(audio_path),
@@ -204,23 +240,12 @@ class RemoveTargetTool(SourceSeparationTool):
             waveform = waveform.mean(dim=0, keepdim=True)
         if sr != processor.audio_sampling_rate:
             waveform = torchaudio.functional.resample(waveform, sr, processor.audio_sampling_rate)
-        audio_tensor = waveform
+        result = _separate_chunked(model, processor, device, label, waveform)
 
-        batch = processor([label], [audio_tensor])
-        batch = batch.to(device)
-
-        if device.type == "cuda":
-            batch.audios = batch.audios.half()
-
-        with torch.inference_mode():
-            result = model.separate(batch, predict_spans=False, reranking_candidates=1)
-
-        if len(result.residual) != 1:
-            raise ToolValidationError("Unexpected separation result shape.")
 
         label_suffix = label.replace(" ", "_")
         output_path = audio_path.parent / f"{audio_path.stem}_{label_suffix}_removed.wav"
-        cls._save_wav(output_path, result.residual[0], processor.audio_sampling_rate)
+        cls._save_wav(output_path, result.residual, processor.audio_sampling_rate)
 
         return {
             "audio_path": str(audio_path),

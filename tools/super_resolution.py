@@ -13,9 +13,22 @@ try:
     import torch
     import torchaudio
     from audiosr import build_model, super_resolution
+    import audiosr.utils as _audiosr_utils
     _AUDIOSR_AVAILABLE = True
 except ImportError:  # pragma: no cover
     _AUDIOSR_AVAILABLE = False
+
+if _AUDIOSR_AVAILABLE:
+    # Upstream bug (audiosr 0.0.7, utils.lowpass_filtering_prepare_inference): for near-silent
+    # input, or when the detected cutoff lands on the top STFT bin, cutoff_freq becomes 24000 Hz
+    # == Nyquist at fs=48000, so scipy's filter design raises "critical frequencies must be
+    # 0 < Wn < 1". Upstream's intent there is "don't lowpass", so clamp just below Nyquist.
+    _upstream_lowpass = _audiosr_utils.lowpass
+
+    def _lowpass_below_nyquist(data, highcut, fs, order=5, _type="butter"):
+        return _upstream_lowpass(data, min(highcut, 0.99 * fs / 2), fs, order=order, _type=_type)
+
+    _audiosr_utils.lowpass = _lowpass_below_nyquist
 
 _MODEL_CACHE: Dict[str, Any] = {}
 
@@ -119,14 +132,7 @@ class SuperResolutionTool(Tool):
         info = torchaudio.info(str(audio_path))
         original_duration = info.num_frames / info.sample_rate
 
-        waveform = super_resolution(
-            model,
-            str(audio_path),
-            ddim_steps=ddim_steps,
-            guidance_scale=guidance_scale,
-        )
-
-        audio_out = np.asarray(waveform[0, 0], dtype=np.float32)
+        audio_out = cls._run_chunked(model, audio_path, info, ddim_steps, guidance_scale)
         target_length = round(original_duration * _OUTPUT_SAMPLE_RATE)
         audio_out = cls._match_length(audio_out, target_length)
         audio_out = np.clip(audio_out, -1.0, 1.0)
@@ -143,11 +149,60 @@ class SuperResolutionTool(Tool):
         }
 
     @classmethod
+    def _run_chunked(cls, model, audio_path: Path, info, ddim_steps: int, guidance_scale: float) -> np.ndarray:
+        """AudioSR pads its input to a multiple of 10.24 s and runs it in one pass, so GPU
+        memory grows with clip length (~10.6 GB peak at 10 s; a 30 s clip OOMs on a 12 GB
+        card). Clips longer than `AUDIOSR_CHUNK_SECONDS` (default 10.24) are split into
+        chunks, each super-resolved on its own, then concatenated at 48 kHz."""
+        import os
+        import tempfile
+
+        chunk_seconds = float(os.environ.get("AUDIOSR_CHUNK_SECONDS", "10.24"))
+        duration = info.num_frames / info.sample_rate
+        if duration <= chunk_seconds:
+            waveform = super_resolution(model, str(audio_path), ddim_steps=ddim_steps, guidance_scale=guidance_scale)
+            return np.asarray(waveform[0, 0], dtype=np.float32)
+
+        audio, sr = torchaudio.load(str(audio_path))
+        chunk_len = int(round(chunk_seconds * sr))
+        pieces = []
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            for i, start in enumerate(range(0, audio.shape[1], chunk_len)):
+                chunk = audio[:, start:start + chunk_len]
+                n = chunk.shape[1]
+                # Zero-pad a short final chunk to the full chunk length: for some short
+                # lengths AudioSR's UNet fails with an off-by-one latent size ("Expected
+                # size 64 but got size 63"). The padding is trimmed off the output below.
+                if n < chunk_len:
+                    chunk = torch.nn.functional.pad(chunk, (0, chunk_len - n))
+                chunk_path = Path(tmp_dir) / f"chunk{i}.wav"
+                torchaudio.save(str(chunk_path), chunk, sr, encoding="PCM_S", bits_per_sample=16)
+                waveform = super_resolution(model, str(chunk_path), ddim_steps=ddim_steps, guidance_scale=guidance_scale)
+                out = np.asarray(waveform[0, 0], dtype=np.float32)
+                pieces.append(cls._match_length(out, round(n / sr * _OUTPUT_SAMPLE_RATE)))
+        return np.concatenate(pieces)
+
+    @classmethod
     def _get_model(cls, model_name: str):
+        """Cached per checkpoint, with at most one on the GPU (each is ~6 GB, so 'basic' and
+        'speech' don't both fit in 12 GB with activations); the other waits in CPU RAM.
+        Built on CPU, then moved: build_model(device="cuda") puts the checkpoint on the GPU
+        *and* the model, ~11 GB at load time."""
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         if model_name not in _MODEL_CACHE:
             torch.set_float32_matmul_precision("high")
-            _MODEL_CACHE[model_name] = build_model(model_name=model_name)
-        return _MODEL_CACHE[model_name]
+            _MODEL_CACHE[model_name] = build_model(model_name=model_name, device="cpu")
+        if device.type == "cuda":
+            for other, m in _MODEL_CACHE.items():
+                if other != model_name and getattr(m, "device", None) == device:
+                    m.to("cpu")
+                    m.device = torch.device("cpu")
+            torch.cuda.empty_cache()
+        model = _MODEL_CACHE[model_name]
+        if getattr(model, "device", None) != device:
+            model.to(device)
+            model.device = device
+        return model
 
     @staticmethod
     def _match_length(audio: np.ndarray, target_len: int) -> np.ndarray:
