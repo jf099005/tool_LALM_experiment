@@ -72,6 +72,8 @@ def parse_arguments():
     p.add_argument("--tag", default=None, help="result-file prefix (default: model basename)")
     p.add_argument("--path_remap", nargs=2, action="append", metavar=("OLD_PREFIX", "NEW_PREFIX"), default=[],
                    help="rewrite audio-path prefixes (repeatable); filter.json's export_dir is remapped automatically")
+    p.add_argument("--limit", type=int, default=None,
+                   help="only the first N items of each subset (smoke test; use a separate --output_dir)")
     p.add_argument("--summary_only", action="store_true", help="only (re)compute the summary from existing results")
     p.add_argument("--cont", "--resume", dest="cont", action=BooleanOptionalAction, default=True,
                    help="resume from existing results (default on; --no-cont starts over)")
@@ -347,6 +349,8 @@ def main():
     if not args.summary_only:
         orig_path, tool_path = subset_paths(args)
         subsets = {"original": load_subset(str(orig_path)), "tool_applied": load_subset(str(tool_path))}
+        if args.limit:
+            subsets = {side: items[: args.limit] for side, items in subsets.items()}
         if [i["id"] for i in subsets["original"]] != [i["id"] for i in subsets["tool_applied"]]:
             raise SystemExit("original and tool-applied subsets must list the same ids in the same order")
         llm = build_llm(args)
