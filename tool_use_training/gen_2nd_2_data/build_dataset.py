@@ -70,7 +70,7 @@ import sys
 import traceback
 import uuid
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 from tqdm import tqdm
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -82,6 +82,7 @@ if str(_THIS_DIR) not in sys.path:
     sys.path.insert(0, str(_THIS_DIR))
 
 import tool_appliers as ta  # noqa: E402
+from tools import heavy_tool_pool  # noqa: E402
 
 DEFAULT_AUDIOSET_DIR = Path(os.environ.get("AUDIOSET_AUDIO_DIR", "/work/u1501463/audioset_20k/20k/train"))
 DEFAULT_VCTK_DIR = Path(os.environ.get("VCTK_AUDIO_DIR", "/work/u1501463/VCTK/wav48_silence_trimmed"))
@@ -271,6 +272,48 @@ def weighted_sample_without_replacement(
     return chosen
 
 
+def draw_tool_names(
+    tool_names: List[str],
+    tool_weights_list: List[float],
+    k: int,
+    rng: random.Random,
+    tool_config: Dict[str, Any],
+) -> List[str]:
+    """k distinct tools. Plain weighted draw by default. If tool_config sets
+    `heavy_tool_probability` p, each pick first goes to the heavy (ML, own-env) group
+    with probability p -- else the light group -- then is weighted within that group,
+    so the ML share stays p however many ML tools are enabled/available."""
+    p = tool_config.get("heavy_tool_probability")
+    if p is None:
+        return weighted_sample_without_replacement(tool_names, tool_weights_list, k, rng)
+    tools_cfg = tool_config["tools"]
+    pool = list(zip(tool_names, tool_weights_list))
+    chosen: List[str] = []
+    for _ in range(k):
+        heavy = [(n, w) for n, w in pool if tools_cfg[n].get("env")]
+        light = [(n, w) for n, w in pool if not tools_cfg[n].get("env")]
+        group = heavy if heavy and (not light or rng.random() < p) else light
+        name = weighted_sample_without_replacement([n for n, _ in group], [w for _, w in group], 1, rng)[0]
+        chosen.append(name)
+        pool = [(n, w) for n, w in pool if n != name]
+    return chosen
+
+
+def choose_tools(tool_names, tool_weights_list, tool_config, min_tools, max_tools, rng,
+                 force_tools: Optional[List[str]] = None) -> List[str]:
+    """The tool chain for one sample: `force_tools` (an item's planned tools, e.g. from
+    plan_tool_variants.py) if given -- no RNG draw then, so parameters come first from the
+    RNG -- else k random tools."""
+    if force_tools:
+        unknown = [t for t in force_tools if t not in tool_names]
+        if unknown:
+            raise ValueError(f"planned tool(s) {unknown} not enabled/available")
+        return list(force_tools)
+    k = rng.randint(min_tools, max_tools)
+    k = max(0, min(k, len(tool_names)))
+    return draw_tool_names(tool_names, tool_weights_list, k, rng, tool_config)
+
+
 def apply_tool_chain(
     source_wav: Path,
     work_dir: Path,
@@ -280,10 +323,9 @@ def apply_tool_chain(
     min_tools: int,
     max_tools: int,
     rng: random.Random,
+    force_tools: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
-    k = rng.randint(min_tools, max_tools)
-    k = max(0, min(k, len(tool_names)))
-    chosen = weighted_sample_without_replacement(tool_names, tool_weights_list, k, rng)
+    chosen = choose_tools(tool_names, tool_weights_list, tool_config, min_tools, max_tools, rng, force_tools)
 
     current_path = source_wav
     chain: List[Dict[str, Any]] = []
@@ -314,22 +356,38 @@ def build_one_sample(
     min_tools: int,
     max_tools: int,
     rng: random.Random,
+    copy_original: bool = True,
 ) -> Dict[str, Any]:
     sample_id = str(item["id"])
     source = Path(get_audio_path(item))
 
     original_dir = output_dir / "original" / sample_id
     tool_applied_dir = output_dir / "tool_applied" / sample_id
-    original_dir.mkdir(parents=True, exist_ok=True)
     tool_applied_dir.mkdir(parents=True, exist_ok=True)
 
-    working_wav = ta.ensure_wav(source, tool_applied_dir)
-    original_wav = original_dir / "original.wav"
-    if working_wav.resolve() != original_wav.resolve():
-        shutil.copy(str(working_wav), str(original_wav))
+    scratch = None
+    if copy_original:
+        original_dir.mkdir(parents=True, exist_ok=True)
+        working_wav = ta.ensure_wav(source, tool_applied_dir)
+        original_wav = original_dir / "original.wav"
+        if working_wav.resolve() != original_wav.resolve():
+            shutil.copy(str(working_wav), str(original_wav))
+    else:
+        # The original stays where it is (no copy: saves ~half the disk for large builds).
+        # Tools run on a scratch copy inside this sample's dir -- some write next to their
+        # input (clipping), which must not be the shared source corpus.
+        if source.suffix.lower() == ".wav" and ta._is_plain_pcm_wav(source):
+            original_wav = source
+        else:
+            original_dir.mkdir(parents=True, exist_ok=True)
+            original_wav = ta.ensure_wav(source, original_dir)
+        scratch = tool_applied_dir / "_input.wav"
+        shutil.copy(str(original_wav), str(scratch))
+        working_wav = scratch
 
     result = apply_tool_chain(
-        working_wav, tool_applied_dir, tool_names, tool_weights_list, tool_config, min_tools, max_tools, rng
+        working_wav, tool_applied_dir, tool_names, tool_weights_list, tool_config, min_tools, max_tools, rng,
+        force_tools=item.get("force_tools"),
     )
     chain = result["chain"]
     final_path = result["final_path"]
@@ -346,14 +404,158 @@ def build_one_sample(
         # k == 0: nothing applied -- tool_applied aliases original directly rather than
         # making a pointless copy.
         tool_applied_path = original_wav
+    if scratch is not None and scratch.exists():
+        scratch.unlink()
 
     return {
         "id": sample_id,
+        **({"base_id": item["base_id"]} if item.get("base_id") else {}),
         "source_audio": str(source),
         "original_audio": str(original_wav),
         "tool_chain": chain,
         "tool_applied_audio": str(tool_applied_path),
     }
+
+
+# ---------------------------------------------------------------------------
+# Parallel build (--workers > 1)
+# ---------------------------------------------------------------------------
+
+_WORKER_CTX: Dict[str, Any] = {}
+
+
+def _init_worker(ctx: Dict[str, Any]) -> None:
+    _WORKER_CTX.update(ctx)
+
+
+def _build_task(task):
+    idx, item = task
+    c = _WORKER_CTX
+    rng = random.Random(f"{c['seed']}:{idx}:{item['id']}")
+    errors = []
+    for attempt in range(c["max_attempts"]):
+        try:
+            record = build_one_sample(
+                item, c["output_dir"], c["tool_names"], c["tool_weights"], c["tool_config"],
+                c["min_tools"], c["max_tools"], rng, copy_original=c["copy_original"],
+            )
+            return idx, record, None
+        except Exception:
+            errors.append(f"Attempt {attempt + 1} failed for {item['id']}:\n{traceback.format_exc()}")
+    return idx, None, "\n".join(errors)
+
+
+def _peek_tools(task, ctx) -> List[str]:
+    """The tool names `_build_task` will draw for this sample (same RNG, same first draws
+    as apply_tool_chain), without doing any audio work."""
+    return _peek(task, ctx)[0]
+
+
+def _peek(task, ctx):
+    """(tool names, first heavy tool's drawn params or None) for this sample. The params
+    are only predictable when the chain's first tool is heavy (heavy appliers draw their
+    params first; light ones consume the RNG in data-dependent ways)."""
+    idx, item = task
+    rng = random.Random(f"{ctx['seed']}:{idx}:{item['id']}")
+    names = choose_tools(ctx["tool_names"], ctx["tool_weights"], ctx["tool_config"], ctx["min_tools"],
+                         ctx["max_tools"], rng, item.get("force_tools"))
+    params = None
+    if names and ctx["tool_config"]["tools"][names[0]].get("env"):
+        params = ta.draw_params(ctx["tool_config"]["tools"][names[0]], rng)
+    return names, params
+
+
+def _run_phase(tasks, ctx, args, sampled, done, progress_file) -> None:
+    import multiprocessing as mp
+
+    if not tasks:
+        return
+    pool = mp.get_context("spawn").Pool(args.workers, initializer=_init_worker, initargs=(ctx,))
+    try:
+        with progress_file.open("a", encoding="utf-8") as out, tqdm(total=len(tasks)) as bar:
+            for n, (idx, record, err) in enumerate(pool.imap_unordered(_build_task, tasks, chunksize=4), 1):
+                if err:
+                    print(err, file=sys.stderr)
+                    print(f"Giving up on {sampled[idx - 1]['id']} after {args.max_attempts_per_sample} attempts.",
+                          file=sys.stderr)
+                done[idx] = record
+                out.write(json.dumps({"idx": idx, "record": record}, ensure_ascii=False) + "\n")
+                if n % args.checkpoint_every == 0:
+                    out.flush()
+                    os.fsync(out.fileno())
+                bar.update(1)
+        pool.close()
+    except BaseException:
+        pool.terminate()
+        raise
+    finally:
+        pool.join()
+
+
+def build_parallel(sampled, args, tool_names, tool_weights_list, tool_config, min_tools, max_tools):
+    """Process-pool version of the main loop. Finished samples are appended to
+    <output-dir>/.records_parallel.jsonl as they complete; a rerun skips them (and retries
+    the ones that failed every attempt)."""
+
+    progress_file = args.output_dir / ".records_parallel.jsonl"
+    key_file = args.output_dir / ".records_parallel_key.json"
+    run_key = {
+        "seed": args.seed, "num_samples": args.num_samples, "repetition": args.repetition,
+        "min_tools": min_tools, "max_tools": max_tools, "tools": tool_names,
+        "sampled_ids": [str(item["id"]) for item in sampled],
+    }
+    done: Dict[int, Any] = {}
+    if args.resume and progress_file.exists() and key_file.exists() \
+            and json.loads(key_file.read_text(encoding="utf-8")) == run_key:
+        with progress_file.open(encoding="utf-8") as f:
+            for line in f:
+                try:
+                    row = json.loads(line)
+                except json.JSONDecodeError:  # line cut off by an interrupt
+                    continue
+                if row["record"] is not None:  # failed samples are retried on resume
+                    done[row["idx"]] = row["record"]
+        print(f"Resuming: {len(done)}/{len(sampled)} done", file=sys.stderr)
+    else:
+        if progress_file.exists():
+            progress_file.unlink()
+        key_file.write_text(json.dumps(run_key), encoding="utf-8")
+
+    tasks = [(idx, item) for idx, item in enumerate(sampled, start=1) if idx not in done]
+    if args.only_ids:
+        # Rebuild mode: same per-sample RNG (seed, position, id), so the same draws as the
+        # original build -- run with the original command plus --only-ids and a new --output-dir.
+        wanted = set(json.loads(Path(args.only_ids).read_text(encoding="utf-8")))
+        tasks = [(idx, item) for idx, item in tasks if str(item["id"]) in wanted]
+        print(f"--only-ids: rebuilding {len(tasks)} of {len(wanted)} requested sample(s)", file=sys.stderr)
+    ctx = {
+        "seed": args.seed, "output_dir": args.output_dir, "tool_names": tool_names,
+        "tool_weights": tool_weights_list, "tool_config": tool_config, "min_tools": min_tools,
+        "max_tools": max_tools, "max_attempts": args.max_attempts_per_sample,
+        "copy_original": not args.no_copy_original,
+    }
+    # One BLAS/numba thread per worker; spawned children inherit this environment.
+    for var in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS", "NUMBA_NUM_THREADS"):
+        os.environ[var] = "1"
+
+    # Run in phases, one set of heavy-tool envs at a time: a server keeps its model on the
+    # GPU once loaded, and e.g. SAM-Audio + AudioSR resident together don't fit in 12 GB.
+    # Each sample's tools are known up front (its RNG is seeded per sample, and the chain is
+    # drawn before any audio work), so phasing doesn't change what gets drawn.
+    phases: Dict[tuple, list] = {}
+    for task in tasks:
+        envs = tuple(sorted({tool_config["tools"][n]["env"] for n in _peek_tools(task, ctx)
+                             if tool_config["tools"][n].get("env")}))
+        phases.setdefault(envs, []).append(task)
+    for envs in sorted(phases, key=lambda e: (len(e), e)):
+        label = ", ".join(Path(e).parents[1].name for e in envs) or "light tools"
+        print(f"Phase [{label}]: {len(phases[envs])} sample(s)", file=sys.stderr)
+        # Group same-parameter calls (e.g. AudioSR's basic vs speech checkpoint) so a server
+        # swaps models as rarely as possible. Order doesn't affect what each sample draws.
+        phase_tasks = sorted(phases[envs], key=lambda t: json.dumps(_peek(t, ctx)[1], sort_keys=True))
+        with heavy_tool_pool.serve(envs):
+            _run_phase(phase_tasks, ctx, args, sampled, done, progress_file)
+    return [done[i] for i in sorted(done) if done[i] is not None]
 
 
 def main() -> None:
@@ -382,6 +584,19 @@ def main() -> None:
     parser.add_argument("--manifest-file", type=Path, default=None, help="Default: <output-dir>/manifest.json")
     parser.add_argument("--original-subset-file", type=Path, default=None, help="Default: <output-dir>/original_subset.json")
     parser.add_argument("--tool-applied-subset-file", type=Path, default=None, help="Default: <output-dir>/tool_applied_subset.json")
+    parser.add_argument("--resume", action=argparse.BooleanOptionalAction, default=True,
+                         help="Resume from <output-dir>/.build_checkpoint.json if present (default on).")
+    parser.add_argument("--workers", type=int, default=1,
+                         help="Worker processes. 1 = original sequential run (one shared RNG). >1 gives each "
+                              "sample its own RNG seeded by (seed, index, id): deterministic regardless of worker "
+                              "count or completion order, but a different draw than --workers 1.")
+    parser.add_argument("--no-copy-original", action="store_true",
+                         help="don't copy the source audio to <output-dir>/original/; original_subset points "
+                              "at the source files (needs --workers > 1 for now)")
+    parser.add_argument("--only-ids", type=Path, default=None,
+                         help="JSON list of sample ids: rebuild only these (with --workers > 1; see build_parallel)")
+    parser.add_argument("--checkpoint-every", type=int, default=200,
+                         help="Save the resume checkpoint every N samples (a resumed run redoes at most N-1).")
     args = parser.parse_args()
 
     tool_config = ta.load_tool_config(args.tool_config)
@@ -416,11 +631,54 @@ def main() -> None:
     original_subset_file = args.original_subset_file or (args.output_dir / "original_subset.json")
     tool_applied_subset_file = args.tool_applied_subset_file or (args.output_dir / "tool_applied_subset.json")
 
-    rng = random.Random(args.seed)
-    records: List[Dict[str, Any]] = []
-    # Heavy ML tools (if any are enabled) get one persistent server per conda env for the run.
-    with ta.heavy_tool_pool.serve(ta.heavy_env_pythons(tool_config, tool_names)):
-        for idx, item in tqdm(enumerate(sampled, start=1), total=len(sampled)):
+    records = generate_records(
+        sampled, args, tool_names, tool_weights_list, tool_config, min_tools, max_tools)
+
+    write_outputs(records, sampled, manifest_file, original_subset_file, tool_applied_subset_file)
+
+
+def generate_records(sampled, args, tool_names, tool_weights_list, tool_config, min_tools, max_tools):
+    if args.no_copy_original or args.only_ids:
+        if args.workers <= 1:
+            raise SystemExit("--no-copy-original / --only-ids need --workers > 1")
+    if args.workers > 1:
+        return build_parallel(
+            sampled, args, tool_names, tool_weights_list, tool_config, min_tools, max_tools)
+    # One persistent server per heavy-tool conda env for the whole run (model loaded once).
+    # No-op without heavy tools.
+    with heavy_tool_pool.serve(ta.heavy_env_pythons(tool_config, tool_names)):
+        rng = random.Random(args.seed)
+        records: List[Dict[str, Any]] = []
+        checkpoint_file = args.output_dir / ".build_checkpoint.json"
+        run_key = {
+            "seed": args.seed, "num_samples": args.num_samples, "repetition": args.repetition,
+            "min_tools": min_tools, "max_tools": max_tools,
+            "sampled_ids": [str(item["id"]) for item in sampled],
+        }
+        start_idx = 1
+        if args.resume and checkpoint_file.exists():
+            ckpt = json.loads(checkpoint_file.read_text(encoding="utf-8"))
+            if ckpt.get("run_key") == run_key:
+                records = ckpt["records"]
+                start_idx = ckpt["next_idx"]
+                # Restoring the RNG state makes a resumed run produce exactly what an
+                # uninterrupted run would have.
+                version, internal, gauss = ckpt["rng_state"]
+                rng.setstate((version, tuple(internal), gauss))
+                print(f"Resuming from checkpoint: {start_idx - 1}/{len(sampled)} done", file=sys.stderr)
+            else:
+                print("Checkpoint is from a different configuration; starting fresh.", file=sys.stderr)
+
+        def save_checkpoint(next_idx: int) -> None:
+            tmp = checkpoint_file.with_suffix(".tmp")
+            tmp.write_text(json.dumps({
+                "run_key": run_key, "next_idx": next_idx,
+                "rng_state": rng.getstate(), "records": records,
+            }), encoding="utf-8")
+            os.replace(tmp, checkpoint_file)
+
+        remaining = sampled[start_idx - 1:]
+        for idx, item in tqdm(enumerate(remaining, start=start_idx), total=len(sampled), initial=start_idx - 1):
             for attempt in range(args.max_attempts_per_sample):
                 try:
                     record = build_one_sample(
@@ -435,7 +693,13 @@ def main() -> None:
                     traceback.print_exc(file=sys.stderr)
             else:
                 print(f"Giving up on {item['id']} after {args.max_attempts_per_sample} attempts.", file=sys.stderr)
+            if (idx - start_idx + 1) % args.checkpoint_every == 0 or idx == len(sampled):
+                save_checkpoint(idx + 1)
 
+        return records
+
+
+def write_outputs(records, sampled, manifest_file, original_subset_file, tool_applied_subset_file) -> None:
     qa_by_id = {item["id"]: item for item in sampled}
 
     with manifest_file.open("w", encoding="utf-8") as handle:

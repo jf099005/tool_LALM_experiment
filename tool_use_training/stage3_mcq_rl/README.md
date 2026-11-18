@@ -66,3 +66,19 @@ assistant: <answer>B</answer>                                                   
   Slurm 會同時 export `ROCR_VISIBLE_DEVICES`，verl worker 遇到會直接報錯，`run_grpo.sh` 會先 unset。
   sam_audio 需要的 `cuda/12.4` module 只給工具 server 用，不會汙染 verl-omni 的程序。
 - 訓練輸出：`/work/u1501463/stage3_mcq_rl/{ckpt,val_generations,tensorboard}/<EXP_NAME>`。
+
+## 本機 UQ 用法（RTX 4070 PC，非 cluster）
+
+`build_mcq_dataset.py` 另外支援 AudioMCQ 的 **Clotho / AudioCaps** 子集（`--clotho-n` / `--audiocaps-n`，預設 0 = 關閉，cluster 行為不變），
+以及 `--format uq`：輸出 `uq_subset.json`（dcase_subset.json 格式，選項為 `A. ...`），可直接給
+`gen_2nd_2_data/build_dataset.py`（套用隨機工具）與 `qwen25_with_tool_chain_evaluation.py`（UQ）使用。
+路徑可用 `STAGE3_WORK_DIR` 或各 `--*-dir` 參數覆寫。
+
+```
+./run_local_uq.sh                     # 音檔準備 → 50k strong MCQ → 套工具 → UQ（每步都可中斷續跑）
+TOTAL_N=10000 CONTRIBUTION=all ./run_local_uq.sh
+STEPS="uq" ./run_local_uq.sh          # 只跑其中幾步：audio mcq tools uq
+```
+
+音檔來源：Clotho v2.1 = HF `gijs/clotho`；AudioCaps v2.0 = HF `Zhaowc/AudioCaps`（tar.gz 分片，
+`prepare_audiomcq_audio.py` 只抽出 AudioMCQ 用到的檔案）。

@@ -261,7 +261,9 @@ def _make_full_segment_applier(tool_cls):
 # Heavy tools dispatched via `_run_tool_subprocess` where the real tool requires an
 # explicit `output_path` (see tools/abstract_tool.Tool.requires_output_path) --
 # `remove_target`/`extract_target` don't need one and are omitted here.
-_HEAVY_TOOLS_REQUIRING_OUTPUT_PATH = {"human_voice_enhance", "super_resolution"}
+_HEAVY_TOOLS_REQUIRING_OUTPUT_PATH = {"human_voice_enhance", "super_resolution",
+                                     "music_source_separation", "speech_enhance", "vad_keep_speech",
+                                     "speech_restore_voicefixer", "dereverb_wpe"}
 
 
 def _make_heavy_applier(tool_name: str):
@@ -310,12 +312,26 @@ APPLIERS: Dict[str, ApplierFn] = {
     "extract_target": _make_heavy_applier("extract_target"),
     "human_voice_enhance": _make_heavy_applier("human_voice_enhance"),
     "super_resolution": _make_heavy_applier("super_resolution"),
+    "music_source_separation": _make_heavy_applier("music_source_separation"),
+    "speech_enhance": _make_heavy_applier("speech_enhance"),
+    "vad_keep_speech": _make_heavy_applier("vad_keep_speech"),
+    "speech_restore_voicefixer": _make_heavy_applier("speech_restore_voicefixer"),
+    "dereverb_wpe": _make_heavy_applier("dereverb_wpe"),
 }
 
 
 def load_tool_config(path: Path) -> Dict[str, Any]:
+    """Load tool_config.json; a heavy tool's `env` may use environment variables
+    (e.g. "${DATA_ROOT}/conda_envs/sam_audio/bin/python" on the local PC, whose data-disk
+    mount point isn't fixed)."""
+    import os
+
     with Path(path).open("r", encoding="utf-8") as handle:
-        return json.load(handle)
+        config = json.load(handle)
+    for cfg in config.get("tools", {}).values():
+        if cfg.get("env"):
+            cfg["env"] = os.path.expandvars(cfg["env"])
+    return config
 
 
 def available_tool_names(tool_config: Dict[str, Any]) -> list[str]:
@@ -329,6 +345,8 @@ def available_tool_names(tool_config: Dict[str, Any]) -> list[str]:
             continue
         env_python = cfg.get("env")
         if env_python and not Path(env_python).exists():
+            print(f"WARNING: skipping enabled tool {name!r}: its env python {env_python} does not exist",
+                  file=sys.stderr)
             continue
         names.append(name)
     return sorted(names)

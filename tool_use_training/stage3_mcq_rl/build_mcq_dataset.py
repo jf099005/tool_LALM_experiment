@@ -1,6 +1,9 @@
 """Build the stage-3 (MCQ-with-tools RL) parquet files for verl-omni.
 
-Training sources (all with local audio under /work/u1501463):
+Training sources (all with local audio under $STAGE3_WORK_DIR, default /work/u1501463):
+  - clotho / audiocaps  AudioMCQ's Clotho (3.8k) and AudioCaps v2.0 (90.5k) splits: MCQs an LLM
+                     wrote from the datasets' text captions, each tagged with audio-contribution
+                     like compa_r. Off by default (--clotho-n / --audiocaps-n).
   - compa_r          AudioMCQ's CompA-R split (197k MCQs) re-pointed at the local CompA-R mp3s.
                      AudioMCQ labels every item with `audio-contribution` (weak = answerable
                      from text priors alone, strong = needs the audio); RL defaults to strong.
@@ -24,6 +27,11 @@ option order is reshuffled per item (seeded) so the answer letter is uniformly d
 
 Usage (CPU-only; see build_data.sbatch):
     python build_mcq_dataset.py --output-dir /work/u1501463/stage3_mcq_rl/data
+
+`--format uq` instead writes one dcase_subset.json-shaped `uq_subset.json` (choices as
+"A. ...", answer as "B. ..."), the input format of gen_2nd_2_data/build_dataset.py and
+qwen25_with_tool_chain_evaluation.py; it needs no tool catalogue and skips the eval sets.
+See run_local_uq.sh for the local-PC run.
 """
 
 from __future__ import annotations
@@ -32,7 +40,9 @@ import argparse
 import collections
 import difflib
 import json
+import os
 import random
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
@@ -43,13 +53,16 @@ import soundfile as sf
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import mcq_protocol  # noqa: E402
 
-WORK = Path("/work/u1501463")
+WORK = Path(os.environ.get("STAGE3_WORK_DIR", "/work/u1501463"))
 REPO_ROOT = mcq_protocol.REPO_ROOT
 
 AGENT_NAME = "audio_tool_mcq_agent"
 ABILITY = "audio_mcq_tool_use"
 
-COMPA_R_JSONL = WORK / "AudioMCQ/datasets/AudioMCQ_CompA-R.jsonl"
+AUDIOMCQ_DIR = WORK / "AudioMCQ/datasets"
+COMPA_R_JSONL = AUDIOMCQ_DIR / "AudioMCQ_CompA-R.jsonl"
+CLOTHO_AUDIO_DIR = WORK / "Clotho/audio"
+AUDIOCAPS_AUDIO_DIR = WORK / "AudioCaps/audio"
 COMPA_R_AUDIO_DIRS = [WORK / "CompA_R/compa_r_train_audios-mp3", WORK / "CompA_R/compa_r_test_audios-mp3"]
 DCASE_JSON = REPO_ROOT / "generate/dcase/dcase_7481.json"
 DCASE_AUDIO_DIRS = [WORK / "DCASE_2025_task5/train", WORK / "DCASE_2025_task5/dcase_25_task5_audio_part_1/train"]
@@ -83,19 +96,23 @@ def _strip_letter(option: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-def load_compa_r(contribution: str) -> List[Dict[str, Any]]:
-    index = {p.stem: p for d in COMPA_R_AUDIO_DIRS for p in d.iterdir()}
+def load_audiomcq(name: str, jsonl: Path, audio_dirs: List[Path], contribution: str) -> List[Dict[str, Any]]:
+    """Any AudioMCQ split: rows are matched to local audio by file stem (AudioMCQ's own
+    `audio_path` prefix, e.g. clotho_audios/, is not meaningful locally)."""
+    index = {p.stem: p for d in audio_dirs if d.exists() for p in d.iterdir()}
     items = []
-    with open(COMPA_R_JSONL, encoding="utf-8") as f:
+    missing = 0
+    with open(jsonl, encoding="utf-8") as f:
         for line in f:
             row = json.loads(line)
             if contribution != "all" and row.get("audio-contribution") != contribution:
                 continue
             audio = index.get(Path(row["audio_path"]).stem)
             if audio is None:
+                missing += 1
                 continue
             items.append({
-                "id": f"compa_r/{row['id']}/{len(items)}",
+                "id": f"{name}/{row['id']}/{len(items)}",
                 "audio": audio,
                 "question": row["question"],
                 "choices": row["choices"],
@@ -103,7 +120,13 @@ def load_compa_r(contribution: str) -> List[Dict[str, Any]]:
                 "category": row.get("question_type", ""),
                 "audio_contribution": row.get("audio-contribution", ""),
             })
+    if missing:
+        print(f"{name}: {missing} item(s) skipped, no local audio", file=sys.stderr)
     return items
+
+
+def load_compa_r(contribution: str) -> List[Dict[str, Any]]:
+    return load_audiomcq("compa_r", COMPA_R_JSONL, COMPA_R_AUDIO_DIRS, contribution)
 
 
 def load_dcase() -> List[Dict[str, Any]]:
@@ -303,6 +326,42 @@ def _write(rows: List[Dict[str, Any]], path: Path) -> None:
     pd.DataFrame(rows).to_parquet(path, engine="pyarrow", index=False, use_dictionary=False)
 
 
+def _safe_id(raw: str, used: set) -> str:
+    """Filesystem-safe, unique id (gen_2nd_2_data/build_dataset.py uses ids as dir names)."""
+    base = re.sub(r"[^A-Za-z0-9._-]+", "_", raw).strip("_")[:120] or "item"
+    out, k = base, 1
+    while out in used:
+        k += 1
+        out = f"{base}_{k}"
+    used.add(out)
+    return out
+
+
+def to_uq_items(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """verl rows -> dcase_subset.json-shaped items (the UQ eval checks `answer in prediction`,
+    so options and answer carry their letter like DCASE's do)."""
+    used: set = set()
+    items = []
+    for r in rows:
+        info = r["extra_info"]
+        choices = json.loads(info["choices"])
+        letter = r["reward_model"]["ground_truth"]
+        items.append({
+            "id": _safe_id(info["id"], used),
+            "source_id": info["id"],
+            "data_source": r["data_source"],
+            "question": info["question"],
+            "choice": [f"{mcq_protocol.LETTERS[i]}. {c}" for i, c in enumerate(choices)],
+            "answer": f"{letter}. {info['answer_text']}",
+            "question_type": info.get("category", ""),
+            "audio_contribution": info.get("audio_contribution", ""),
+            "duration": info["duration"],
+            "audio_url": r["audios"][0],
+            "audio_path": r["audios"][0],
+        })
+    return items
+
+
 def _stratified(rows: List[Dict[str, Any]], n: int, rng: random.Random) -> List[Dict[str, Any]]:
     by_cat = collections.defaultdict(list)
     for r in rows:
@@ -320,6 +379,18 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--compa-r-n", type=int, default=8000, help="0 disables the source")
     ap.add_argument("--compa-r-contribution", choices=["strong", "weak", "all"], default="strong")
+    ap.add_argument("--clotho-n", type=int, default=0, help="AudioMCQ Clotho split; -1 = all, 0 disables")
+    ap.add_argument("--audiocaps-n", type=int, default=0, help="AudioMCQ AudioCaps split; -1 = all, 0 disables")
+    ap.add_argument("--audiomcq-contribution", choices=["strong", "weak", "all"], default="strong",
+                    help="audio-contribution filter for the Clotho/AudioCaps splits")
+    ap.add_argument("--audiomcq-dir", type=Path, default=AUDIOMCQ_DIR, help="dir holding AudioMCQ_*.jsonl")
+    ap.add_argument("--clotho-audio-dir", type=Path, default=CLOTHO_AUDIO_DIR)
+    ap.add_argument("--audiocaps-audio-dir", type=Path, default=AUDIOCAPS_AUDIO_DIR)
+    ap.add_argument("--total-n", type=int, default=None,
+                    help="cap the train set at N; AudioCaps (the largest pool) is sized to fill up to N")
+    ap.add_argument("--format", choices=["verl", "uq"], default="verl",
+                    help="verl: RL parquet files (default). uq: uq_subset.json for the UQ evaluation.")
+    ap.add_argument("--skip-eval", action="store_true", help="don't build the MMAU/MMAR val/eval sets")
     ap.add_argument("--dcase-n", type=int, default=-1, help="-1 = all (7481), 0 disables")
     ap.add_argument("--audioset-n", type=int, default=2000, help="0 disables the source")
     ap.add_argument("--val-n", type=int, default=200, help="MMAU test-mini subset used as in-training val")
@@ -332,7 +403,8 @@ def main() -> None:
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
-    system_prompt = mcq_protocol.build_system_prompt(args.system_prompt_model_type)
+    # The UQ format never shows this prompt, and building it needs the stage-1 tool registry.
+    system_prompt = "" if args.format == "uq" else mcq_protocol.build_system_prompt(args.system_prompt_model_type)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     dropped: collections.Counter = collections.Counter()
 
@@ -354,15 +426,54 @@ def main() -> None:
     if args.audioset_n:
         train += to_rows(take(load_audioset_labels(args.audioset_n, rng), -1), "audioset_labels", "train",
                          system_prompt, rng, args.max_train_seconds, dropped)
+    if args.clotho_n:
+        clotho = load_audiomcq("clotho", args.audiomcq_dir / "AudioMCQ_Clotho.jsonl",
+                               [args.clotho_audio_dir], args.audiomcq_contribution)
+        train += to_rows(take(clotho, args.clotho_n), "clotho", "train", system_prompt, rng,
+                         args.max_train_seconds, dropped)
+    if args.audiocaps_n:
+        n = args.audiocaps_n
+        if args.total_n is not None:
+            n = max(0, args.total_n - len(train)) if n < 0 else min(n, max(0, args.total_n - len(train)))
+        if n:
+            audiocaps = load_audiomcq("audiocaps", args.audiomcq_dir / "AudioMCQ_AudioCaps.jsonl",
+                                      [args.audiocaps_audio_dir], args.audiomcq_contribution)
+            # Oversample 1.2x so the duration filter can't leave us short.
+            train += to_rows(take(audiocaps, int(n * 1.2) if n > 0 else -1), "audiocaps", "train",
+                             system_prompt, rng, args.max_train_seconds, dropped)[: n if n > 0 else None]
+    if args.total_n is not None:
+        train = train[: args.total_n]
     rng.shuffle(train)
     for i, row in enumerate(train):
         row["extra_info"]["index"] = i
+
+    if args.format == "uq":
+        uq_items = to_uq_items(train)
+        out = args.output_dir / "uq_subset.json"
+        out.write_text(json.dumps(uq_items, indent=2, ensure_ascii=False), encoding="utf-8")
+        stats = {
+            "uq_subset": len(uq_items),
+            "by_source": dict(collections.Counter(i["data_source"] for i in uq_items)),
+            "by_contribution": dict(collections.Counter(i["audio_contribution"] for i in uq_items)),
+            "answer_letters": dict(sorted(collections.Counter(i["answer"][0] for i in uq_items).items())),
+            "dropped": dict(sorted(dropped.items())),
+            "args": {k: str(v) for k, v in vars(args).items()},
+        }
+        (args.output_dir / "stats.json").write_text(json.dumps(stats, indent=2), encoding="utf-8")
+        print(json.dumps(stats, indent=2))
+        print(f"Wrote {len(uq_items)} items to {out}")
+        return
+
+    _write(train, args.output_dir / "train.parquet")
+    if args.skip_eval:
+        print(json.dumps({"train": dict(collections.Counter(r["data_source"] for r in train)),
+                          "dropped": dict(sorted(dropped.items()))}, indent=2))
+        return
 
     mmau = to_rows(take(load_mmau(), -1), "mmau_test_mini", "eval", system_prompt, rng, args.max_eval_seconds, dropped)
     mmar = to_rows(take(load_mmar(), -1), "mmar", "eval", system_prompt, rng, args.max_eval_seconds, dropped)
     val = _stratified(mmau, args.val_n, random.Random(args.seed))
 
-    _write(train, args.output_dir / "train.parquet")
     _write(val, args.output_dir / "val.parquet")
     _write(mmau, args.output_dir / "eval_mmau_test_mini.parquet")
     _write(mmar, args.output_dir / "eval_mmar.parquet")

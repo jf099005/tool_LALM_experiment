@@ -148,20 +148,56 @@ class SourceSeparationTool(Tool):
         if local_model_dir.exists():
             model_source = str(local_model_dir)
         else:
-            model_source = "facebook/sam-audio-large"
-            model_kwargs["cache_dir"] = "/work/u1501463/"
-
-        model = SAMAudio.from_pretrained(model_source, **model_kwargs)
-        processor = SAMAudioProcessor.from_pretrained(model_source)
+            # SAM_AUDIO_MODEL picks the checkpoint (e.g. facebook/sam-audio-base on a small GPU);
+            # SAM_AUDIO_CACHE_DIR overrides where it is downloaded (default: the HF cache).
+            model_source = os.environ.get("SAM_AUDIO_MODEL", "facebook/sam-audio-large")
+            cache_dir = os.environ.get("SAM_AUDIO_CACHE_DIR")
+            if cache_dir is None and not os.environ.get("HF_HOME") and Path("/work/u1501463").is_dir():
+                cache_dir = "/work/u1501463/"  # cluster default, as before
+            if cache_dir:
+                model_kwargs["cache_dir"] = cache_dir
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        if device.type == "cuda":
-            model = model.half()
+        model = cls._from_pretrained_low_mem(model_source, model_kwargs, half=device.type == "cuda")
+        processor = SAMAudioProcessor.from_pretrained(model_source)
 
         model = model.eval().to(device)
 
         _MODEL_CACHE["sam"] = (model, processor, device)
         return _MODEL_CACHE["sam"]
+
+    @staticmethod
+    def _from_pretrained_low_mem(model_source: str, model_kwargs: Dict[str, Any], half: bool):
+        """Same result as `SAMAudio.from_pretrained(...)` followed by `.half()`, with a much lower
+        CPU-RAM peak. Upstream builds the fp32 model (~15 GB for sam-audio-large) and then
+        torch.loads the whole fp32 checkpoint (another ~15 GB) before anything is halved -- a
+        ~30 GB peak that got the dataset build OOM-killed on a 32 GB machine. Here the model is
+        halved before loading, and the checkpoint is memory-mapped (page cache, reclaimable);
+        load_state_dict casts fp32 -> fp16 exactly like .half() would."""
+        import json
+
+        from huggingface_hub import snapshot_download
+
+        kwargs = dict(model_kwargs)
+        cache_dir = kwargs.pop("cache_dir", None)
+        if os.path.isdir(model_source):
+            model_dir = model_source
+        else:
+            model_dir = snapshot_download(repo_id=model_source, revision=getattr(SAMAudio, "revision", None),
+                                          cache_dir=cache_dir)
+        with open(os.path.join(model_dir, "config.json")) as fin:
+            config = json.load(fin)
+        for key, value in kwargs.items():  # as upstream: only keys the config knows
+            if key in config:
+                config[key] = value
+        model = SAMAudio(SAMAudio.config_cls(**config))
+        if half:
+            model = model.half()
+        state_dict = torch.load(os.path.join(model_dir, "checkpoint.pt"), weights_only=True,
+                                map_location="cpu", mmap=True)
+        model.load_state_dict(state_dict, strict=True)
+        del state_dict
+        return model
 
     @classmethod
     def _execute_single(
