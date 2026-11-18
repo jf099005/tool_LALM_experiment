@@ -2,7 +2,12 @@
 # Build the three heavy-tool conda envs on the local PC's data disk (one env per tool, as on
 # the cluster; never imported into the main env -- they run as tools/heavy_tool_server.py).
 #
-#   tools/setup_local_heavy_envs.sh [deepfilternet] [audiosr] [sam_audio]   (default: all)
+#   tools/setup_local_heavy_envs.sh [deepfilternet] [audiosr] [sam_audio] [extra_tools] [extra_tools2]
+#   (default: all five)
+#
+#   extra_tools   Demucs (music_source_separation), ClearerVoice MossFormer2 (speech_enhance),
+#                 Silero VAD (vad_keep_speech) -- tools/extra_ml_tools.py
+#   extra_tools2  VoiceFixer (speech_restore_voicefixer), nara_wpe (dereverb_wpe)
 #
 # Version notes:
 #   deepfilternet 0.5.6 imports torchaudio.backend.common (removed in torchaudio 2.1) -> torch 2.0.1.
@@ -47,8 +52,26 @@ build_sam_audio() {
     $P -m pip install "huggingface_hub<1.0" "transformers>=4.54,<5"
 }
 
+build_extra_tools() {
+    make_env extra_tools 3.10
+    local P="${ENVS}/extra_tools/bin/python"
+    $P -m pip install torch==2.4.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121
+    $P -m pip install demucs clearvoice silero-vad soundfile librosa tqdm "numpy<2"
+}
+
+build_extra_tools2() {
+    make_env extra_tools2 3.10
+    local P="${ENVS}/extra_tools2/bin/python"
+    # VoiceFixer downloads its weights to ~/.cache/voicefixer (hard-coded) on first import;
+    # point that at the data disk first so they don't land on the system disk.
+    mkdir -p "${DATA_ROOT}/models/extra_tools/voicefixer" ~/.cache
+    [ -e ~/.cache/voicefixer ] || ln -s "${DATA_ROOT}/models/extra_tools/voicefixer" ~/.cache/voicefixer
+    $P -m pip install torch==2.4.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121
+    $P -m pip install voicefixer nara_wpe soundfile tqdm
+}
+
 targets=("$@")
-[ ${#targets[@]} -eq 0 ] && targets=(deepfilternet audiosr sam_audio)
+[ ${#targets[@]} -eq 0 ] && targets=(deepfilternet audiosr sam_audio extra_tools extra_tools2)
 for t in "${targets[@]}"; do
     echo "=== building ${t}"
     "build_${t}"

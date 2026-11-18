@@ -67,7 +67,7 @@ import sys
 import traceback
 import uuid
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 from tqdm import tqdm
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -207,6 +207,21 @@ def draw_tool_names(
     return chosen
 
 
+def choose_tools(tool_names, tool_weights_list, tool_config, min_tools, max_tools, rng,
+                 force_tools: Optional[List[str]] = None) -> List[str]:
+    """The tool chain for one sample: `force_tools` (an item's planned tools, e.g. from
+    plan_tool_variants.py) if given -- no RNG draw then, so parameters come first from the
+    RNG -- else k random tools."""
+    if force_tools:
+        unknown = [t for t in force_tools if t not in tool_names]
+        if unknown:
+            raise ValueError(f"planned tool(s) {unknown} not enabled/available")
+        return list(force_tools)
+    k = rng.randint(min_tools, max_tools)
+    k = max(0, min(k, len(tool_names)))
+    return draw_tool_names(tool_names, tool_weights_list, k, rng, tool_config)
+
+
 def apply_tool_chain(
     source_wav: Path,
     work_dir: Path,
@@ -216,10 +231,9 @@ def apply_tool_chain(
     min_tools: int,
     max_tools: int,
     rng: random.Random,
+    force_tools: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
-    k = rng.randint(min_tools, max_tools)
-    k = max(0, min(k, len(tool_names)))
-    chosen = draw_tool_names(tool_names, tool_weights_list, k, rng, tool_config)
+    chosen = choose_tools(tool_names, tool_weights_list, tool_config, min_tools, max_tools, rng, force_tools)
 
     current_path = source_wav
     chain: List[Dict[str, Any]] = []
@@ -250,22 +264,38 @@ def build_one_sample(
     min_tools: int,
     max_tools: int,
     rng: random.Random,
+    copy_original: bool = True,
 ) -> Dict[str, Any]:
     sample_id = str(item["id"])
     source = Path(get_audio_path(item))
 
     original_dir = output_dir / "original" / sample_id
     tool_applied_dir = output_dir / "tool_applied" / sample_id
-    original_dir.mkdir(parents=True, exist_ok=True)
     tool_applied_dir.mkdir(parents=True, exist_ok=True)
 
-    working_wav = ta.ensure_wav(source, tool_applied_dir)
-    original_wav = original_dir / "original.wav"
-    if working_wav.resolve() != original_wav.resolve():
-        shutil.copy(str(working_wav), str(original_wav))
+    scratch = None
+    if copy_original:
+        original_dir.mkdir(parents=True, exist_ok=True)
+        working_wav = ta.ensure_wav(source, tool_applied_dir)
+        original_wav = original_dir / "original.wav"
+        if working_wav.resolve() != original_wav.resolve():
+            shutil.copy(str(working_wav), str(original_wav))
+    else:
+        # The original stays where it is (no copy: saves ~half the disk for large builds).
+        # Tools run on a scratch copy inside this sample's dir -- some write next to their
+        # input (clipping), which must not be the shared source corpus.
+        if source.suffix.lower() == ".wav" and ta._is_plain_pcm_wav(source):
+            original_wav = source
+        else:
+            original_dir.mkdir(parents=True, exist_ok=True)
+            original_wav = ta.ensure_wav(source, original_dir)
+        scratch = tool_applied_dir / "_input.wav"
+        shutil.copy(str(original_wav), str(scratch))
+        working_wav = scratch
 
     result = apply_tool_chain(
-        working_wav, tool_applied_dir, tool_names, tool_weights_list, tool_config, min_tools, max_tools, rng
+        working_wav, tool_applied_dir, tool_names, tool_weights_list, tool_config, min_tools, max_tools, rng,
+        force_tools=item.get("force_tools"),
     )
     chain = result["chain"]
     final_path = result["final_path"]
@@ -282,9 +312,12 @@ def build_one_sample(
         # k == 0: nothing applied -- tool_applied aliases original directly rather than
         # making a pointless copy.
         tool_applied_path = original_wav
+    if scratch is not None and scratch.exists():
+        scratch.unlink()
 
     return {
         "id": sample_id,
+        **({"base_id": item["base_id"]} if item.get("base_id") else {}),
         "source_audio": str(source),
         "original_audio": str(original_wav),
         "tool_chain": chain,
@@ -312,7 +345,7 @@ def _build_task(task):
         try:
             record = build_one_sample(
                 item, c["output_dir"], c["tool_names"], c["tool_weights"], c["tool_config"],
-                c["min_tools"], c["max_tools"], rng,
+                c["min_tools"], c["max_tools"], rng, copy_original=c["copy_original"],
             )
             return idx, record, None
         except Exception:
@@ -332,9 +365,8 @@ def _peek(task, ctx):
     params first; light ones consume the RNG in data-dependent ways)."""
     idx, item = task
     rng = random.Random(f"{ctx['seed']}:{idx}:{item['id']}")
-    k = rng.randint(ctx["min_tools"], ctx["max_tools"])
-    k = max(0, min(k, len(ctx["tool_names"])))
-    names = draw_tool_names(ctx["tool_names"], ctx["tool_weights"], k, rng, ctx["tool_config"])
+    names = choose_tools(ctx["tool_names"], ctx["tool_weights"], ctx["tool_config"], ctx["min_tools"],
+                         ctx["max_tools"], rng, item.get("force_tools"))
     params = None
     if names and ctx["tool_config"]["tools"][names[0]].get("env"):
         params = ta.draw_params(ctx["tool_config"]["tools"][names[0]], rng)
@@ -398,10 +430,17 @@ def build_parallel(sampled, args, tool_names, tool_weights_list, tool_config, mi
         key_file.write_text(json.dumps(run_key), encoding="utf-8")
 
     tasks = [(idx, item) for idx, item in enumerate(sampled, start=1) if idx not in done]
+    if args.only_ids:
+        # Rebuild mode: same per-sample RNG (seed, position, id), so the same draws as the
+        # original build -- run with the original command plus --only-ids and a new --output-dir.
+        wanted = set(json.loads(Path(args.only_ids).read_text(encoding="utf-8")))
+        tasks = [(idx, item) for idx, item in tasks if str(item["id"]) in wanted]
+        print(f"--only-ids: rebuilding {len(tasks)} of {len(wanted)} requested sample(s)", file=sys.stderr)
     ctx = {
         "seed": args.seed, "output_dir": args.output_dir, "tool_names": tool_names,
         "tool_weights": tool_weights_list, "tool_config": tool_config, "min_tools": min_tools,
         "max_tools": max_tools, "max_attempts": args.max_attempts_per_sample,
+        "copy_original": not args.no_copy_original,
     }
     # One BLAS/numba thread per worker; spawned children inherit this environment.
     for var in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS", "NUMBA_NUM_THREADS"):
@@ -455,6 +494,11 @@ def main() -> None:
                          help="Worker processes. 1 = original sequential run (one shared RNG). >1 gives each "
                               "sample its own RNG seeded by (seed, index, id): deterministic regardless of worker "
                               "count or completion order, but a different draw than --workers 1.")
+    parser.add_argument("--no-copy-original", action="store_true",
+                         help="don't copy the source audio to <output-dir>/original/; original_subset points "
+                              "at the source files (needs --workers > 1 for now)")
+    parser.add_argument("--only-ids", type=Path, default=None,
+                         help="JSON list of sample ids: rebuild only these (with --workers > 1; see build_parallel)")
     parser.add_argument("--checkpoint-every", type=int, default=200,
                          help="Save the resume checkpoint every N samples (a resumed run redoes at most N-1).")
     args = parser.parse_args()
@@ -494,6 +538,9 @@ def main() -> None:
 
 
 def generate_records(sampled, args, tool_names, tool_weights_list, tool_config, min_tools, max_tools):
+    if args.no_copy_original or args.only_ids:
+        if args.workers <= 1:
+            raise SystemExit("--no-copy-original / --only-ids need --workers > 1")
     if args.workers > 1:
         return build_parallel(
             sampled, args, tool_names, tool_weights_list, tool_config, min_tools, max_tools)

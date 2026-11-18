@@ -1,0 +1,66 @@
+{
+  "_comment": "Extra ML tools (2026-11-07/08): Demucs, MossFormer2 SE, Silero VAD (env extra_tools); VoiceFixer, WPE (env extra_tools2).",
+  "min_tools": 1,
+  "max_tools": 1,
+  "tools": {
+    "music_source_separation": {
+      "enabled": true,
+      "weight": 1.0,
+      "env": "${DATA_ROOT}/conda_envs/extra_tools/bin/python",
+      "params": {
+        "stem": {
+          "kind": "choice",
+          "values": [
+            "vocals",
+            "no_vocals",
+            "drums",
+            "bass",
+            "other"
+          ]
+        }
+      }
+    },
+    "speech_enhance": {
+      "enabled": true,
+      "weight": 1.0,
+      "env": "${DATA_ROOT}/conda_envs/extra_tools/bin/python",
+      "params": {}
+    },
+    "vad_keep_speech": {
+      "enabled": true,
+      "weight": 1.0,
+      "env": "${DATA_ROOT}/conda_envs/extra_tools/bin/python",
+      "params": {
+        "threshold": {
+          "kind": "choice",
+          "values": [
+            0.3,
+            0.5,
+            0.7
+          ]
+        }
+      }
+    },
+    "speech_restore_voicefixer": {
+      "enabled": true,
+      "weight": 1.0,
+      "env": "${DATA_ROOT}/conda_envs/extra_tools2/bin/python",
+      "params": {}
+    },
+    "dereverb_wpe": {
+      "enabled": true,
+      "weight": 1.0,
+      "env": "${DATA_ROOT}/conda_envs/extra_tools2/bin/python",
+      "params": {
+        "taps": {
+          "kind": "choice",
+          "values": [
+            5,
+            10,
+            15
+          ]
+        }
+      }
+    }
+  }
+}

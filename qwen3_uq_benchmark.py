@@ -51,6 +51,13 @@ from qwen25_with_tool_chain_evaluation import (
 # The project's Qwen3-Omni prompt (audio token <|audio_start|><|audio_pad|><|audio_end|>).
 from qwen3_with_tool_chain_evaluation import build_standard_prompt
 from uncertainty_quantification_tools import QWEN3_OMNI_AUDIO_TOKEN, compute_uncertainty_batch
+from uncertainty_quantification_tools import (
+    build_self_verification_prompt,
+    discrete_semantic_entropy,
+    length_normalized_entropy,
+    p_true_from_first_token_logprobs,
+    predictive_entropy,
+)
 
 SIDES = ("original", "tool_applied")
 METRICS = ["p_true", "predictive_entropy", "length_normalized_entropy", "discrete_semantic_entropy", "semantic_entropy"]
@@ -78,6 +85,13 @@ def parse_arguments():
     p.add_argument("--cont", "--resume", dest="cont", action=BooleanOptionalAction, default=True,
                    help="resume from existing results (default on; --no-cont starts over)")
 
+    # Backend: vLLM in-process (default; the cluster run), or a running llama.cpp server
+    # (llama-server with a Qwen3-Omni GGUF + mmproj; for a small GPU, see run_qwen3_llamacpp_local.sh).
+    p.add_argument("--backend", choices=["vllm", "llamacpp"], default="vllm")
+    p.add_argument("--server_url", default="http://127.0.0.1:8080", help="llamacpp backend: llama-server URL")
+    p.add_argument("--concurrency", type=int, default=4,
+                   help="llamacpp backend: items in flight at once (match llama-server --parallel)")
+
     # Model / vLLM (defaults follow qwen3_with_tool_chain_evaluation.py).
     p.add_argument("--model", default="Qwen/Qwen3-Omni-30B-A3B-Instruct")
     p.add_argument("--tensor_parallel_size", type=int, default=2)
@@ -88,6 +102,15 @@ def parse_arguments():
     p.add_argument("--mm_processor_cache_gb", type=float, default=0,
                    help="vLLM multimodal preprocessor cache; 0 = off (each clip is seen once, the cache only costs RAM)")
     p.add_argument("--enforce_eager", action="store_true")
+    # Small-GPU options (off by default; the cluster run needs none of them).
+    p.add_argument("--cpu_offload_gb", type=float, default=0,
+                   help="keep this many GB of weights in CPU RAM (streamed over PCIe every step; slow)")
+    p.add_argument("--max_num_batched_tokens", type=int, default=None)
+    p.add_argument("--extra_engine_args", type=json.loads, default={},
+                   help='extra vllm.LLM kwargs as JSON, e.g. \'{"offload_group_size": 3, "offload_num_in_group": 2}\' '
+                        "(vLLM >= 0.2x prefetch offloading)")
+    p.add_argument("--no_image_video", action="store_true",
+                   help="limit image/video to 0 per prompt so vLLM doesn't reserve memory for them")
     p.add_argument("--download_dir", default=os.environ.get("REMOTE_HF_CACHE") or os.environ.get("HF_HUB_CACHE")
                    or "/work/u1501463/hf_cache", help="model download cache (default: cluster_paths.sh's REMOTE_HF_CACHE)")
     p.add_argument("--system_prompt", default=DEFAULT_SYSTEM_PROMPT)
@@ -161,13 +184,18 @@ def build_llm(args):
         max_model_len=args.max_model_len,
         max_num_seqs=args.max_num_seqs,
         gpu_memory_utilization=args.gpu_memory_utilization,
-        limit_mm_per_prompt={"audio": 1},
+        limit_mm_per_prompt={"audio": 1, "image": 0, "video": 0} if args.no_image_video else {"audio": 1},
         trust_remote_code=True,
         download_dir=args.download_dir,
         dtype=args.dtype,
         tensor_parallel_size=args.tensor_parallel_size,
         enforce_eager=args.enforce_eager,
     )
+    if args.cpu_offload_gb:
+        kwargs["cpu_offload_gb"] = args.cpu_offload_gb
+    if args.max_num_batched_tokens:
+        kwargs["max_num_batched_tokens"] = args.max_num_batched_tokens
+    kwargs.update(args.extra_engine_args)
     # Only on vLLM versions that have it (the cluster's may differ from the local one).
     if "mm_processor_cache_gb" in {f.name for f in dataclasses.fields(EngineArgs)}:
         kwargs["mm_processor_cache_gb"] = args.mm_processor_cache_gb
@@ -241,6 +269,152 @@ def run(args, llm, subsets: Dict[str, List[dict]], out_paths: Dict[str, Path], r
             bar.update(len(batch))
 
     # Merge each side's progress log into its final results file (subset order).
+    for side in SIDES:
+        results = {r["id"]: r for r in load_previous_results(str(out_paths[side]))}
+        save_results_atomic([results[i["id"]] for i in subsets[side] if i["id"] in results], str(out_paths[side]))
+        if os.path.exists(partial_path(str(out_paths[side]))):
+            os.remove(partial_path(str(out_paths[side])))
+
+
+# ---------------------------------------------------------------------------
+# llama.cpp backend
+# ---------------------------------------------------------------------------
+
+# llama-server's media placeholder: random per server start (LLAMA_MEDIA_MARKER pins it), published
+# as /props "media_marker"; mtmd adds <|audio_start|>/<|audio_end|> around it itself.
+LLAMACPP_DEFAULT_MEDIA_MARKER = "<__media__>"
+
+
+def llamacpp_media_marker(server_url: str) -> str:
+    import urllib.request
+
+    try:
+        with urllib.request.urlopen(server_url.rstrip("/") + "/props", timeout=30) as resp:
+            props = json.loads(resp.read().decode("utf-8"))
+    except OSError as exc:
+        raise SystemExit(f"llama-server not reachable at {server_url}: {exc}")
+    if not (props.get("modalities") or {}).get("audio", False):
+        raise SystemExit("llama-server has no audio support loaded (start it with the Qwen3-Omni --mmproj)")
+    return props.get("media_marker") or LLAMACPP_DEFAULT_MEDIA_MARKER, int(props.get("total_slots") or 1)
+
+# Neutral sampling, matching vLLM's defaults (llama.cpp otherwise applies top-k 40, top-p 0.95,
+# min-p 0.05 ...), so the sampled distribution is the model's own -- the UQ metrics depend on it.
+_NEUTRAL_SAMPLING = {
+    "top_k": 0, "top_p": 1.0, "min_p": 0.0, "typical_p": 1.0, "repeat_penalty": 1.0,
+    "presence_penalty": 0.0, "frequency_penalty": 0.0, "dry_multiplier": 0.0, "xtc_probability": 0.0,
+    "top_n_sigma": -1.0, "mirostat": 0,
+}
+
+
+def _post(url: str, payload: dict, timeout: float = 3600.0):
+    import urllib.error
+    import urllib.request
+
+    req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"),
+                                 headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:  # surface llama-server's own message
+        raise RuntimeError(f"llama-server {exc.code}: {exc.read().decode('utf-8', 'replace')[:500]}") from exc
+
+
+def _completions(result) -> List[dict]:
+    """/completion returns one object, or a list of them for n_cmpl > 1."""
+    if isinstance(result, list):
+        return result
+    return result.get("results", [result]) if isinstance(result, dict) else []
+
+
+def _token_logprobs(completion: dict) -> List[float]:
+    probs = completion.get("completion_probabilities") or completion.get("probs") or []
+    return [p["logprob"] for p in probs if p.get("logprob") is not None]
+
+
+def llamacpp_item(args, task, remaps) -> dict:
+    """Greedy answer + K samples + P(True) for one item via llama-server; same result entry
+    (and `uncertainty` dict) as the vLLM path."""
+    import base64
+
+    side, idx, item = task
+    audio_path = remap(item.get("audio_path") or item.get("audio_url"), remaps)
+    audio_b64 = base64.b64encode(Path(audio_path).read_bytes()).decode("ascii")
+    question, choices, answer = item.get("question", ""), item.get("choice", []), item.get("answer", "N/A")
+    prompt = build_standard_prompt(question=question, choices=choices, system_prompt=args.system_prompt)
+    server_prompt = prompt.replace(QWEN3_OMNI_AUDIO_TOKEN, args.media_marker)
+    url = args.server_url.rstrip("/") + "/completion"
+
+    def ask(text, **params):
+        payload = {"prompt": {"prompt_string": text, "multimodal_data": [audio_b64]},
+                   "cache_prompt": True, **_NEUTRAL_SAMPLING, **params}
+        return _completions(_post(url, payload))
+
+    greedy = ask(server_prompt, temperature=0.0, n_predict=args.max_tokens)[0]
+    prediction = greedy["content"].strip()
+
+    uq: Dict = {"num_samples": args.uq_num_samples}
+    if args.uq_num_samples > 0:
+        samples, k = [], 0
+        while k < args.uq_num_samples:  # n_cmpl <= server slots per request; distinct seed per chunk
+            n = min(args.server_slots, args.uq_num_samples - k)
+            samples += ask(server_prompt, temperature=args.uq_sample_temperature, n_predict=args.max_tokens,
+                           n_cmpl=n, n_probs=1, seed=idx * 1000 + k)
+            k += n
+        texts = [c["content"].strip() for c in samples]
+        logprob_sums, lengths = [], []
+        for c in samples:
+            lps = _token_logprobs(c)
+            logprob_sums.append(sum(lps) if lps else None)
+            lengths.append(len(lps))
+        uq["sampled_predictions"] = texts
+        uq["predictive_entropy"] = predictive_entropy(logprob_sums)
+        uq["length_normalized_entropy"] = length_normalized_entropy(logprob_sums, lengths)
+        uq["discrete_semantic_entropy"], uq["answer_distribution"] = discrete_semantic_entropy(texts, choices)
+    if args.uq_p_true:
+        verify = build_self_verification_prompt(
+            system_prompt=args.system_prompt, question=question, choices=choices,
+            candidate_answer=prediction, num_audio_tokens=1, audio_token=args.media_marker,
+        )
+        out = ask(verify, temperature=0.0, n_predict=5, n_probs=20)[0]
+        probs = out.get("completion_probabilities") or out.get("probs") or []
+        first = {t["token"]: t["logprob"] for t in probs[0].get("top_logprobs", [])} if probs else None
+        uq["p_true"] = p_true_from_first_token_logprobs(first)
+        uq["p_true_raw_response"] = out["content"].strip()
+
+    return {
+        "side": side,
+        "entry": {
+            "index": idx, "prompt": prompt, "load tool chain results": False, "id": item["id"],
+            "question": question, "choices": choices, "answer": answer, "prediction": prediction,
+            "correct": answer != "N/A" and answer.strip() in prediction, "uncertainty": uq,
+        },
+    }
+
+
+def run_llamacpp(args, subsets: Dict[str, List[dict]], out_paths: Dict[str, Path], remaps) -> None:
+    """Same lockstep order, progress files and resume behaviour as run(), via llama-server."""
+    # n_cmpl per request can't exceed the server's slot count, so samples go out in chunks.
+    args.media_marker, args.server_slots = llamacpp_media_marker(args.server_url)
+    done = {}
+    for side in SIDES:
+        prev = load_previous_results(str(out_paths[side])) if args.cont else []
+        done[side] = {r["id"] for r in prev}
+        if prev:
+            print(f"Resuming {side}: {len(prev)} item(s) done")
+    tasks = [(side, idx, subsets[side][idx - 1])
+             for idx in range(1, max(len(s) for s in subsets.values()) + 1)
+             for side in SIDES
+             if idx <= len(subsets[side]) and subsets[side][idx - 1]["id"] not in done[side]]
+    total = sum(len(s) for s in subsets.values())
+    chunk = max(args.batch_size, args.concurrency)
+    with ThreadPoolExecutor(max_workers=args.concurrency) as pool, tqdm(total=total, initial=total - len(tasks)) as bar:
+        for start in range(0, len(tasks), chunk):
+            results = list(pool.map(lambda t: llamacpp_item(args, t, remaps), tasks[start:start + chunk]))
+            for side in SIDES:
+                entries = [r["entry"] for r in results if r["side"] == side]
+                if entries:
+                    append_partial(entries, str(out_paths[side]))
+            bar.update(len(results))
     for side in SIDES:
         results = {r["id"]: r for r in load_previous_results(str(out_paths[side]))}
         save_results_atomic([results[i["id"]] for i in subsets[side] if i["id"] in results], str(out_paths[side]))
@@ -353,8 +527,11 @@ def main():
             subsets = {side: items[: args.limit] for side, items in subsets.items()}
         if [i["id"] for i in subsets["original"]] != [i["id"] for i in subsets["tool_applied"]]:
             raise SystemExit("original and tool-applied subsets must list the same ids in the same order")
-        llm = build_llm(args)
-        run(args, llm, subsets, out_paths, path_remaps(args))
+        if args.backend == "llamacpp":
+            run_llamacpp(args, subsets, out_paths, path_remaps(args))
+        else:
+            llm = build_llm(args)
+            run(args, llm, subsets, out_paths, path_remaps(args))
     summarize(args, out_paths, tag)
 
 

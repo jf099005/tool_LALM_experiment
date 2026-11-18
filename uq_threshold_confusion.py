@@ -183,25 +183,32 @@ def accuracy(items, side: str) -> float:
 # Output
 # ---------------------------------------------------------------------------
 
-def export_items(kept, dataset_dir: Path, export_dir: Path, copy_audio: bool, filter_info: dict) -> None:
-    """Write the kept items as a build_dataset-style dataset (see module docstring)."""
+def export_items(kept, dataset_dir, export_dir: Path, copy_audio: bool, filter_info: dict,
+                 sources: Optional[tuple] = None) -> None:
+    """Write the kept items as a build_dataset-style dataset (see module docstring).
+
+    `sources` = (original_by_id, tool_applied_by_id, manifest_by_id) replaces reading the
+    three files from `dataset_dir`, for item sets gathered from several datasets (500k slices)."""
     import shutil
 
-    dataset_dir, export_dir = Path(dataset_dir), Path(export_dir).expanduser().resolve()
+    export_dir = Path(export_dir).expanduser().resolve()
     keep = {it["id"]: it for it in kept}
 
     def subset_entries(name):
-        entries = json.loads((dataset_dir / name).read_text(encoding="utf-8"))
+        entries = json.loads((Path(dataset_dir) / name).read_text(encoding="utf-8"))
         by_id = {e["id"]: e for e in entries}
         missing = [i for i in keep if i not in by_id]
         if missing:
-            raise SystemExit(f"{len(missing)} kept id(s) not in {dataset_dir / name}, e.g. {missing[:3]}")
+            raise SystemExit(f"{len(missing)} kept id(s) not in {Path(dataset_dir) / name}, e.g. {missing[:3]}")
         return by_id
 
-    original = subset_entries("original_subset.json")
-    tool_applied = subset_entries("tool_applied_subset.json")
-    manifest_path = dataset_dir / "manifest.json"
-    manifest = {r["id"]: r for r in json.loads(manifest_path.read_text(encoding="utf-8"))} if manifest_path.exists() else {}
+    if sources is not None:
+        original, tool_applied, manifest = sources
+    else:
+        original = subset_entries("original_subset.json")
+        tool_applied = subset_entries("tool_applied_subset.json")
+        manifest_path = Path(dataset_dir) / "manifest.json"
+        manifest = {r["id"]: r for r in json.loads(manifest_path.read_text(encoding="utf-8"))} if manifest_path.exists() else {}
 
     export_dir.mkdir(parents=True, exist_ok=True)
     out_orig, out_tool, out_manifest = [], [], []

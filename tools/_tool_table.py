@@ -44,4 +44,9 @@ TOOL_MODULES: Dict[str, Tuple[str, str]] = {
     "super_resolution": ("tools.super_resolution", "SuperResolutionTool"),
     "pitch_shift": ("tools.pitch_time", "PitchShiftTool"),
     "time_stretch": ("tools.pitch_time", "TimeStretchTool"),
+    "music_source_separation": ("tools.extra_ml_tools", "MusicSourceSeparationTool"),
+    "speech_enhance": ("tools.extra_ml_tools", "SpeechEnhanceTool"),
+    "vad_keep_speech": ("tools.extra_ml_tools", "VADKeepSpeechTool"),
+    "speech_restore_voicefixer": ("tools.extra_ml_tools", "VoiceFixerTool"),
+    "dereverb_wpe": ("tools.extra_ml_tools", "DereverbWPETool"),
 }

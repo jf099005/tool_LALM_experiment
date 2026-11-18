@@ -29,6 +29,8 @@ def parse_arguments():
     parser.add_argument('--max_num_batched_tokens', type=int, default=None, help="Cap on tokens per scheduler step (vLLM default 8192). Lower it if engine start-up OOMs during memory profiling.")
     parser.add_argument('--paired_subset_path', type=str, default=None, help="Optional second subset evaluated in lockstep with --subset_path (e.g. tool-applied vs original audio of the same items): items are interleaved into the same batches, each subset writes its own results.")
     parser.add_argument('--paired_output_path', type=str, default=None, help="Output path for --paired_subset_path (same suffix rules as --output_path).")
+    parser.add_argument('--quantization', type=str, default=None, help="vLLM on-the-fly weight quantization, e.g. 'fp8' (Ada/Hopper GPUs). Default: none (bf16).")
+    parser.add_argument('--kv_cache_dtype', type=str, default="auto", help="KV cache dtype, e.g. 'fp8' to double KV capacity. Default: auto (= model dtype).")
     parser.add_argument('--mm_processor_cache_gb', type=float, default=0, help="vLLM multimodal preprocessor cache size (GiB, kept in both the frontend and engine processes). Default 0: every audio clip is seen once here, so the cache only costs RAM (vLLM's default 4 GiB per process ran a 31 GB machine out of memory).")
     parser.add_argument('--batch_size', type=int, default=1, help="Items per llm.generate call (greedy, UQ samples and P(True) are each batched across items). Progress is saved after every batch.")
     parser.add_argument('--max_audios_per_prompt', type=int, default=4, help="Max audio clips per prompt (1 is enough without --load_tool_chain_results).")
@@ -383,6 +385,8 @@ def main():
         enforce_eager=args.enforce_eager,
         max_num_batched_tokens=args.max_num_batched_tokens,
         mm_processor_cache_gb=args.mm_processor_cache_gb,
+        quantization=args.quantization,
+        kv_cache_dtype=args.kv_cache_dtype,
         **mm_memory_kwargs(MODEL, args.max_audios_per_prompt),
         trust_remote_code=True,
         download_dir=args.download_dir,
