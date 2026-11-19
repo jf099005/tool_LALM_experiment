@@ -83,24 +83,31 @@ $PY export_random_subset.py --subset-dir "$D" --n 10000 --seed 0 \
 完成條件：export 目錄多了 `reference/`（兩個結果檔）；`filter.json` 有 `items`、`model`、
 `n_reference_items`。這一步做不到時跳過即可（cluster 照樣能跑 bf16），在回報中說明原因。
 
-## 4. 上傳到 cluster（需要使用者本人）
+## 4. 上傳到 cluster（只能由使用者本人執行）
 
-```bash
-DRY_RUN=1 ./push_exports_to_nano5.sh "$DATA_ROOT/exports/audiomcq50k_random10k_s0"   # 先確認內容
-./push_exports_to_nano5.sh "$DATA_ROOT/exports/audiomcq50k_random10k_s0"             # 需要 cluster 密碼/OTP
-```
+連線 cluster 需要密碼與驗證碼（OTP），連 `DRY_RUN=1` 也會連線、要求登入。所以 agent：
 
-- 正式上傳需要互動輸入密碼。agent **不要**嘗試自動輸入密碼或改用其他登入方式；
-  做完 dry run 後停下，請使用者自己執行第二行。
+- **不要執行** `push_exports_to_nano5.sh`（包括 `DRY_RUN=1`）、`rsync`、`scp`、`ssh` 或任何會連到
+  cluster（`nano5.nchc.org.tw`）的指令；不要嘗試自動輸入密碼、設定金鑰或改用其他登入方式。
+- 只在本機做上傳前檢查，然後停下，把下面的上傳指令交給使用者：
+  ```bash
+  E=$DATA_ROOT/exports/audiomcq50k_random10k_s0
+  du -sh "$E"                                        # 匯出大小
+  find "$E/original" "$E/tool_applied" -type f | wc -l   # 應為 20000
+  ```
+- 使用者自己執行（會要求密碼與驗證碼）：
+  ```bash
+  ./push_exports_to_nano5.sh "$DATA_ROOT/exports/audiomcq50k_random10k_s0"
+  ```
 
-完成條件：使用者確認 rsync 完成。
+完成條件：使用者確認 rsync 完成（agent 不需要等，回報後即可結束）。
 
 ## 5. 回報給使用者
 
 - 來源資料集路徑、匯出的題數、export 目錄大小。
 - 第 3 步採用哪個方式（現成結果 / 新跑 / 跳過），reference 涵蓋幾題。
 - 若修改過腳本：改了什麼、commit id。
-- 接下來 cluster 上要做的事（使用者自己 submit）：
+- 接下來 cluster 上要做的事（只列在回報裡給使用者；agent 不要連線 cluster、不要執行）：
   ```bash
   cd /home/u1501463/tool_use_LALM_pc && git pull
   SMOKE=1 sbatch --time=00:20:00 qwen3_bf16_uq.sbatch    # 先 32 題，確認 1 張 GPU 放得下
