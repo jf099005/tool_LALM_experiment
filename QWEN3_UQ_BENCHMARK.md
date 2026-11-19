@@ -158,6 +158,9 @@ two result files via `--original/--tool-applied` (see the comment at the end of
 - `limit_mm_per_prompt={"audio": 1}`; image/video are left at vLLM defaults. If engine start-up
   profiling OOMs, lower `--gpu_memory_utilization`/`--max_model_len` (default 20000; 8192 is plenty
   for ≤45 s clips) before changing anything else.
+- The GPU nodes have no nvcc, so FlashInfer's JIT top-k/top-p sampler fails at engine start-up
+  (`Could not find nvcc and default cuda_home='/usr/local/cuda' doesn't exist`, smoke job 427150);
+  the sbatch files set `VLLM_USE_FLASHINFER_SAMPLER=0` (PyTorch sampler, same distribution).
 - Earlier stage-3 smoke jobs on these nodes died with `pthread_create failed: Resource
   temporarily unavailable`; if that appears, cap threads in the sbatch (`OMP_NUM_THREADS=2`,
   `MKL_NUM_THREADS=2`, `RAYON_NUM_THREADS=2`) as `stage3_mcq_rl/smoke_test.sbatch` does.
