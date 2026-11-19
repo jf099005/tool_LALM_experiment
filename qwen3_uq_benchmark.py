@@ -202,10 +202,22 @@ def build_llm(args):
     return LLM(**kwargs)
 
 
+def drop_old_results(args, out_paths: Dict[str, Path]) -> None:
+    """--no-cont: delete old results first; otherwise the final merge, which prefers the results
+    file over the progress log for the same id, would keep the old entries."""
+    if args.cont:
+        return
+    for side in SIDES:
+        for p in (str(out_paths[side]), partial_path(str(out_paths[side]))):
+            if os.path.exists(p):
+                os.remove(p)
+
+
 def run(args, llm, subsets: Dict[str, List[dict]], out_paths: Dict[str, Path], remaps) -> None:
     from vllm import SamplingParams
 
     greedy = SamplingParams(temperature=args.temperature, max_tokens=args.max_tokens)
+    drop_old_results(args, out_paths)
     done = {}
     for side in SIDES:
         prev = load_previous_results(str(out_paths[side])) if args.cont else []
@@ -395,6 +407,7 @@ def run_llamacpp(args, subsets: Dict[str, List[dict]], out_paths: Dict[str, Path
     """Same lockstep order, progress files and resume behaviour as run(), via llama-server."""
     # n_cmpl per request can't exceed the server's slot count, so samples go out in chunks.
     args.media_marker, args.server_slots = llamacpp_media_marker(args.server_url)
+    drop_old_results(args, out_paths)
     done = {}
     for side in SIDES:
         prev = load_previous_results(str(out_paths[side])) if args.cont else []
