@@ -220,13 +220,7 @@ def run(args, llm, subsets: Dict[str, List[dict]], out_paths: Dict[str, Path], r
     drop_old_results(args, out_paths)
     done = {}
     for side in SIDES:
-        if not args.cont:
-            # Starting over: drop old results, else the final merge (which prefers the results
-            # file over the progress log for the same id) would keep the old entries.
-            for p in (str(out_paths[side]), partial_path(str(out_paths[side]))):
-                if os.path.exists(p):
-                    os.remove(p)
-        prev =load_previous_results(str(out_paths[side])) if args.cont else []
+        prev = load_previous_results(str(out_paths[side])) if args.cont else []
         done[side] = {r["id"] for r in prev}
         if prev:
             print(f"Resuming {side}: {len(prev)} item(s) done")
